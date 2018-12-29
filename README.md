@@ -5,4 +5,4 @@
 
 ## Description
 
-This library aims to provide python way to communicate with gardena smart gateway and all gardena systems.
+This library aims to provide python way to communicate with gardena smart gateway and all smart gardena systems.
