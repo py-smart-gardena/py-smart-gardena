@@ -1,0 +1,10 @@
+version: "2"
+plugins:
+  duplication:
+    enabled: true
+  pep8:
+    enabled: true
+  radon:
+    enabled: true
+  sonar-python:
+    enabled: true
