@@ -38,7 +38,6 @@ class Gateway:
         response.raise_for_status()
         response_data = json.loads(response.content.decode('utf-8'))
         self.token = response_data['sessions']['token']
-        self.refresh_token = response_data['sessions']['refresh_token']
         self.user_id = response_data['sessions']['user_id']
 
     def update_locations(self):
