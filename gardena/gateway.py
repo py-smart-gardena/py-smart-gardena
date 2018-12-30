@@ -16,15 +16,19 @@ class Gateway:
         self.refresh_token = None
         self.user_id = None
         self.etag = None
+        self.locations = None
         self.request_session = requests.session()
 
     def authenticate(self):
-        """Authenticate and get tokens. This function needs to be called first"""
+        """
+        Authenticate and get tokens.
+        This function needs to be called first.
+        """
+        url = 'https://smart.gardena.com/sg-1/sessions'
         credentials = {
             "email": self.email,
             "password": self.password
         }
-        url = 'https://smart.gardena.com/sg-1/sessions'
         response = self.request_session.post(
             url,
             headers=self.__create_header(),
@@ -35,6 +39,21 @@ class Gateway:
         self.token = response_data['sessions']['token']
         self.refresh_token = response_data['sessions']['refresh_token']
         self.user_id = response_data['sessions']['user_id']
+
+    def update_locations(self):
+        """Update locations (gardens, ..) """
+        url = "https://smart.gardena.com/sg-1/locations/"
+        params = (
+            ('user_id', self.user_id),
+        )
+        response = self.request_session.get(
+            url,
+            headers=self.__create_header(),
+            params=params
+        )
+        response_data = json.loads(response.content.decode('utf-8'))
+        self.locations = [(i['id'], i['name']) for i in
+                          response_data['locations']]
 
     def __create_header(self):
         headers = {
