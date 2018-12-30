@@ -1,9 +1,9 @@
 # py-smart-gardena
-<a href="https://codeclimate.com/github/grm/py-smart-gardena/maintainability"><img src="https://api.codeclimate.com/v1/badges/e1931021997308c01056/maintainability" /></a>
-<a href="https://codeclimate.com/github/grm/py-smart-gardena/test_coverage"><img src="https://api.codeclimate.com/v1/badges/e1931021997308c01056/test_coverage" /></a>
+[![Maintainability](https://api.codeclimate.com/v1/badges/e1931021997308c01056/maintainability)](https://codeclimate.com/github/grm/py-smart-gardena/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/e1931021997308c01056/test_coverage)](https://codeclimate.com/github/grm/py-smart-gardena/test_coverage)
 [![Updates](https://pyup.io/repos/github/grm/py-smart-gardena/shield.svg)](https://pyup.io/repos/github/grm/py-smart-gardena/)
 [![Python 3](https://pyup.io/repos/github/grm/py-smart-gardena/python-3-shield.svg)](https://pyup.io/repos/github/grm/py-smart-gardena/)
-
+[![Known Vulnerabilities](https://snyk.io/test/github/grm/py-smart-gardena/badge.svg?targetFile=requirements.txt)](https://snyk.io/test/github/grm/py-smart-gardena?targetFile=requirements.txt)
 
 ## Description
 
