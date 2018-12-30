@@ -6,3 +6,5 @@ pip-selfcheck.json
 *pycache*
 .coverage
 .eggs/
+src/py_smart_gardena.egg-info/
+venv/

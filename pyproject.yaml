@@ -11,8 +11,10 @@ exclude = '''
   | \.eggs
   | \.coverage
   | _build
+  | bin
   | buck-out
   | build
   | dist
+  | lib
 )/
 '''
