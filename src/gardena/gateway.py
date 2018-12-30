@@ -42,7 +42,7 @@ class Gateway:
 
     def update_locations(self):
         """Update locations (gardens, ..) """
-        url = "https://smart.gardena.com/sg-1/locations/"
+        url = "https://smart.gardena.com/sg-1/locations"
         params = (
             ('user_id', self.user_id),
         )
@@ -51,9 +51,10 @@ class Gateway:
             headers=self.__create_header(),
             params=params
         )
+        response.raise_for_status()
         response_data = json.loads(response.content.decode('utf-8'))
         self.locations = {}
-        for location in response_data:
+        for location in response_data['locations']:
             self.locations[location['id']] = location
 
     def update_devices(self):
@@ -62,6 +63,7 @@ class Gateway:
             url,
             headers=self.__create_header()
         )
+        response.raise_for_status()
         response_data = json.loads(response.content.decode('utf-8'))
         self.devices = {}
         for device in response_data['devices']:

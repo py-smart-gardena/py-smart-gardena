@@ -19,7 +19,7 @@ setuptools.setup(
     package_dir={'': 'src'},
     install_requires=['requests'],
     setup_requires=["pytest-runner"],
-    tests_require=["pytest", "coverage", "pytest-cov"],
+    tests_require=["pytest", "coverage", "pytest-cov", "requests_mock"],
     py_modules={splitext(basename(path))[0] for path in glob('src/*py')},
     license="MIT",
     zip_safe=False,

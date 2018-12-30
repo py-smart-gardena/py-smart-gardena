@@ -1,0 +1,44 @@
+Metadata-Version: 2.1
+Name: py-smart-gardena
+Version: 0.0.1
+Summary: This library aims to provide python way to communicate with gardena smart gateway and all smart gardena systems.
+Home-page: https://github.com/grm/py-smart-gardena
+Author: Jérémie Klein
+Author-email: grm.klein@gmail.com
+License: MIT
+Description: # py-smart-gardena
+        [![Build Status](https://travis-ci.org/grm/py-smart-gardena.svg?branch=master)](https://travis-ci.org/grm/py-smart-gardena)
+        [![Maintainability](https://api.codeclimate.com/v1/badges/e1931021997308c01056/maintainability)](https://codeclimate.com/github/grm/py-smart-gardena/maintainability)
+        [![Test Coverage](https://api.codeclimate.com/v1/badges/e1931021997308c01056/test_coverage)](https://codeclimate.com/github/grm/py-smart-gardena/test_coverage)
+        [![codecov](https://codecov.io/gh/grm/py-smart-gardena/branch/master/graph/badge.svg)](https://codecov.io/gh/grm/py-smart-gardena)
+        [![Updates](https://pyup.io/repos/github/grm/py-smart-gardena/shield.svg)](https://pyup.io/repos/github/grm/py-smart-gardena/)
+        [![Python 3](https://pyup.io/repos/github/grm/py-smart-gardena/python-3-shield.svg)](https://pyup.io/repos/github/grm/py-smart-gardena/)
+        [![Known Vulnerabilities](https://snyk.io/test/github/grm/py-smart-gardena/badge.svg?targetFile=requirements.txt)](https://snyk.io/test/github/grm/py-smart-gardena?targetFile=requirements.txt)
+        
+        ## Description
+        
+        This library aims to provide python way to communicate with gardena smart gateway and all smart gardena systems.
+        
+        ## Installation
+        
+        ```sh
+        pip install py-smart-gardena
+        ```
+        
+        ## Usage
+        
+        ```python
+        from gardena.gateway import Gateway
+        gw = Gateway(email="email@gardena.com", password="password")
+        gw.authenticate()
+        
+        # To update locations (gardens, ..)
+        gw.update_locations()
+        # To update devices information (mower, gateway, sensor, ..)
+        gw.update_devices()
+        ```
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Description-Content-Type: text/markdown
