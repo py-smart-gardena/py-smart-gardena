@@ -8,3 +8,18 @@
 ## Description
 
 This library aims to provide python way to communicate with gardena smart gateway and all smart gardena systems.
+
+## Installation
+
+```sh
+pip install py-smart-gardena
+```
+
+## Usage
+
+```python
+from gardena.gateway import Gateway
+gw = Gateway(email="email@gardena.com", password="password")
+gw.authenticate()
+
+```

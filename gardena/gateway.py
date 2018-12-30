@@ -1,4 +1,5 @@
 import requests
+import json
 
 
 class Gateway:
@@ -12,15 +13,28 @@ class Gateway:
         self.email = email
         self.password = password
         self.token = None
+        self.refresh_token = None
+        self.user_id = None
         self.etag = None
         self.request_session = requests.session()
 
     def authenticate(self):
-        """Authenticate and get tokens """
+        """Authenticate and get tokens. This function needs to be called first"""
         credentials = {
             "email": self.email,
             "password": self.password
         }
+        url = 'https://smart.gardena.com/sg-1/sessions'
+        response = self.request_session.post(
+            url,
+            headers=self.__create_header(),
+            data=json.dumps(credentials, ensure_ascii=False)
+        )
+        response.raise_for_status()
+        response_data = json.loads(response.content.decode('utf-8'))
+        self.token = response_data['sessions']['token']
+        self.refresh_token = response_data['sessions']['refresh_token']
+        self.user_id = response_data['sessions']['user_id']
 
     def __create_header(self):
         headers = {
