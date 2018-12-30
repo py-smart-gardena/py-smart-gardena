@@ -75,6 +75,4 @@ class Gateway:
         }
         if self.token is not None:
             headers['X-Session'] = self.token
-        if self.etag is not None:
-            headers['If-None-Match'] = ETag
         return headers
