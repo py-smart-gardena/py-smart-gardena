@@ -9,8 +9,9 @@ python:
 # command to install dependencies
 install:
   - pip install -r requirements.txt
+  - pip install codecov
 # command to run tests
 script:
   - python setup.py test
 after_success:
-- bash <(curl -s https://codecov.io/bash)
+  - codecov
