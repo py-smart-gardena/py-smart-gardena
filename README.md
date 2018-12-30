@@ -24,8 +24,8 @@ from gardena.gateway import Gateway
 gw = Gateway(email="email@gardena.com", password="password")
 gw.authenticate()
 
-# To update locations (gérdens, ..)
+# To update locations (gardens, ..)
 gw.update_locations()
-# To update devices (mower, gateway, sensor ..)
+# To update devices information (mower, gateway, sensor, ..)
 gw.update_devices()
 ```
