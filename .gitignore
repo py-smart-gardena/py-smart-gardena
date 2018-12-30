@@ -4,3 +4,5 @@ lib/
 pyvenv.cfg
 pip-selfcheck.json
 *pycache*
+.coverage
+.eggs/
