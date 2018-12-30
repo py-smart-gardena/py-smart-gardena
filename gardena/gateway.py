@@ -17,6 +17,7 @@ class Gateway:
         self.user_id = None
         self.etag = None
         self.locations = None
+        self.devices = None
         self.request_session = requests.session()
 
     def authenticate(self):
@@ -52,8 +53,20 @@ class Gateway:
             params=params
         )
         response_data = json.loads(response.content.decode('utf-8'))
-        self.locations = [(i['id'], i['name']) for i in
-                          response_data['locations']]
+        self.locations = {}
+        for location in response_data:
+            self.locations[location['id']] = location
+
+    def update_devices(self):
+        url = "https://smart.gardena.com/sg-1/devices"
+        response = self.request_session.get(
+            url,
+            headers=self.__create_header()
+        )
+        response_data = json.loads(response.content.decode('utf-8'))
+        self.devices = {}
+        for device in response_data['devices']:
+            self.devices[device['id']] = device
 
     def __create_header(self):
         headers = {
