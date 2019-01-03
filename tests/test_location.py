@@ -33,7 +33,7 @@ class LocationTestCase(unittest.TestCase):
         with pytest.raises(ValueError):
             Location(smart_system=self.smart_system_test_info)
 
-    def test_locations_infos(self):
+    def test_location_information(self):
         location = Location(
             smart_system=self.smart_system_test_info,
             api_information=self.location_test_info,
