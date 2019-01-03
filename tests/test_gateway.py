@@ -84,7 +84,7 @@ class GatewayTestCase(unittest.TestCase, BaseTestDevice):
                     {
                         "id": "b74cbb14-b5e4-11e5-86c5-100000000001",
                         "name": "time_zone",
-                        "value": " Europe/Vienna (CEST, +0200)",
+                        "value": "Europe/Vienna (CEST, +0200)",
                         "writeable": False,
                         "supported_values": [],
                     },
@@ -115,3 +115,8 @@ class GatewayTestCase(unittest.TestCase, BaseTestDevice):
             gateway.is_configuration_synchronized
             == self.gateway_test_info["configuration_synchronized"]
         )
+        assert gateway.ip_address == "192.168.1.217"
+        assert gateway.timezone == "Europe/Vienna (CEST, +0200)"
+        assert gateway.serial_number == "N/A"
+        assert gateway.version == "1.2.1"
+        assert gateway.last_time_online == "N/A"
