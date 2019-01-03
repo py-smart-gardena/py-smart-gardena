@@ -1,8 +1,5 @@
-class Gateway:
-    """Class to communicate with smart gateway and handle network calls"""
+from gardena.base_gardena_device import BaseGardenaDevice
 
-    def __init__(self, smart_system=None):
-        """Constructor, create instance of gateway"""
-        if smart_system is None:
-            raise ValueError("Argument 'smart_system' is missing")
-        self.smart_system = smart_system
+
+class Gateway(BaseGardenaDevice):
+    """Class to communicate with smart gateway and handle network calls"""
