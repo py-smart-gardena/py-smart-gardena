@@ -19,6 +19,12 @@ class SmartSystem:
         self.devices = None
         self.locations = None
 
+    def __create_header(self):
+        headers = {"Content-Type": "application/json"}
+        if self.token is not None:
+            headers["X-Session"] = self.token
+        return headers
+
     def authenticate(self):
         """
         Authenticate and get tokens.
@@ -60,9 +66,3 @@ class SmartSystem:
 
     def get_session(self):
         return self.request_session
-
-    def __create_header(self):
-        headers = {"Content-Type": "application/json"}
-        if self.token is not None:
-            headers["X-Session"] = self.token
-        return headers
