@@ -1,6 +1,8 @@
 import requests
 import json
 
+from gardena.location import Location
+
 
 class SmartSystem:
     """Base class to communicate with gardena and handle network calls"""
@@ -44,7 +46,7 @@ class SmartSystem:
 
     def update_locations(self):
         """Update locations (gardens, ..) """
-        url = "https://smart.gardena.com/sg-1/locations"
+        url = "https://smart.gardena.com/sg-1/locations/"
         params = (("user_id", self.user_id),)
         response = self.request_session.get(
             url, headers=self.__create_header(), params=params
@@ -53,7 +55,9 @@ class SmartSystem:
         response_data = json.loads(response.content.decode("utf-8"))
         self.locations = {}
         for location in response_data["locations"]:
-            self.locations[location["id"]] = location
+            self.locations[location["id"]] = Location(
+                smart_system=self, api_information=location
+            )
 
     def update_devices(self):
         url = "https://smart.gardena.com/sg-1/devices"

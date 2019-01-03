@@ -21,7 +21,7 @@ def init_mock(smart_system):
     )
     adapter.register_uri(
         "GET",
-        "https://smart.gardena.com/sg-1/locations",
+        "https://smart.gardena.com/sg-1/locations/?user_id=196ab891-a521-872c-ab1d-1685d1e77afc",
         json={
             "locations": [
                 {
@@ -440,10 +440,21 @@ def init_mock(smart_system):
 def init_failed_mock(smart_system):
     adapter = requests_mock.Adapter()
     adapter.register_uri(
-        "POST", "https://smart.gardena.com/sg-1/sessions", json={}, status_code=400
+        "POST",
+        "https://smart.gardena.com/sg-1/sessions",
+        json={
+            "sessions": {
+                "token": "7867e26c-05eb-4a60-bf30-7c3a1b4480aa",
+                "user_id": "196ab891-a521-872c-ab1d-1685d1e77afc",
+            }
+        },
+        status_code=200,
     )
     adapter.register_uri(
-        "GET", "https://smart.gardena.com/sg-1/locations", json={}, status_code=400
+        "GET",
+        "https://smart.gardena.com/sg-1/locations/?user_id=196ab891-a521-872c-ab1d-1685d1e77afc",
+        json={},
+        status_code=400,
     )
     adapter.register_uri(
         "GET", "https://smart.gardena.com/sg-1/devices", json={}, status_code=400
@@ -474,22 +485,61 @@ class SmartSystemTestCase(unittest.TestCase):
 
     def test_authenticate_failed(self):
         smart_system = SmartSystem(email="test@test.com", password="password")
-        init_failed_mock(smart_system)
+        adapter = requests_mock.Adapter()
+        adapter.register_uri(
+            "POST", "https://smart.gardena.com/sg-1/sessions", json={}, status_code=400
+        )
+        smart_system.request_session.mount("https://smart.gardena.com/", adapter)
         with pytest.raises(HTTPError):
             smart_system.authenticate()
 
-    def test_get_locations(self):
+    def test_update_locations(self):
         smart_system = SmartSystem(email="test@test.com", password="password")
         init_mock(smart_system)
         smart_system.authenticate()
         smart_system.update_locations()
+        test_location = {
+            "id": "1c8b301f-22c8-423d-1b4d-ec25315d1377",
+            "name": "My Garden",
+            "devices": [
+                "75cfc1f8-a20c-51d6-c5ea-1b5ecdde80c1",
+                "e3c1b615-7351-25fc-a551-1908254a2b3e",
+            ],
+        }
         assert len(smart_system.locations) == 1
+        assert (
+            smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1377"].get_id()
+            == test_location["id"]
+        )
+        assert (
+            smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1377"].get_name()
+            == test_location["name"]
+        )
+        assert (
+            len(
+                smart_system.locations[
+                    "1c8b301f-22c8-423d-1b4d-ec25315d1377"
+                ].get_devices()
+            )
+            == 2
+        )
+        assert (
+            "75cfc1f8-a20c-51d6-c5ea-1b5ecdde80c1"
+            in smart_system.locations[
+                "1c8b301f-22c8-423d-1b4d-ec25315d1377"
+            ].get_devices()
+        )
+        assert (
+            "e3c1b615-7351-25fc-a551-1908254a2b3e"
+            in smart_system.locations[
+                "1c8b301f-22c8-423d-1b4d-ec25315d1377"
+            ].get_devices()
+        )
 
     def test_get_locations_failed(self):
         smart_system = SmartSystem(email="test@test.com", password="password")
         init_failed_mock(smart_system)
-        with pytest.raises(HTTPError):
-            smart_system.authenticate()
+        smart_system.authenticate()
         with pytest.raises(HTTPError):
             smart_system.update_locations()
 
@@ -503,8 +553,7 @@ class SmartSystemTestCase(unittest.TestCase):
     def test_get_devices_failed(self):
         smart_system = SmartSystem(email="test@test.com", password="password")
         init_failed_mock(smart_system)
-        with pytest.raises(HTTPError):
-            smart_system.authenticate()
+        smart_system.authenticate()
         with pytest.raises(HTTPError):
             smart_system.update_devices()
 
