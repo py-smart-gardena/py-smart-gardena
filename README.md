@@ -24,14 +24,14 @@ $ pip install py-smart-gardena
 ## Usage
 
 ```python
-from gardena.gateway import Gateway
-gw = Gateway(email="email@gardena.com", password="password")
-gw.authenticate()
+from gardena.smart_system import SmartSystem
+smart_system = SmartSystem(email="email@gardena.com", password="password")
+smart_system.authenticate()
 
 # To update locations (gardens, ..)
-gw.update_locations()
+smart_system.update_locations()
 # To update devices information (mower, gateway, sensor, ..)
-gw.update_devices()
+smart_system.update_devices()
 ```
 
 ## Development environment
