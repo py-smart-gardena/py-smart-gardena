@@ -18,7 +18,7 @@ class SmartSystem:
         self.refresh_token = None
         self.user_id = None
         self.request_session = requests.session()
-        self.locations = None
+        self.locations = {}
 
     def create_header(self):
         headers = {"Content-Type": "application/json"}
@@ -52,7 +52,6 @@ class SmartSystem:
         )
         response.raise_for_status()
         response_data = json.loads(response.content.decode("utf-8"))
-        self.locations = {}
         for location in response_data["locations"]:
             if location["id"] not in self.locations:
                 self.locations[location["id"]] = Location(smart_system=self)
