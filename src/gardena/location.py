@@ -1,6 +1,8 @@
 class Location:
+    """Keep informations about gardena locations (gardens, ..)"""
+
     def __init__(self, smart_system=None, location_info=None):
-        """Constructor, create instance of a gardena device"""
+        """Constructor, create instance of a location"""
         if smart_system is None:
             raise ValueError("Argument 'smart_system' is missing")
         if location_info is None:
