@@ -18,10 +18,9 @@ class SmartSystem:
         self.refresh_token = None
         self.user_id = None
         self.request_session = requests.session()
-        self.devices = None
         self.locations = None
 
-    def __create_header(self):
+    def create_header(self):
         headers = {"Content-Type": "application/json"}
         if self.token is not None:
             headers["X-Session"] = self.token
@@ -36,7 +35,7 @@ class SmartSystem:
         credentials = {"email": self.email, "password": self.password}
         response = self.request_session.post(
             url,
-            headers=self.__create_header(),
+            headers=self.create_header(),
             data=json.dumps(credentials, ensure_ascii=False),
         )
         response.raise_for_status()
@@ -49,24 +48,15 @@ class SmartSystem:
         url = "https://smart.gardena.com/sg-1/locations/"
         params = (("user_id", self.user_id),)
         response = self.request_session.get(
-            url, headers=self.__create_header(), params=params
+            url, headers=self.create_header(), params=params
         )
         response.raise_for_status()
         response_data = json.loads(response.content.decode("utf-8"))
         self.locations = {}
         for location in response_data["locations"]:
-            self.locations[location["id"]] = Location(
-                smart_system=self, api_information=location
-            )
-
-    def update_devices(self):
-        url = "https://smart.gardena.com/sg-1/devices"
-        response = self.request_session.get(url, headers=self.__create_header())
-        response.raise_for_status()
-        response_data = json.loads(response.content.decode("utf-8"))
-        self.devices = {}
-        for device in response_data["devices"]:
-            self.devices[device["id"]] = device
+            if location["id"] not in self.locations:
+                self.locations[location["id"]] = Location(smart_system=self)
+            self.locations[location["id"]].update_information(location)
 
     def get_session(self):
         return self.request_session

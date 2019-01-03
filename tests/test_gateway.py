@@ -97,31 +97,21 @@ class GatewayTestCase(unittest.TestCase, BaseTestDevice):
     }
 
     def test_init(self):
-        gw = Gateway(
-            smart_system=self.smart_system_test_info,
-            api_information=self.gateway_test_info,
-        )
+        gw = Gateway(smart_system=self.smart_system_test_info)
         assert gw.smart_system == self.smart_system_test_info
-        assert gw.api_information == self.gateway_test_info
 
     def test_init_exception_without_smart_system(self):
         with pytest.raises(ValueError):
-            Gateway(api_information=self.gateway_test_info)
-
-    def test_init_exception_without_device_info(self):
-        with pytest.raises(ValueError):
-            Gateway(smart_system=self.smart_system_test_info)
+            Gateway()
 
     def test_gateway_information(self):
-        gateway = Gateway(
-            smart_system=self.smart_system_test_info,
-            api_information=self.gateway_test_info,
-        )
-        assert gateway.get_id() == self.gateway_test_info["id"]
-        assert gateway.get_name() == self.gateway_test_info["name"]
-        assert gateway.get_description() == self.gateway_test_info["description"]
-        assert gateway.get_category() == self.gateway_test_info["category"]
+        gateway = Gateway(smart_system=self.smart_system_test_info)
+        gateway.update_information(information=self.gateway_test_info)
+        assert gateway.id == self.gateway_test_info["id"]
+        assert gateway.name == self.gateway_test_info["name"]
+        assert gateway.description == self.gateway_test_info["description"]
+        assert gateway.category == self.gateway_test_info["category"]
         assert (
-            gateway.get_configuration_synchronized()
+            gateway.is_configuration_synchronized
             == self.gateway_test_info["configuration_synchronized"]
         )

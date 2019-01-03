@@ -30,8 +30,17 @@ smart_system.authenticate()
 
 # To update locations (gardens, ..)
 smart_system.update_locations()
-# To update devices information (mower, gateway, sensor, ..)
-smart_system.update_devices()
+
+for location in smart_system.locations:
+   # To update devices information for a location (mower, gateway, sensor, ..)
+    location.update_devices()
+    #Iterate over gateways
+    for gateway in location.gateways:
+        print(gateway.name + "(" + gateway.id +")")
+    #Iterate over mowers
+    for mower in location.mowers:
+        print(mower.name + "(" + mower.id +")")
+
 ```
 
 ## Development environment
@@ -39,3 +48,10 @@ smart_system.update_devices()
 ```sh
 $ pip install -e .[dev]
 ```
+
+
+## Credits
+
+This library would not have been possible without the work of :
+* DXSdata (http://www.dxsdata.com/2016/07/php-class-for-gardena-smart-system-api/)
+* Gerrieg (https://www.roboter-forum.com/index.php?thread/16777-gardena-smart-system-analyse/&l=2)

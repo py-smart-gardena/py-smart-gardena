@@ -4,11 +4,12 @@ from gardena.base_gardena_class import BaseGardenaClass
 class Gateway(BaseGardenaClass):
     """Class to hold informations about gateways"""
 
-    def get_description(self):
-        return self.api_information["description"]
+    description = None
+    category = None
+    is_configuration_synchronized = None
 
-    def get_category(self):
-        return self.api_information["category"]
-
-    def get_configuration_synchronized(self):
-        return self.api_information["configuration_synchronized"]
+    def update_information(self, information):
+        super(Gateway, self).update_information(information)
+        self.description = information["description"]
+        self.category = information["category"]
+        self.is_configuration_synchronized = information["configuration_synchronized"]
