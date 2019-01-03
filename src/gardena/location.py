@@ -14,7 +14,9 @@ class Location(BaseGardenaClass):
         "mower": {"class": Mower, "map": mowers},
     }
 
-    def __add_or_update_device(self, device):
+    def add_or_update_device(self, device=None):
+        if device is None:
+            raise ValueError("No device provided")
         if device["category"] not in self.categories_data:
             raise ValueError("Category " + device["category"] + " unknown")
 
@@ -33,4 +35,4 @@ class Location(BaseGardenaClass):
         response.raise_for_status()
         response_data = json.loads(response.content.decode("utf-8"))
         for device in response_data["devices"]:
-            self.__add_or_update_device(device)
+            self.add_or_update_device(device)

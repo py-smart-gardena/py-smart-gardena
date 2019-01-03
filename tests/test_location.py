@@ -42,10 +42,39 @@ class LocationTestCase(unittest.TestCase):
         assert location.id == self.location_test_info["id"]
         assert location.name == self.location_test_info["name"]
 
-    def test_get_devices(self):
+    def test_update_devices(self):
         location = Location(smart_system=self.smart_system_test_info)
         location.update_information(self.location_test_info)
         location.update_devices()
+        assert len(location.gateways) == 1
+        assert len(location.mowers) == 1
+
+    def test_update_devices_unknown_category(self):
+        location = Location(smart_system=self.smart_system_test_info)
+        location.update_information(self.location_test_info)
+        location.update_devices()
+        assert len(location.gateways) == 1
+        assert len(location.mowers) == 1
+        with pytest.raises(ValueError):
+            location.add_or_update_device(
+                device={
+                    "id": "75cfc1f8-a20c-51d6-c5ea-1b5eccce80c1",
+                    "name": "Unknown device",
+                    "description": "Unknown device",
+                    "category": "unknown_category",
+                }
+            )
+        assert len(location.gateways) == 1
+        assert len(location.mowers) == 1
+
+    def test_update_devices_exception_with_none_device(self):
+        location = Location(smart_system=self.smart_system_test_info)
+        location.update_information(self.location_test_info)
+        location.update_devices()
+        assert len(location.gateways) == 1
+        assert len(location.mowers) == 1
+        with pytest.raises(ValueError):
+            location.add_or_update_device()
         assert len(location.gateways) == 1
         assert len(location.mowers) == 1
 

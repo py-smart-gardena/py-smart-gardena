@@ -61,7 +61,31 @@ class SmartSystemTestCase(unittest.TestCase):
             == test_location["name"]
         )
 
-    def test_get_locations_failed(self):
+    def test_update_locations_update(self):
+        smart_system = SmartSystem(email="test@test.com", password="password")
+        init_mock(smart_system)
+        smart_system.authenticate()
+        test_location = {
+            "id": "1c8b301f-22c8-423d-1b4d-ec25315d1377",
+            "name": "My Garden",
+            "devices": [
+                "75cfc1f8-a20c-51d6-c5ea-1b5ecdde80c1",
+                "e3c1b615-7351-25fc-a551-1908254a2b3e",
+            ],
+        }
+        smart_system.update_locations()
+        smart_system.update_locations()
+        assert len(smart_system.locations) == 1
+        assert (
+            smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1377"].id
+            == test_location["id"]
+        )
+        assert (
+            smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1377"].name
+            == test_location["name"]
+        )
+
+    def test_update_locations_failed(self):
         smart_system = SmartSystem(email="test@test.com", password="password")
         init_failed_mock(smart_system)
         smart_system.authenticate()
