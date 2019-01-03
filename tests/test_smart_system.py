@@ -1,36 +1,9 @@
 import pytest
 import unittest
 import requests_mock
+import requests
 from requests import HTTPError
 from gardena.smart_system import SmartSystem
-
-
-# This method will be used by the mock to replace requests.get
-def mocked_requests_post(*args, **kwargs):
-    class MockResponse:
-        def __init__(self, json_data, status_code):
-            self.json_data = json_data
-            self.status_code = status_code
-
-        def json(self):
-            return self.json_data
-
-    if args[0] == "https://smart.gardena.com/sg-1/sessions":
-        return MockResponse(
-            {
-                "sessions": {
-                    "token": "7867e26c-05eb-4a60-bf30-7c3a1b4480aa",
-                    "user_id": "196ab891-a521-872c-ab1d-1685d1e77afc",
-                }
-            },
-            200,
-        )
-    elif args[0] == "https://smart.gardena.com/sg-1/locations":
-        return MockResponse({"key2": "value2"}, 200)
-    elif args[0] == "https://smart.gardena.com/sg-1/devices":
-        return MockResponse({"key2": "value2"}, 200)
-
-    return MockResponse(None, 404)
 
 
 def init_mock(smart_system):
@@ -478,7 +451,7 @@ def init_failed_mock(smart_system):
     smart_system.request_session.mount("https://smart.gardena.com/", adapter)
 
 
-class GatewayTestCase(unittest.TestCase):
+class SmartSystemTestCase(unittest.TestCase):
     def test_init(self):
         smart_system = SmartSystem(email="test@test.com", password="password")
         assert smart_system.email == "test@test.com"
@@ -534,3 +507,8 @@ class GatewayTestCase(unittest.TestCase):
             smart_system.authenticate()
         with pytest.raises(HTTPError):
             smart_system.update_devices()
+
+    def test_get_session(self):
+        smart_system = SmartSystem(email="test@test.com", password="password")
+        init_mock(smart_system)
+        assert isinstance(smart_system.get_session(), requests.sessions.Session)
