@@ -1,5 +1,5 @@
-from gardena.base_gardena_device import BaseGardenaDevice
+from gardena.base_gardena_device import BaseGardenaClass
 
 
-class Mower(BaseGardenaDevice):
+class Mower(BaseGardenaClass):
     """Class to communicate with a mower"""

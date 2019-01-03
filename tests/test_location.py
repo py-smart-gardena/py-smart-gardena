@@ -20,14 +20,14 @@ class LocationTestCase(unittest.TestCase):
     def test_init(self):
         location = Location(
             smart_system=self.smart_system_test_info,
-            location_info=self.location_test_info,
+            api_information=self.location_test_info,
         )
         assert location.smart_system == self.smart_system_test_info
-        assert location.location_info == self.location_test_info
+        assert location.api_information == self.location_test_info
 
     def test_init_exception_without_smart_system(self):
         with pytest.raises(ValueError):
-            Location(location_info=self.location_test_info)
+            Location(api_information=self.location_test_info)
 
     def test_init_exception_without_device_info(self):
         with pytest.raises(ValueError):
@@ -36,7 +36,7 @@ class LocationTestCase(unittest.TestCase):
     def test_locations_infos(self):
         location = Location(
             smart_system=self.smart_system_test_info,
-            location_info=self.location_test_info,
+            api_information=self.location_test_info,
         )
         assert location.get_id() == self.location_test_info["id"]
         assert location.get_name() == self.location_test_info["name"]

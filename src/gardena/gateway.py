@@ -1,5 +1,5 @@
-from gardena.base_gardena_device import BaseGardenaDevice
+from gardena.base_gardena_device import BaseGardenaClass
 
 
-class Gateway(BaseGardenaDevice):
+class Gateway(BaseGardenaClass):
     """Class to hold informations about gateways"""

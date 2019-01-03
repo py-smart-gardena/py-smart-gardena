@@ -98,14 +98,15 @@ class GatewayTestCase(unittest.TestCase, BaseTestDevice):
 
     def test_init(self):
         gw = Gateway(
-            smart_system=self.smart_system_test_info, device_info=self.gateway_test_info
+            smart_system=self.smart_system_test_info,
+            api_information=self.gateway_test_info,
         )
         assert gw.smart_system == self.smart_system_test_info
-        assert gw.device_info == self.gateway_test_info
+        assert gw.api_information == self.gateway_test_info
 
     def test_init_exception_without_smart_system(self):
         with pytest.raises(ValueError):
-            Gateway(device_info=self.gateway_test_info)
+            Gateway(api_information=self.gateway_test_info)
 
     def test_init_exception_without_device_info(self):
         with pytest.raises(ValueError):

@@ -300,14 +300,15 @@ class MowerTestCase(unittest.TestCase, BaseTestDevice):
 
     def test_init(self):
         mower = Mower(
-            smart_system=self.smart_system_test_info, device_info=self.mower_test_info
+            smart_system=self.smart_system_test_info,
+            api_information=self.mower_test_info,
         )
         assert mower.smart_system == self.smart_system_test_info
-        assert mower.device_info == self.mower_test_info
+        assert mower.api_information == self.mower_test_info
 
     def test_init_exception_without_smart_system(self):
         with pytest.raises(ValueError):
-            Mower(device_info=self.mower_test_info)
+            Mower(api_information=self.mower_test_info)
 
     def test_init_exception_without_device_info(self):
         with pytest.raises(ValueError):

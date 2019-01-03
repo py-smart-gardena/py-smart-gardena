@@ -1,17 +1,11 @@
-class Location:
+from gardena.base_gardena_device import BaseGardenaClass
+
+
+class Location(BaseGardenaClass):
     """Keep informations about gardena locations (gardens, ..)"""
 
-    def __init__(self, smart_system=None, location_info=None):
-        """Constructor, create instance of a location"""
-        if smart_system is None:
-            raise ValueError("Argument 'smart_system' is missing")
-        if location_info is None:
-            raise ValueError("Argument 'location_info' is missing")
-        self.smart_system = smart_system
-        self.location_info = location_info
-
     def get_id(self):
-        return self.location_info["id"]
+        return self.api_information["id"]
 
     def get_name(self):
-        return self.location_info["name"]
+        return self.api_information["name"]
