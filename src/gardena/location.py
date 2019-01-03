@@ -17,15 +17,12 @@ class Location(BaseGardenaClass):
     def __add_or_update_device(self, device):
         if device["category"] not in self.categories_data:
             raise ValueError("Category " + device["category"] + " unknown")
-        if device["id"] not in self.categories_data[device["category"]]["map"]:
-            self.categories_data[device["category"]]["map"][
-                device["id"]
-            ] = self.categories_data[device["category"]]["class"](
-                smart_system=self.smart_system
-            )
-        self.categories_data[device["category"]]["map"][
-            device["id"]
-        ].update_information(device)
+
+        device_class = self.categories_data[device["category"]]["class"]
+        device_map = self.categories_data[device["category"]]["map"]
+        if device["id"] not in device_map:
+            device_map[device["id"]] = device_class(smart_system=self.smart_system)
+        device_map[device["id"]].update_information(device)
 
     def update_devices(self):
         url = "https://smart.gardena.com/sg-1/devices/"
