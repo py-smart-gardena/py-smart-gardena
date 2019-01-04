@@ -13,29 +13,26 @@ class Gateway(BaseGardenaClass):
     version = None
     last_time_online = None
 
+    data_fields = {
+        "gateway": {"ip_address": "ip_address", "time_zone": "timezone"},
+        "device_info": {
+            "serial_number": "serial_number",
+            "version": "version",
+            "last_time_online": "last_time_online",
+        },
+    }
+
     def update_information(self, information):
         super(Gateway, self).update_information(information)
         self.description = information["description"]
         self.category = information["category"]
         self.is_configuration_synchronized = information["configuration_synchronized"]
         for ability in information["abilities"]:
-            if ability["type"] == "device_info":
-                self.update_gateway_device_info(ability)
-            if ability["type"] == "gateway":
-                self.update_gateway_ability(ability)
+            self.update_property(ability)
 
-    def update_gateway_ability(self, ability):
+    def update_property(self, ability):
         for prop in ability["properties"]:
-            if prop["name"] == "ip_address":
-                self.ip_address = prop["value"]
-            elif prop["name"] == "time_zone":
-                self.timezone = prop["value"]
-
-    def update_gateway_device_info(self, ability):
-        for prop in ability["properties"]:
-            if prop["name"] == "serial_number":
-                self.serial_number = prop["value"]
-            elif prop["name"] == "version":
-                self.version = prop["value"]
-            elif prop["name"] == "last_time_online":
-                self.last_time_online = prop["value"]
+            if prop["name"] in self.data_fields[ability["type"]]:
+                setattr(
+                    self, self.data_fields[ability["type"]][prop["name"]], prop["value"]
+                )
