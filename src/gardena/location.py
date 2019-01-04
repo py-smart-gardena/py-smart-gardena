@@ -7,12 +7,40 @@ from gardena.mower import Mower
 class Location(BaseGardenaClass):
     """Keep informations about gardena locations (gardens, ..) and devices"""
 
+    latitude = None
+    longitude = None
+    address = None
+    city = None
+    sunrise = None
+    sunset = None
+    time_zone = None
+    time_zone_offset = None
     gateways = {}
     mowers = {}
     categories_data = {
         "gateway": {"class": Gateway, "map": gateways},
         "mower": {"class": Mower, "map": mowers},
     }
+
+    def update_information(self, information):
+        super(Location, self).update_information(information)
+        if "geo_position" in information:
+            self.set_field_if_exists(
+                information["geo_position"], "latitude", "latitude"
+            )
+            self.set_field_if_exists(
+                information["geo_position"], "longitude", "longitude"
+            )
+            self.set_field_if_exists(information["geo_position"], "address", "address")
+            self.set_field_if_exists(information["geo_position"], "city", "city")
+            self.set_field_if_exists(information["geo_position"], "sunrise", "sunrise")
+            self.set_field_if_exists(information["geo_position"], "sunset", "sunset")
+            self.set_field_if_exists(
+                information["geo_position"], "time_zone", "time_zone"
+            )
+            self.set_field_if_exists(
+                information["geo_position"], "time_zone_offset", "time_zone_offset"
+            )
 
     def add_or_update_device(self, device=None):
         if device is None:

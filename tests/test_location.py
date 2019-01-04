@@ -19,6 +19,17 @@ class LocationTestCase(unittest.TestCase):
             "75cfc1f8-a20c-51d6-c5ea-1b5ecdde80c1",
             "e3c1b615-7351-25fc-a551-1908254a2b3e",
         ],
+        "geo_position": {
+            "latitude": 48.8738,
+            "longitude": 2.295,
+            "address": "Place Charles de Gaulle 75008 Paris, France",
+            "city": "Paris",
+            "id": "b30e4f46-f96d-4808-ccb8-ecacec57249d",
+            "sunrise": "08:46",
+            "sunset": "17:09",
+            "time_zone": "Europe/Paris",
+            "time_zone_offset": 3600000,
+        },
     }
 
     def setup_method(self, method):
@@ -41,6 +52,21 @@ class LocationTestCase(unittest.TestCase):
         location.update_information(self.location_test_info)
         assert location.id == self.location_test_info["id"]
         assert location.name == self.location_test_info["name"]
+        assert location.latitude == self.location_test_info["geo_position"]["latitude"]
+        assert (
+            location.longitude == self.location_test_info["geo_position"]["longitude"]
+        )
+        assert location.address == self.location_test_info["geo_position"]["address"]
+        assert location.city == self.location_test_info["geo_position"]["city"]
+        assert location.sunrise == self.location_test_info["geo_position"]["sunrise"]
+        assert location.sunset == self.location_test_info["geo_position"]["sunset"]
+        assert (
+            location.time_zone == self.location_test_info["geo_position"]["time_zone"]
+        )
+        assert (
+            location.time_zone_offset
+            == self.location_test_info["geo_position"]["time_zone_offset"]
+        )
 
     def test_update_devices(self):
         location = Location(smart_system=self.smart_system_test_info)

@@ -72,6 +72,17 @@ class SmartSystemTestCase(unittest.TestCase):
                 "75cfc1f8-a20c-51d6-c5ea-1b5ecdde80c1",
                 "e3c1b615-7351-25fc-a551-1908254a2b3e",
             ],
+            "geo_position": {
+                "latitude": 48.8738,
+                "longitude": 2.295,
+                "address": "Place Charles de Gaulle 75008 Paris, France",
+                "city": "Paris",
+                "id": "b30e4f46-f96d-4808-ccb8-ecacec57249d",
+                "sunrise": "08:46",
+                "sunset": "17:09",
+                "time_zone": "Europe/Paris",
+                "time_zone_offset": 3600000,
+            },
         }
         smart_system.update_locations()
         smart_system.update_locations()
