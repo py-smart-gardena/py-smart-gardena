@@ -4,12 +4,17 @@ from gardena.base_gardena_class import BaseGardenaClass
 class BaseGardenaDeviceClass(BaseGardenaClass):
     """Base class for Gardena devices"""
 
+    # Common fields
     description = None
     category = None
     is_configuration_synchronized = False
     serial_number = None
     version = None
     last_time_online = None
+    # Battery specific fields
+    battery_level = None
+    rechargable_battery_status = None
+    charging = False
 
     """Used to map data between 'device_info' ability fields and class fields"""
     device_info_ability_fields = {
@@ -18,10 +23,18 @@ class BaseGardenaDeviceClass(BaseGardenaClass):
         "last_time_online": "last_time_online",
     }
 
+    battery_ability_fields = {
+        "level": "battery_level",
+        "rechargable_battery_status": "rechargable_battery_status",
+        "last_time_online": "last_time_online",
+    }
+
     def handle_abilities(self, abilities):
         for ability in abilities:
             if ability["type"] == "device_info":
                 self.set_ability_field(ability, self.device_info_ability_fields)
+            elif ability["type"] == "battery_power":
+                self.set_ability_field(ability, self.battery_ability_fields)
             else:
                 self.update_specific_device_info(ability)
 

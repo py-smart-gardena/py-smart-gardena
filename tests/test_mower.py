@@ -305,3 +305,19 @@ class MowerTestCase(unittest.TestCase, BaseTestDevice):
     def test_init_exception_without_smart_system(self):
         with pytest.raises(ValueError):
             Mower()
+
+    def test_mower_information(self):
+        mower = Mower(smart_system=self.smart_system_test_info)
+        mower.update_information(information=self.mower_test_info)
+        assert mower.id == self.mower_test_info["id"]
+        assert mower.name == self.mower_test_info["name"]
+        # XXX : no description for mower ?
+        # assert mower.description == self.mower_test_info["description"]
+        assert mower.category == self.mower_test_info["category"]
+        assert (
+            mower.is_configuration_synchronized
+            == self.mower_test_info["configuration_synchronized"]
+        )
+        assert mower.battery_level == 100
+        assert mower.rechargable_battery_status == "ok"
+        assert not mower.charging

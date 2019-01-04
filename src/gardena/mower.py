@@ -17,7 +17,7 @@ class Mower(BaseGardenaDeviceClass):
             self.handle_abilities(information["abilities"])
 
     def update_specific_device_info(self, device_specific_information):
-        if device_specific_information["type"] == "mower":
+        if device_specific_information["type"] == "robotic_mower":
             self.set_ability_field(
                 device_specific_information, self.mower_ability_fields
             )

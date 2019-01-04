@@ -11,7 +11,7 @@ class BaseGardenaClass:
         self.smart_system = smart_system
 
     def set_field_if_exists(self, hashmap, hashmap_key, field_name):
-        if hashmap_key in hashmap:
+        if hashmap_key in hashmap and hasattr(self, field_name):
             setattr(self, field_name, hashmap[hashmap_key])
 
     def update_information(self, information):
