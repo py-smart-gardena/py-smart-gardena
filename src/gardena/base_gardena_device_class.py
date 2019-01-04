@@ -13,8 +13,12 @@ class BaseGardenaDeviceClass(BaseGardenaClass):
     last_time_online = None
     # Battery specific fields
     battery_level = None
-    rechargable_battery_status = None
-    charging = False
+    battery_rechargable_status = None
+    battery_charging = False
+    # Radio fields
+    radio_quality = None
+    radio_connection_status = None
+    radio_state = None
 
     """Used to map data between 'device_info' ability fields and class fields"""
     device_info_ability_fields = {
@@ -25,8 +29,14 @@ class BaseGardenaDeviceClass(BaseGardenaClass):
 
     battery_ability_fields = {
         "level": "battery_level",
-        "rechargable_battery_status": "rechargable_battery_status",
-        "last_time_online": "last_time_online",
+        "rechargable_battery_status": "battery_rechargable_status",
+        "charging": "battery_charging",
+    }
+
+    radio_ability_fields = {
+        "quality": "radio_quality",
+        "connection_status": "radio_connection_status",
+        "state": "radio_state",
     }
 
     def handle_abilities(self, abilities):
@@ -35,6 +45,8 @@ class BaseGardenaDeviceClass(BaseGardenaClass):
                 self.set_ability_field(ability, self.device_info_ability_fields)
             elif ability["type"] == "battery_power":
                 self.set_ability_field(ability, self.battery_ability_fields)
+            elif ability["type"] == "radio_link":
+                self.set_ability_field(ability, self.radio_ability_fields)
             else:
                 self.update_specific_device_info(ability)
 

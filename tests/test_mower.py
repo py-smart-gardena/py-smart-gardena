@@ -319,5 +319,8 @@ class MowerTestCase(unittest.TestCase, BaseTestDevice):
             == self.mower_test_info["configuration_synchronized"]
         )
         assert mower.battery_level == 100
-        assert mower.rechargable_battery_status == "ok"
-        assert not mower.charging
+        assert mower.battery_rechargable_status == "ok"
+        assert not mower.battery_charging
+        assert mower.radio_quality == 50
+        assert mower.radio_connection_status == "status_device_unreachable"
+        assert mower.radio_state == "good"
