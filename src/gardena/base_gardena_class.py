@@ -15,5 +15,5 @@ class BaseGardenaClass:
             setattr(self, field_name, hashmap[hashmap_key])
 
     def update_information(self, information):
-        self.id = information["id"]
-        self.name = information["name"]
+        self.set_field_if_exists(information, "id", "id")
+        self.set_field_if_exists(information, "name", "name")
