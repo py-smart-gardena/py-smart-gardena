@@ -7,7 +7,7 @@ from tests.base_test_device import BaseTestDevice
 class SensorTestCase(unittest.TestCase, BaseTestDevice):
 
     sensor_test_info = {
-        "id": "a130596e-6627-4020-aea5-b6d2f24d0e03",
+        "id": "a130596e-6627-4030-aea5-b6d2f24d0e03",
         "name": "Sensor",
         "category": "sensor",
         "configuration_synchronized": False,
