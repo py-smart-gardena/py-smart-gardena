@@ -324,3 +324,4 @@ class MowerTestCase(unittest.TestCase, BaseTestDevice):
         assert mower.radio_quality == 50
         assert mower.radio_connection_status == "status_device_unreachable"
         assert mower.radio_state == "good"
+        assert mower.internal_temperature == 32

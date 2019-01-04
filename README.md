@@ -62,21 +62,22 @@ for location in smart_system.locations.values():
     # Iterate over mowers
     for mower in location.mowers:
         print("-> mower : " + mower.name + "(" + mower.id + ")")
-        print("---> category : " + gateway.category)
-        print("---> description : " + gateway.description)
+        print("---> category : " + mower.category)
+        print("---> description : " + mower.description)
         print(
-            "---> is_configuration_synchronized : " + 
-            gateway.is_configuration_synchronized)
-        print("---> serial number : " + gateway.serial_number)
-        print("---> version : " + gateway.version)
-        print("---> last time online : " + gateway.last_time_online)
-        print("---> battery level : " + gateway.battery_level)
-        print("---> battery rechargeable status : " + gateway
+            "---> is_configuration_synchronized : " +
+            str(mower.is_configuration_synchronized))
+        print("---> serial number : " + mower.serial_number)
+        print("---> version : " + mower.version)
+        print("---> last time online : " + mower.last_time_online)
+        print("---> battery level : " + str(mower.battery_level))
+        print("---> battery rechargeable status : " + mower
               .battery_rechargable_status)
-        print("---> battery charging : " + gateway.battery_charging)
-        print("---> radio quality : " + gateway.radio_quality)
-        print("---> radio connection status : " + gateway.radio_connection_status)
-        print("---> radio state : " + gateway.radio_state)
+        print("---> battery charging : " + str(mower.battery_charging))
+        print("---> radio quality : " + str(mower.radio_quality))
+        print("---> radio connection status : " + mower.radio_connection_status)
+        print("---> radio state : " + mower.radio_state)
+        print("---> internal temperature : " + str(mower.internal_temperature))
 
 ```
 
