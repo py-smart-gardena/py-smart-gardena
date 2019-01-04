@@ -6,14 +6,12 @@ class Gateway(BaseGardenaDeviceClass):
 
     ip_address = None
     timezone = None
-    device_state = None
 
     """Used to map data between 'gateway' ability fields and class fields"""
     gateway_ability_fields = {"ip_address": "ip_address", "time_zone": "timezone"}
 
     def update_information(self, information):
         super(Gateway, self).update_information(information)
-        self.set_field_if_exists(information, "device_state", "device_state")
         if "abilities" in information:
             self.handle_abilities(information["abilities"])
 

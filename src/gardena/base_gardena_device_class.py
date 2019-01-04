@@ -19,6 +19,7 @@ class BaseGardenaDeviceClass(BaseGardenaClass):
     radio_quality = None
     radio_connection_status = None
     radio_state = None
+    device_state = None
 
     """Used to map data between 'device_info' ability fields and class fields"""
     device_info_ability_fields = {
@@ -31,6 +32,7 @@ class BaseGardenaDeviceClass(BaseGardenaClass):
         "level": "battery_level",
         "rechargable_battery_status": "battery_status",
         "charging": "battery_charging",
+        "disposable_battery_status": "battery_status",
     }
 
     radio_ability_fields = {
@@ -62,6 +64,7 @@ class BaseGardenaDeviceClass(BaseGardenaClass):
         super(BaseGardenaDeviceClass, self).update_information(information)
         self.set_field_if_exists(information, "description", "description")
         self.set_field_if_exists(information, "category", "category")
+        self.set_field_if_exists(information, "device_state", "device_state")
         self.set_field_if_exists(
             information, "configuration_synchronized", "is_configuration_synchronized"
         )

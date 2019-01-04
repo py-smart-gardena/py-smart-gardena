@@ -2,6 +2,7 @@ import json
 from gardena.base_gardena_class import BaseGardenaClass
 from gardena.gateway import Gateway
 from gardena.mower import Mower
+from gardena.sensor import Sensor
 
 
 class Location(BaseGardenaClass):
@@ -17,11 +18,13 @@ class Location(BaseGardenaClass):
     time_zone_offset = None
     gateways = {}
     mowers = {}
+    sensors = {}
 
     """Used to configure device instance assignements"""
     device_types_configuration = {
         "gateway": {"class": Gateway, "map": gateways},
         "mower": {"class": Mower, "map": mowers},
+        "sensor": {"class": Sensor, "map": sensors},
     }
 
     def update_information(self, information):

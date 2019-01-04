@@ -81,6 +81,31 @@ for location in smart_system.locations.values():
         print("---> manual operation : " + str(mower.mower_manual_operation))
         print("---> timestamp next start : " + mower.mower_timestamp_next_start)
 
+    # Iterate over sensors
+    for sensor in location.sensors.values():
+        print("-> sensor : " + sensor.name + "(" + sensor.id + ")")
+        print("---> category : " + sensor.category)
+        print(
+            "---> is_configuration_synchronized : " +
+            str(sensor.is_configuration_synchronized))
+        print("---> serial number : " + sensor.serial_number)
+        print("---> version : " + sensor.version)
+        print("---> last time online : " + sensor.last_time_online)
+        print("---> device state : " + sensor.device_state)
+        print("---> battery level : " + str(sensor.battery_level))
+        print("---> battery rechargeable status : " + sensor.battery_status)
+        print("---> battery charging : " + str(sensor.battery_charging))
+        print("---> radio quality : " + str(sensor.radio_quality))
+        print("---> radio connection status : " + sensor.radio_connection_status)
+        print("---> radio state : " + sensor.radio_state)
+        print("---> ambient temperature : " + str(
+            sensor.sensor_ambient_temperature))
+        print("---> frost warning : " + sensor.sensor_frost_warning)
+        print("---> soil temperature : " + str(sensor.sensor_soil_temperature))
+        print("---> soil humidity : " + str(sensor.sensor_soil_humidity))
+        print("---> light : " + str(sensor.sensor_light))
+        print("---> firmware status : " + sensor.firmware_status)
+    
 ```
 
 ## Development environment
