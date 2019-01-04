@@ -11,3 +11,4 @@ plugins:
 exclude_patterns:
   - "versioneer.py"
   - "src/gardena/_version.py"
+  - "tests/gardena_api_return"
