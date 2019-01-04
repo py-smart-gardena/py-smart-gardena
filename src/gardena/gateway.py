@@ -4,7 +4,6 @@ from gardena.base_gardena_device_class import BaseGardenaDeviceClass
 class Gateway(BaseGardenaDeviceClass):
     """Class to hold informations about gateways"""
 
-    is_configuration_synchronized = None
     ip_address = None
     timezone = None
     serial_number = None
@@ -17,9 +16,6 @@ class Gateway(BaseGardenaDeviceClass):
 
     def update_information(self, information):
         super(Gateway, self).update_information(information)
-        self.set_field_if_exists(
-            information, "configuration_synchronized", "is_configuration_synchronized"
-        )
         self.set_field_if_exists(information, "device_state", "device_state")
         if "abilities" in information:
             self.handle_abilities(information["abilities"])

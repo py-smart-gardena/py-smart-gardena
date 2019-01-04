@@ -25,6 +25,9 @@ class BaseGardenaClass:
         self.set_field_if_exists(information, "id", "id")
         self.set_field_if_exists(information, "name", "name")
 
+    def update_specific_device_info(self, device_specific_information):
+        pass
+
     def handle_abilities(self, abilities):
         for ability in abilities:
             if ability["type"] == "device_info":
@@ -36,6 +39,3 @@ class BaseGardenaClass:
         for prop in hashmap["properties"]:
             if prop["name"] in fields_hashmap:
                 setattr(self, fields_hashmap[prop["name"]], prop["value"])
-
-    def update_specific_device_info(self, device_specific_information):
-        pass
