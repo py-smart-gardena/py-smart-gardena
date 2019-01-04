@@ -5,6 +5,7 @@ import requests_mock
 from requests import HTTPError
 from gardena.smart_system import SmartSystem
 from tests.gardena_api_mock import init_mock, init_failed_mock
+from tests.gardena_api_return.locations_return import location_return
 
 
 class SmartSystemTestCase(unittest.TestCase):
@@ -79,57 +80,30 @@ class SmartSystemTestCase(unittest.TestCase):
         init_mock(smart_system)
         smart_system.authenticate()
         smart_system.update_locations()
-        test_location = {
-            "id": "1c8b301f-22c8-423d-1b4d-ec25315d1377",
-            "name": "My Garden",
-            "devices": [
-                "75cfc1f8-a20c-51d6-c5ea-1b5ecdde80c1",
-                "e3c1b615-7351-25fc-a551-1908254a2b3e",
-            ],
-        }
         assert len(smart_system.locations) == 1
         assert (
             smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1377"].id
-            == test_location["id"]
+            == location_return["id"]
         )
         assert (
             smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1377"].name
-            == test_location["name"]
+            == location_return["name"]
         )
 
     def test_update_locations_update(self):
         smart_system = SmartSystem(email="test@test.com", password="password")
         init_mock(smart_system)
         smart_system.authenticate()
-        test_location = {
-            "id": "1c8b301f-22c8-423d-1b4d-ec25315d1377",
-            "name": "My Garden",
-            "devices": [
-                "75cfc1f8-a20c-51d6-c5ea-1b5ecdde80c1",
-                "e3c1b615-7351-25fc-a551-1908254a2b3e",
-            ],
-            "geo_position": {
-                "latitude": 48.8738,
-                "longitude": 2.295,
-                "address": "Place Charles de Gaulle 75008 Paris, France",
-                "city": "Paris",
-                "id": "b30e4f46-f96d-4808-ccb8-ecacec57249d",
-                "sunrise": "08:46",
-                "sunset": "17:09",
-                "time_zone": "Europe/Paris",
-                "time_zone_offset": 3600000,
-            },
-        }
         smart_system.update_locations()
         smart_system.update_locations()
         assert len(smart_system.locations) == 1
         assert (
             smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1377"].id
-            == test_location["id"]
+            == location_return["id"]
         )
         assert (
             smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1377"].name
-            == test_location["name"]
+            == location_return["name"]
         )
 
     def test_update_locations_failed(self):
