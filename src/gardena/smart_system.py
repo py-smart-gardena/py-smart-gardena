@@ -8,11 +8,11 @@ class SmartSystem:
     """Base class to communicate with gardena and handle network calls"""
 
     debug = False
-    email = "N/A"
-    password = "N/A"
-    token = "N/A"
-    refresh_token = "N/A"
-    user_id = "N/A"
+    email = None
+    password = None
+    token = None
+    refresh_token = None
+    user_id = None
     locations = {}
     request_session = requests.session()
 
