@@ -44,9 +44,9 @@ class Location(BaseGardenaClass):
 
     def add_or_update_device(self, device=None):
         if device is None:
-            raise ValueError("No device provided")
+            return
         if device["category"] not in self.categories_data:
-            raise ValueError("Category " + device["category"] + " unknown")
+            return
 
         device_class = self.categories_data[device["category"]]["class"]
         device_map = self.categories_data[device["category"]]["map"]
