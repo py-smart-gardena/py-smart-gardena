@@ -25,10 +25,12 @@ class Gateway(BaseGardenaClass):
 
     def update_information(self, information):
         super(Gateway, self).update_information(information)
-        self.description = information["description"]
-        self.category = information["category"]
-        self.is_configuration_synchronized = information["configuration_synchronized"]
-        self.device_state = information["device_state"]
+        self.set_field_if_exists(information, "description", "description")
+        self.set_field_if_exists(information, "category", "category")
+        self.set_field_if_exists(
+            information, "configuration_synchronized", "is_configuration_synchronized"
+        )
+        self.set_field_if_exists(information, "device_state", "device_state")
         for ability in information["abilities"]:
             self.update_property(ability)
 
