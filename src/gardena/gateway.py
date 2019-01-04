@@ -13,7 +13,9 @@ class Gateway(BaseGardenaClass):
     version = None
     last_time_online = None
     device_state = None
-    gateway_info_fields = {"ip_address": "ip_address", "time_zone": "timezone"}
+
+    """Used to map data between 'gateway' ability fields and class fields"""
+    gateway_ability_fields = {"ip_address": "ip_address", "time_zone": "timezone"}
 
     def update_information(self, information):
         super(Gateway, self).update_information(information)
@@ -29,5 +31,5 @@ class Gateway(BaseGardenaClass):
     def update_specific_device_info(self, device_specific_information):
         if device_specific_information["type"] == "gateway":
             self.set_ability_field(
-                device_specific_information, self.gateway_info_fields
+                device_specific_information, self.gateway_ability_fields
             )

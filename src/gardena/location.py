@@ -17,7 +17,9 @@ class Location(BaseGardenaClass):
     time_zone_offset = None
     gateways = {}
     mowers = {}
-    categories_data = {
+
+    """Used to configure device instance assignements"""
+    device_types_configuration = {
         "gateway": {"class": Gateway, "map": gateways},
         "mower": {"class": Mower, "map": mowers},
     }
@@ -45,11 +47,11 @@ class Location(BaseGardenaClass):
     def add_or_update_device(self, device=None):
         if device is None:
             return
-        if device["category"] not in self.categories_data:
+        if device["category"] not in self.device_types_configuration:
             return
 
-        device_class = self.categories_data[device["category"]]["class"]
-        device_map = self.categories_data[device["category"]]["map"]
+        device_class = self.device_types_configuration[device["category"]]["class"]
+        device_map = self.device_types_configuration[device["category"]]["map"]
         if device["id"] not in device_map:
             device_map[device["id"]] = device_class(smart_system=self.smart_system)
         device_map[device["id"]].update_information(device)

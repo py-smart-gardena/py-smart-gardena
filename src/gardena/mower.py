@@ -4,7 +4,8 @@ from gardena.base_gardena_class import BaseGardenaClass
 class Mower(BaseGardenaClass):
     """Class to communicate with a mower"""
 
-    mower_info_fields = {}
+    """Used to map data between 'mower' ability fields and class fields"""
+    mower_ability_fields = {}
 
     def update_information(self, information):
         super(Mower, self).update_information(information)
@@ -19,4 +20,6 @@ class Mower(BaseGardenaClass):
 
     def update_specific_device_info(self, device_specific_information):
         if device_specific_information["type"] == "mower":
-            self.set_ability_field(device_specific_information, self.mower_info_fields)
+            self.set_ability_field(
+                device_specific_information, self.mower_ability_fields
+            )

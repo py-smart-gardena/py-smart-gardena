@@ -3,7 +3,9 @@ class BaseGardenaClass:
 
     id = None
     name = None
-    device_info_fields = {
+
+    """Used to map data between 'device_info' ability fields and class fields"""
+    device_info_ability_fields = {
         "serial_number": "serial_number",
         "version": "version",
         "last_time_online": "last_time_online",
@@ -26,7 +28,7 @@ class BaseGardenaClass:
     def handle_abilities(self, abilities):
         for ability in abilities:
             if ability["type"] == "device_info":
-                self.set_ability_field(ability, self.device_info_fields)
+                self.set_ability_field(ability, self.device_info_ability_fields)
             else:
                 self.update_specific_device_info(ability)
 
