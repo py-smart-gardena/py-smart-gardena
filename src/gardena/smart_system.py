@@ -44,6 +44,12 @@ class SmartSystem:
         )
         response.raise_for_status()
         response_data = json.loads(response.content.decode("utf-8"))
+        if (
+            "sessions" not in response_data
+            or "token" not in response_data["sessions"]
+            or "user_id" not in response_data["sessions"]
+        ):
+            raise RuntimeError("Could not authenticate to gateway")
         self.token = response_data["sessions"]["token"]
         self.user_id = response_data["sessions"]["user_id"]
 

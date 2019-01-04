@@ -38,6 +38,42 @@ class SmartSystemTestCase(unittest.TestCase):
         with pytest.raises(HTTPError):
             smart_system.authenticate()
 
+    def test_authenticate_failed_without_session(self):
+        smart_system = SmartSystem(email="test@test.com", password="password")
+        adapter = requests_mock.Adapter()
+        adapter.register_uri(
+            "POST", "https://smart.gardena.com/sg-1/sessions", json={}, status_code=200
+        )
+        smart_system.request_session.mount("https://smart.gardena.com/", adapter)
+        with pytest.raises(RuntimeError):
+            smart_system.authenticate()
+
+    def test_authenticate_failed_without_token(self):
+        smart_system = SmartSystem(email="test@test.com", password="password")
+        adapter = requests_mock.Adapter()
+        adapter.register_uri(
+            "POST",
+            "https://smart.gardena.com/sg-1/sessions",
+            json={"sessions": {"user_id": "196ab891-a521-872c-ab1d-1685d1e77afc"}},
+            status_code=200,
+        )
+        smart_system.request_session.mount("https://smart.gardena.com/", adapter)
+        with pytest.raises(RuntimeError):
+            smart_system.authenticate()
+
+    def test_authenticate_failed_without_user_id(self):
+        smart_system = SmartSystem(email="test@test.com", password="password")
+        adapter = requests_mock.Adapter()
+        adapter.register_uri(
+            "POST",
+            "https://smart.gardena.com/sg-1/sessions",
+            json={"sessions": {"token": "7867e26c-05eb-4a60-bf30-7c3a1b4480aa"}},
+            status_code=200,
+        )
+        smart_system.request_session.mount("https://smart.gardena.com/", adapter)
+        with pytest.raises(RuntimeError):
+            smart_system.authenticate()
+
     def test_update_locations(self):
         smart_system = SmartSystem(email="test@test.com", password="password")
         init_mock(smart_system)
