@@ -20,6 +20,10 @@ class BaseGardenaDeviceClass(BaseGardenaClass):
     radio_connection_status = None
     radio_state = None
     device_state = None
+    # Ambient temperature
+    ambient_temperature = None
+    frost_warning = None
+    firmware_status = None
 
     """Used to map data between 'device_info' ability fields and class fields"""
     device_info_ability_fields = {
@@ -41,6 +45,13 @@ class BaseGardenaDeviceClass(BaseGardenaClass):
         "state": "radio_state",
     }
 
+    ambient_temperature_ability_fields = {
+        "temperature": "ambient_temperature",
+        "frost_warning": "frost_warning",
+    }
+
+    firmware_ability_fields = {"firmware_status": "firmware_status"}
+
     def handle_abilities(self, abilities):
         for ability in abilities:
             if ability["type"] == "device_info":
@@ -49,6 +60,10 @@ class BaseGardenaDeviceClass(BaseGardenaClass):
                 self.set_ability_field(ability, self.battery_ability_fields)
             elif ability["type"] == "radio_link":
                 self.set_ability_field(ability, self.radio_ability_fields)
+            elif ability["type"] == "ambient_temperature_sensor":
+                self.set_ability_field(ability, self.ambient_temperature_ability_fields)
+            elif ability["type"] == "firmware":
+                self.set_ability_field(ability, self.firmware_ability_fields)
             else:
                 self.update_specific_device_info(ability)
 

@@ -34,7 +34,7 @@ class MowerTestCase(unittest.TestCase, BaseTestDevice):
                     {
                         "id": "83df149b-3509-446a-9f8c-4d1dc71b8a7a",
                         "name": "serial_number",
-                        "value": "00008438",
+                        "value": "12345678",
                         "writeable": False,
                         "supported_values": [],
                     },
@@ -318,6 +318,9 @@ class MowerTestCase(unittest.TestCase, BaseTestDevice):
             mower.is_configuration_synchronized
             == self.mower_test_info["configuration_synchronized"]
         )
+        assert mower.serial_number == "12345678"
+        assert mower.version == "3-2.4.7-1.2.0-4380-MODIFIED-ICD1.16_1.2.0"
+        assert mower.last_time_online == "2016-07-21T13:28:48Z"
         assert mower.battery_level == 100
         assert mower.battery_status == "ok"
         assert not mower.battery_charging

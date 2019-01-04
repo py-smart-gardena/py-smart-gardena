@@ -3,6 +3,7 @@ from gardena.base_gardena_class import BaseGardenaClass
 from gardena.gateway import Gateway
 from gardena.mower import Mower
 from gardena.sensor import Sensor
+from gardena.water_control import WaterControl
 
 
 class Location(BaseGardenaClass):
@@ -19,12 +20,14 @@ class Location(BaseGardenaClass):
     gateways = {}
     mowers = {}
     sensors = {}
+    water_controls = {}
 
     """Used to configure device instance assignements"""
     device_types_configuration = {
         "gateway": {"class": Gateway, "map": gateways},
         "mower": {"class": Mower, "map": mowers},
         "sensor": {"class": Sensor, "map": sensors},
+        "watering_computer": {"class": WaterControl, "map": water_controls},
     }
 
     def update_information(self, information):

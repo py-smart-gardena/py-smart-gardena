@@ -33,7 +33,7 @@ class SensorTestCase(unittest.TestCase, BaseTestDevice):
                     {
                         "id": "bc40765a-fc7a-3db9-a282-ddad079b5f3a",
                         "name": "serial_number",
-                        "value": "00028462",
+                        "value": "12345678",
                         "writeable": False,
                         "supported_values": [],
                     },
@@ -340,14 +340,17 @@ class SensorTestCase(unittest.TestCase, BaseTestDevice):
             sensor.is_configuration_synchronized
             == self.sensor_test_info["configuration_synchronized"]
         )
+        assert sensor.serial_number == "12345678"
+        assert sensor.version == "1.0.3-2.5.2-1.2.5-ICD1.17_1.0.18"
+        assert sensor.last_time_online == "2019-01-03T23:57:34.549Z"
         assert sensor.device_state == "ok"
         assert sensor.battery_level == 97
         assert sensor.battery_status == "ok"
         assert sensor.radio_quality == 90
         assert sensor.radio_connection_status == "unknown"
         assert sensor.radio_state == "good"
-        assert sensor.sensor_ambient_temperature == 22
-        assert sensor.sensor_frost_warning == "no_frost"
+        assert sensor.ambient_temperature == 22
+        assert sensor.frost_warning == "no_frost"
         assert sensor.sensor_soil_temperature == 22
         assert sensor.sensor_soil_humidity == 0
         assert sensor.sensor_light == 0

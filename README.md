@@ -94,18 +94,38 @@ for location in smart_system.locations.values():
         print("---> device state : " + sensor.device_state)
         print("---> battery level : " + str(sensor.battery_level))
         print("---> battery rechargeable status : " + sensor.battery_status)
-        print("---> battery charging : " + str(sensor.battery_charging))
         print("---> radio quality : " + str(sensor.radio_quality))
         print("---> radio connection status : " + sensor.radio_connection_status)
         print("---> radio state : " + sensor.radio_state)
-        print("---> ambient temperature : " + str(
-            sensor.sensor_ambient_temperature))
-        print("---> frost warning : " + sensor.sensor_frost_warning)
+        print("---> firmware status : " + water_control.firmware_status)
+        print("---> ambient temperature : " + str(sensor.ambient_temperature))
+        print("---> frost warning : " + sensor.frost_warning)
         print("---> soil temperature : " + str(sensor.sensor_soil_temperature))
         print("---> soil humidity : " + str(sensor.sensor_soil_humidity))
         print("---> light : " + str(sensor.sensor_light))
-        print("---> firmware status : " + sensor.firmware_status)
-    
+
+    # Iterate over water control
+    for water_control in location.water_controls.values():
+        print("-> water control : " + water_control.name + "(" + water_control.id + ")")
+        print("---> category : " + water_control.category)
+        print(
+            "---> is_configuration_synchronized : " +
+            str(water_control.is_configuration_synchronized))
+        print("---> serial number : " + water_control.serial_number)
+        print("---> version : " + water_control.version)
+        print("---> last time online : " + water_control.last_time_online)
+        print("---> device state : " + water_control.device_state)
+        print("---> battery level : " + str(water_control.battery_level))
+        print("---> battery rechargeable status : " + water_control.battery_status)
+        print("---> radio quality : " + str(water_control.radio_quality))
+        print("---> radio connection status : " + water_control.radio_connection_status)
+        print("---> radio state : " + water_control.radio_state)
+        print("---> firmware status : " + water_control.firmware_status)
+        print("---> ambient temperature : " + str(water_control.ambient_temperature))
+        print("---> frost warning : " + water_control.frost_warning)
+        print("---> valve open : " + str(water_control.watering_valve_open))
+        print("---> manual override : " + water_control.watering_manual_override)
+
 ```
 
 ## Development environment
