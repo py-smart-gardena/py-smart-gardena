@@ -6,9 +6,6 @@ class Gateway(BaseGardenaDeviceClass):
 
     ip_address = None
     timezone = None
-    serial_number = None
-    version = None
-    last_time_online = None
     device_state = None
 
     """Used to map data between 'gateway' ability fields and class fields"""

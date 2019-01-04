@@ -7,6 +7,9 @@ class BaseGardenaDeviceClass(BaseGardenaClass):
     description = None
     category = None
     is_configuration_synchronized = False
+    serial_number = None
+    version = None
+    last_time_online = None
 
     """Used to map data between 'device_info' ability fields and class fields"""
     device_info_ability_fields = {
