@@ -13,7 +13,7 @@ class BaseGardenaDeviceClass(BaseGardenaClass):
     last_time_online = None
     # Battery specific fields
     battery_level = None
-    battery_rechargable_status = None
+    battery_status = None
     battery_charging = False
     # Radio fields
     radio_quality = None
@@ -29,7 +29,7 @@ class BaseGardenaDeviceClass(BaseGardenaClass):
 
     battery_ability_fields = {
         "level": "battery_level",
-        "rechargable_battery_status": "battery_rechargable_status",
+        "rechargable_battery_status": "battery_status",
         "charging": "battery_charging",
     }
 

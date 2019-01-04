@@ -71,13 +71,15 @@ for location in smart_system.locations.values():
         print("---> version : " + mower.version)
         print("---> last time online : " + mower.last_time_online)
         print("---> battery level : " + str(mower.battery_level))
-        print("---> battery rechargeable status : " + mower
-              .battery_rechargable_status)
+        print("---> battery rechargeable status : " + mower.battery_status)
         print("---> battery charging : " + str(mower.battery_charging))
         print("---> radio quality : " + str(mower.radio_quality))
         print("---> radio connection status : " + mower.radio_connection_status)
         print("---> radio state : " + mower.radio_state)
         print("---> internal temperature : " + str(mower.internal_temperature))
+        print("---> mower status : " + mower.mower_status)
+        print("---> manual operation : " + str(mower.mower_manual_operation))
+        print("---> timestamp next start : " + mower.mower_timestamp_next_start)
 
 ```
 
