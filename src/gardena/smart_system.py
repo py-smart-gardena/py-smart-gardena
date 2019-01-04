@@ -7,6 +7,15 @@ from gardena.location import Location
 class SmartSystem:
     """Base class to communicate with gardena and handle network calls"""
 
+    debug = False
+    email = "N/A"
+    password = "N/A"
+    token = "N/A"
+    refresh_token = "N/A"
+    user_id = "N/A"
+    locations = {}
+    request_session = requests.session()
+
     def __init__(self, email=None, password=None, debug=False):
         """Constructor, create instance of gateway"""
         if email is None or password is None:
@@ -14,11 +23,6 @@ class SmartSystem:
         self.debug = debug
         self.email = email
         self.password = password
-        self.token = None
-        self.refresh_token = None
-        self.user_id = None
-        self.request_session = requests.session()
-        self.locations = {}
 
     def create_header(self):
         headers = {"Content-Type": "application/json"}

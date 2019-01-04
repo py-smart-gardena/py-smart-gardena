@@ -4,14 +4,14 @@ from gardena.base_gardena_class import BaseGardenaClass
 class Gateway(BaseGardenaClass):
     """Class to hold informations about gateways"""
 
-    description = None
-    category = None
-    is_configuration_synchronized = None
-    ip_address = None
-    timezone = None
-    serial_number = None
-    version = None
-    last_time_online = None
+    description = "N/A"
+    category = "N/A"
+    is_configuration_synchronized = "N/A"
+    ip_address = "N/A"
+    timezone = "N/A"
+    serial_number = "N/A"
+    version = "N/A"
+    last_time_online = "N/A"
 
     data_fields = {
         "gateway": {"ip_address": "ip_address", "time_zone": "timezone"},
