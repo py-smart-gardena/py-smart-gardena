@@ -25,21 +25,58 @@ $ pip install py-smart-gardena
 
 ```python
 from gardena.smart_system import SmartSystem
-smart_system = SmartSystem(email="email@gardena.com", password="password")
+
+smart_system = SmartSystem(email="test@test.com", password="password")
 smart_system.authenticate()
 
 # To update locations (gardens, ..)
 smart_system.update_locations()
 
-for location in smart_system.locations:
-   # To update devices information for a location (mower, gateway, sensor, ..)
+for location in smart_system.locations.values():
+    print("location : " + location.name + "(" + location.id + ")")
+    print("-> latitude : " + str(location.latitude))
+    print("-> longitude : " + str(location.longitude))
+    print("-> address : " + location.address)
+    print("-> city : " + location.city)
+    print("-> sunrise : " + location.sunrise)
+    print("-> sunset : " + location.sunset)
+    print("-> time zone : " + location.time_zone)
+    print("-> time zone offset : " + str(location.time_zone_offset))
+
+    # To update devices information for a location (mower, gateway, sensor, ..)
     location.update_devices()
-    #Iterate over gateways
-    for gateway in location.gateways:
-        print(gateway.name + "(" + gateway.id +")")
-    #Iterate over mowers
+    # Iterate over gateways
+    for gateway in location.gateways.values():
+        print("-> gateway : " + gateway.name + "(" + gateway.id + ")")
+        print("---> category : " + gateway.category)
+        print("---> description : " + gateway.description)
+        print("---> is_configuration_synchronized : " + str(
+            gateway.is_configuration_synchronized))
+        print("---> serial number : " + gateway.serial_number)
+        print("---> version : " + gateway.version)
+        print("---> last time online : " + gateway.last_time_online)
+        print("---> ip address : " + gateway.ip_address)
+        print("---> timezone : " + gateway.timezone)
+        print("---> device state : " + gateway.device_state)
+
+    # Iterate over mowers
     for mower in location.mowers:
-        print(mower.name + "(" + mower.id +")")
+        print("-> mower : " + mower.name + "(" + mower.id + ")")
+        print("---> category : " + gateway.category)
+        print("---> description : " + gateway.description)
+        print(
+            "---> is_configuration_synchronized : " + 
+            gateway.is_configuration_synchronized)
+        print("---> serial number : " + gateway.serial_number)
+        print("---> version : " + gateway.version)
+        print("---> last time online : " + gateway.last_time_online)
+        print("---> battery level : " + gateway.battery_level)
+        print("---> battery rechargeable status : " + gateway
+              .battery_rechargable_status)
+        print("---> battery charging : " + gateway.battery_charging)
+        print("---> radio quality : " + gateway.radio_quality)
+        print("---> radio connection status : " + gateway.radio_connection_status)
+        print("---> radio state : " + gateway.radio_state)
 
 ```
 
