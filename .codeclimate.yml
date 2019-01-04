@@ -8,3 +8,6 @@ plugins:
     enabled: true
   sonar-python:
     enabled: true
+exclude_patterns:
+  - "versioneer.py"
+  - "src/gardena/_version.py"

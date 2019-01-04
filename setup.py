@@ -1,4 +1,5 @@
 import setuptools
+import versioneer
 from os.path import splitext, basename
 from glob import glob
 
@@ -7,7 +8,8 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="py-smart-gardena",
-    version="0.0.1",
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
     author="Jérémie Klein",
     author_email="grm.klein@gmail.com",
     description="This library aims to provide python way to communicate "
