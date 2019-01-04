@@ -36,7 +36,7 @@ class SmartSystem:
         This function needs to be called first.
         """
         url = "https://smart.gardena.com/sg-1/sessions"
-        credentials = {"email": self.email, "password": self.password}
+        credentials = {"sessions": {"email": self.email, "password": self.password}}
         response = self.request_session.post(
             url,
             headers=self.create_header(),
