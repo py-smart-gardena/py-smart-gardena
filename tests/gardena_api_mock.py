@@ -42,6 +42,7 @@ def init_mock(smart_system):
                     "description": "Gateway device",
                     "category": "gateway",
                     "configuration_synchronized": True,
+                    "device_state": "ok",
                     "abilities": [
                         {
                             "id": "f9667bc2-b5e2-11e5-b6a5-32212aec0665",

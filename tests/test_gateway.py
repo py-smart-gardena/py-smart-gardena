@@ -12,6 +12,7 @@ class GatewayTestCase(unittest.TestCase, BaseTestDevice):
         "description": "Gateway device",
         "category": "gateway",
         "configuration_synchronized": True,
+        "device_state": "ok",
         "abilities": [
             {
                 "id": "f9667bc2-b5e2-11e5-b6a5-32212aec0665",
@@ -120,3 +121,4 @@ class GatewayTestCase(unittest.TestCase, BaseTestDevice):
         assert gateway.serial_number == "N/A"
         assert gateway.version == "1.2.1"
         assert gateway.last_time_online == "N/A"
+        assert gateway.device_state == "ok"

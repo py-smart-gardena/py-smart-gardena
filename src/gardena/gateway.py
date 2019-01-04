@@ -4,14 +4,15 @@ from gardena.base_gardena_class import BaseGardenaClass
 class Gateway(BaseGardenaClass):
     """Class to hold informations about gateways"""
 
-    description = "N/A"
-    category = "N/A"
-    is_configuration_synchronized = "N/A"
-    ip_address = "N/A"
-    timezone = "N/A"
-    serial_number = "N/A"
-    version = "N/A"
-    last_time_online = "N/A"
+    description = None
+    category = None
+    is_configuration_synchronized = None
+    ip_address = None
+    timezone = None
+    serial_number = None
+    version = None
+    last_time_online = None
+    device_state = None
 
     data_fields = {
         "gateway": {"ip_address": "ip_address", "time_zone": "timezone"},
@@ -27,6 +28,7 @@ class Gateway(BaseGardenaClass):
         self.description = information["description"]
         self.category = information["category"]
         self.is_configuration_synchronized = information["configuration_synchronized"]
+        self.device_state = information["device_state"]
         for ability in information["abilities"]:
             self.update_property(ability)
 
