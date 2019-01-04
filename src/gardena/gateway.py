@@ -13,15 +13,7 @@ class Gateway(BaseGardenaClass):
     version = None
     last_time_online = None
     device_state = None
-
-    data_fields = {
-        "gateway": {"ip_address": "ip_address", "time_zone": "timezone"},
-        "device_info": {
-            "serial_number": "serial_number",
-            "version": "version",
-            "last_time_online": "last_time_online",
-        },
-    }
+    gateway_info_fields = {"ip_address": "ip_address", "time_zone": "timezone"}
 
     def update_information(self, information):
         super(Gateway, self).update_information(information)
@@ -31,12 +23,11 @@ class Gateway(BaseGardenaClass):
             information, "configuration_synchronized", "is_configuration_synchronized"
         )
         self.set_field_if_exists(information, "device_state", "device_state")
-        for ability in information["abilities"]:
-            self.update_property(ability)
+        if "abilities" in information:
+            self.handle_abilities(information["abilities"])
 
-    def update_property(self, ability):
-        for prop in ability["properties"]:
-            if prop["name"] in self.data_fields[ability["type"]]:
-                setattr(
-                    self, self.data_fields[ability["type"]][prop["name"]], prop["value"]
-                )
+    def update_specific_device_info(self, device_specific_information):
+        if device_specific_information["type"] == "gateway":
+            self.set_ability_field(
+                device_specific_information, self.gateway_info_fields
+            )
