@@ -325,3 +325,6 @@ class MowerTestCase(unittest.TestCase, BaseTestDevice):
         assert mower.radio_connection_status == "status_device_unreachable"
         assert mower.radio_state == "good"
         assert mower.internal_temperature == 32
+        assert mower.mower_status == "off_disabled"
+        assert not mower.mower_manual_operation
+        assert mower.mower_timestamp_next_start == "2016-07-22T08:00:00.000000001Z"
