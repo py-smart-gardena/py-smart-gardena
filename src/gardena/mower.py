@@ -1,7 +1,7 @@
-from gardena.base_gardena_class import BaseGardenaClass
+from gardena.base_gardena_device_class import BaseGardenaDeviceClass
 
 
-class Mower(BaseGardenaClass):
+class Mower(BaseGardenaDeviceClass):
     """Class to communicate with a mower"""
 
     """Used to map data between 'mower' ability fields and class fields"""
@@ -9,8 +9,6 @@ class Mower(BaseGardenaClass):
 
     def update_information(self, information):
         super(Mower, self).update_information(information)
-        self.set_field_if_exists(information, "description", "description")
-        self.set_field_if_exists(information, "category", "category")
         self.set_field_if_exists(
             information, "configuration_synchronized", "is_configuration_synchronized"
         )
