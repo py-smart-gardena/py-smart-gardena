@@ -1,21 +1,16 @@
-import pytest
 import unittest
-from gardena.mower import Mower
-from tests.base_test_device import BaseTestDevice
+
+from gardena.devices.mower import Mower
 from tests.gardena_api_return.devices_return import device_mower_return
+from tests.fixtures import SmartSystemFixture, LocationFixture
 
 
-class MowerTestCase(unittest.TestCase, BaseTestDevice):
-    def test_init(self):
-        mower = Mower(smart_system=self.smart_system_test_info)
-        assert mower.smart_system == self.smart_system_test_info
-
-    def test_init_exception_without_smart_system(self):
-        with pytest.raises(ValueError):
-            Mower()
-
+class MowerTestCase(unittest.TestCase):
     def test_mower_information(self):
-        mower = Mower(smart_system=self.smart_system_test_info)
+        mower = Mower(
+            smart_system=SmartSystemFixture.get_smart_system_fixture(),
+            location=LocationFixture.get_location_fixture(),
+        )
         mower.update_information(information=device_mower_return)
         assert mower.id == device_mower_return["id"]
         assert mower.name == device_mower_return["name"]

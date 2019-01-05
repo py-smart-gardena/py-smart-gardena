@@ -1,4 +1,4 @@
-from gardena.base_gardena_device_class import BaseGardenaDeviceClass
+from gardena.devices.base_gardena_device_class import BaseGardenaDeviceClass
 
 
 class Mower(BaseGardenaDeviceClass):

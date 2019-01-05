@@ -69,3 +69,13 @@ class SmartSystem:
 
     def get_session(self):
         return self.request_session
+
+    def call_smart_system(self, url=None, params=None, request_type="get", data={}):
+        response = getattr(self.request_session, request_type)(
+            url,
+            headers=self.create_header(),
+            params=params,
+            data=json.dumps(data, ensure_ascii=False),
+        )
+        response.raise_for_status()
+        return response

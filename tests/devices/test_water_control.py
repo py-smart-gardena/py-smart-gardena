@@ -1,21 +1,16 @@
-import pytest
 import unittest
-from gardena.water_control import WaterControl
-from tests.base_test_device import BaseTestDevice
+
+from gardena.devices.water_control import WaterControl
 from tests.gardena_api_return.devices_return import device_water_control_return
+from tests.fixtures import SmartSystemFixture, LocationFixture
 
 
-class WaterControlTestCase(unittest.TestCase, BaseTestDevice):
-    def test_init(self):
-        water_control = WaterControl(smart_system=self.smart_system_test_info)
-        assert water_control.smart_system == self.smart_system_test_info
-
-    def test_init_exception_without_smart_system(self):
-        with pytest.raises(ValueError):
-            WaterControl()
-
+class WaterControlTestCase(unittest.TestCase):
     def test_water_control_information(self):
-        water_control = WaterControl(smart_system=self.smart_system_test_info)
+        water_control = WaterControl(
+            smart_system=SmartSystemFixture.get_smart_system_fixture(),
+            location=LocationFixture.get_location_fixture(),
+        )
         water_control.update_information(information=device_water_control_return)
         assert water_control.id == device_water_control_return["id"]
         assert water_control.name == device_water_control_return["name"]

@@ -60,6 +60,13 @@ class BaseGardenaDeviceClass(BaseGardenaClass):
         "firmware": firmware_ability_fields,
     }
 
+    def __init__(self, smart_system=None, location=None):
+        """Constructor, create instance of a gardena location"""
+        super(BaseGardenaDeviceClass, self).__init__(smart_system)
+        if location is None:
+            raise ValueError("Argument 'location' is missing")
+        self.location = location
+
     def handle_abilities(self, abilities):
         for ability in abilities:
             if ability["type"] in self.device_ability_type_maps:

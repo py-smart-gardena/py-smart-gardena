@@ -1,9 +1,11 @@
 import pytest
 import unittest
+
 from requests import HTTPError
 from gardena.smart_system import SmartSystem
 from gardena.location import Location
-from tests.gardena_api_mock import init_mock, init_failed_mock
+from tests.fixtures import SmartSystemFixture
+from tests.mocks.gardena_api_mock import init_mock, init_failed_mock
 from tests.gardena_api_return.locations_return import location_return
 
 
@@ -32,9 +34,7 @@ class LocationTestCase(unittest.TestCase):
     }
 
     def setup_method(self, method):
-        self.smart_system_test_info = SmartSystem(
-            email="test@test.com", password="password"
-        )
+        self.smart_system_test_info = SmartSystemFixture.get_smart_system_fixture()
         init_mock(self.smart_system_test_info)
         self.smart_system_test_info.authenticate()
 

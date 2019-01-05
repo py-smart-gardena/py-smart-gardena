@@ -1,21 +1,16 @@
-import pytest
 import unittest
-from gardena.sensor import Sensor
-from tests.base_test_device import BaseTestDevice
+
+from gardena.devices.sensor import Sensor
 from tests.gardena_api_return.devices_return import device_sensor_return
+from tests.fixtures import SmartSystemFixture, LocationFixture
 
 
-class SensorTestCase(unittest.TestCase, BaseTestDevice):
-    def test_init(self):
-        sensor = Sensor(smart_system=device_sensor_return)
-        assert sensor.smart_system == device_sensor_return
-
-    def test_init_exception_without_smart_system(self):
-        with pytest.raises(ValueError):
-            Sensor()
-
+class SensorTestCase(unittest.TestCase):
     def test_sensor_information(self):
-        sensor = Sensor(smart_system=device_sensor_return)
+        sensor = Sensor(
+            smart_system=SmartSystemFixture.get_smart_system_fixture(),
+            location=LocationFixture.get_location_fixture(),
+        )
         sensor.update_information(information=device_sensor_return)
         assert sensor.id == device_sensor_return["id"]
         assert sensor.name == device_sensor_return["name"]

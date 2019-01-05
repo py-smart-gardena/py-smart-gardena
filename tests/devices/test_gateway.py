@@ -1,21 +1,17 @@
-import pytest
 import unittest
-from gardena.gateway import Gateway
-from tests.base_test_device import BaseTestDevice
+
+from gardena.devices.gateway import Gateway
 from tests.gardena_api_return.devices_return import device_gateway_return
+from tests.fixtures import SmartSystemFixture, LocationFixture
 
 
-class GatewayTestCase(unittest.TestCase, BaseTestDevice):
-    def test_init(self):
-        gw = Gateway(smart_system=self.smart_system_test_info)
-        assert gw.smart_system == self.smart_system_test_info
-
-    def test_init_exception_without_smart_system(self):
-        with pytest.raises(ValueError):
-            Gateway()
-
+class GatewayTestCase(unittest.TestCase):
     def test_gateway_information(self):
-        gateway = Gateway(smart_system=self.smart_system_test_info)
+        smart_system_fixture = SmartSystemFixture.get_smart_system_fixture()
+        gateway = Gateway(
+            smart_system=smart_system_fixture,
+            location=LocationFixture.get_location_fixture(),
+        )
         gateway.update_information(information=device_gateway_return)
         assert gateway.id == device_gateway_return["id"]
         assert gateway.name == device_gateway_return["name"]

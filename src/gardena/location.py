@@ -1,9 +1,10 @@
 import json
+
 from gardena.base_gardena_class import BaseGardenaClass
-from gardena.gateway import Gateway
-from gardena.mower import Mower
-from gardena.sensor import Sensor
-from gardena.water_control import WaterControl
+from gardena.devices.gateway import Gateway
+from gardena.devices.mower import Mower
+from gardena.devices.sensor import Sensor
+from gardena.devices.water_control import WaterControl
 
 
 class Location(BaseGardenaClass):
@@ -59,7 +60,9 @@ class Location(BaseGardenaClass):
         device_class = self.device_types_configuration[device["category"]]["class"]
         device_map = self.device_types_configuration[device["category"]]["map"]
         if device["id"] not in device_map:
-            device_map[device["id"]] = device_class(smart_system=self.smart_system)
+            device_map[device["id"]] = device_class(
+                smart_system=self.smart_system, location=self
+            )
         device_map[device["id"]].update_information(device)
 
     def update_devices(self):

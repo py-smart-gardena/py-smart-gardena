@@ -2,9 +2,10 @@ import pytest
 import unittest
 import requests
 import requests_mock
+
 from requests import HTTPError
 from gardena.smart_system import SmartSystem
-from tests.gardena_api_mock import init_mock, init_failed_mock
+from tests.mocks.gardena_api_mock import init_mock, init_failed_mock
 from tests.gardena_api_return.locations_return import location_return
 
 
