@@ -29,6 +29,14 @@ Your help is very much appreciated.
 Here are the links if you want to show your support :  
 <span class="badge-paypal"><a href="https://paypal.me/grmklein" title="Donate to this project using Paypal"><img src="https://img.shields.io/badge/paypal-donate-yellow.svg" alt="PayPal donate button" /></a></span>
 
+## Supported devices
+
+For now, only few devices are supported. I may add new ones in the future :  
+* Gateway
+* Smart Mower (not tested)
+* Smart water control
+* Smart sensor
+
 ## Installation
 
 ```sh
