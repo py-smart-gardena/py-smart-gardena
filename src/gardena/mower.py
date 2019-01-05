@@ -25,8 +25,6 @@ class Mower(BaseGardenaDeviceClass):
 
     def update_information(self, information):
         super(Mower, self).update_information(information)
-        if "abilities" in information:
-            self.handle_abilities(information["abilities"])
 
     def get_device_specific_ability_type_maps(self):
         return self.mower_ability_type_maps

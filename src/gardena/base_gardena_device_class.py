@@ -92,3 +92,5 @@ class BaseGardenaDeviceClass(BaseGardenaClass):
         self.set_field_if_exists(
             information, "configuration_synchronized", "is_configuration_synchronized"
         )
+        if "abilities" in information:
+            self.handle_abilities(information["abilities"])
