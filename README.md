@@ -17,7 +17,7 @@ This library aims to provide python way to communicate with gardena smart gatewa
 For now, this library only supports retrieving information, it should soon be able ot
  interact with devices to integrate in your automation system.
 
-## Donate / H
+## Support / Donate
 
 **This project needs your support.**  
 Gardena equipments are expensive, and I need to buy them in order to add support.
@@ -36,6 +36,9 @@ $ pip install py-smart-gardena
 ```
 
 ## Usage
+
+You just have to replace email and password with your own.
+Then, here is the sample script containing all functions.
 
 ```python
 from gardena.smart_system import SmartSystem
@@ -143,6 +146,8 @@ for location in smart_system.locations.values():
 ```
 
 ## Development environment
+
+To install the dev environment, you just have to do :
 
 ```sh
 $ pip install -e .[dev]
