@@ -15,21 +15,16 @@ class Sensor(BaseGardenaDeviceClass):
 
     light_sensor_ability_fields = {"light": "sensor_light"}
 
+    sensor_ability_type_maps = {
+        "soil_temperature_sensor": soil_temperature_sensor_ability_fields,
+        "soil_humidity_sensor": soil_humidity_sensor_ability_fields,
+        "light_sensor": light_sensor_ability_fields,
+    }
+
     def update_information(self, information):
         super(Sensor, self).update_information(information)
         if "abilities" in information:
             self.handle_abilities(information["abilities"])
 
-    def update_specific_device_info(self, device_specific_information):
-        if device_specific_information["type"] == "soil_temperature_sensor":
-            self.set_ability_field(
-                device_specific_information, self.soil_temperature_sensor_ability_fields
-            )
-        elif device_specific_information["type"] == "soil_humidity_sensor":
-            self.set_ability_field(
-                device_specific_information, self.soil_humidity_sensor_ability_fields
-            )
-        elif device_specific_information["type"] == "light_sensor":
-            self.set_ability_field(
-                device_specific_information, self.light_sensor_ability_fields
-            )
+    def get_device_specific_ability_type_maps(self):
+        return self.sensor_ability_type_maps

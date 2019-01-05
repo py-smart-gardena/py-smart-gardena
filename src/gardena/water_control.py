@@ -13,13 +13,14 @@ class WaterControl(BaseGardenaDeviceClass):
         "manual_override": "watering_manual_override",
     }
 
+    water_control_ability_type_maps = {
+        "watering_outlet": watering_outlet_ability_fields
+    }
+
     def update_information(self, information):
         super(WaterControl, self).update_information(information)
         if "abilities" in information:
             self.handle_abilities(information["abilities"])
 
-    def update_specific_device_info(self, device_specific_information):
-        if device_specific_information["type"] == "watering_outlet":
-            self.set_ability_field(
-                device_specific_information, self.watering_outlet_ability_fields
-            )
+    def get_device_specific_ability_type_maps(self):
+        return self.water_control_ability_type_maps

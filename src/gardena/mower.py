@@ -18,17 +18,15 @@ class Mower(BaseGardenaDeviceClass):
 
     temperature_ability_fields = {"temperature": "internal_temperature"}
 
+    mower_ability_type_maps = {
+        "robotic_mower": mower_ability_fields,
+        "internal_temperature_sensor": temperature_ability_fields,
+    }
+
     def update_information(self, information):
         super(Mower, self).update_information(information)
         if "abilities" in information:
             self.handle_abilities(information["abilities"])
 
-    def update_specific_device_info(self, device_specific_information):
-        if device_specific_information["type"] == "robotic_mower":
-            self.set_ability_field(
-                device_specific_information, self.mower_ability_fields
-            )
-        elif device_specific_information["type"] == "internal_temperature_sensor":
-            self.set_ability_field(
-                device_specific_information, self.temperature_ability_fields
-            )
+    def get_device_specific_ability_type_maps(self):
+        return self.mower_ability_type_maps

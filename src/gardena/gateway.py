@@ -10,13 +10,12 @@ class Gateway(BaseGardenaDeviceClass):
     """Used to map data between 'gateway' ability fields and class fields"""
     gateway_ability_fields = {"ip_address": "ip_address", "time_zone": "timezone"}
 
+    gateway_ability_type_maps = {"gateway": gateway_ability_fields}
+
     def update_information(self, information):
         super(Gateway, self).update_information(information)
         if "abilities" in information:
             self.handle_abilities(information["abilities"])
 
-    def update_specific_device_info(self, device_specific_information):
-        if device_specific_information["type"] == "gateway":
-            self.set_ability_field(
-                device_specific_information, self.gateway_ability_fields
-            )
+    def get_device_specific_ability_type_maps(self):
+        return self.gateway_ability_type_maps

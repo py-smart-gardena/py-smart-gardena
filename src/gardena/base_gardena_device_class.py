@@ -52,23 +52,32 @@ class BaseGardenaDeviceClass(BaseGardenaClass):
 
     firmware_ability_fields = {"firmware_status": "firmware_status"}
 
+    device_ability_type_maps = {
+        "device_info": device_info_ability_fields,
+        "battery_power": battery_ability_fields,
+        "radio_link": radio_ability_fields,
+        "ambient_temperature_sensor": ambient_temperature_ability_fields,
+        "firmware": firmware_ability_fields,
+    }
+
     def handle_abilities(self, abilities):
         for ability in abilities:
-            if ability["type"] == "device_info":
-                self.set_ability_field(ability, self.device_info_ability_fields)
-            elif ability["type"] == "battery_power":
-                self.set_ability_field(ability, self.battery_ability_fields)
-            elif ability["type"] == "radio_link":
-                self.set_ability_field(ability, self.radio_ability_fields)
-            elif ability["type"] == "ambient_temperature_sensor":
-                self.set_ability_field(ability, self.ambient_temperature_ability_fields)
-            elif ability["type"] == "firmware":
-                self.set_ability_field(ability, self.firmware_ability_fields)
+            if ability["type"] in self.device_ability_type_maps:
+                self.set_ability_field(
+                    ability, self.device_ability_type_maps[ability["type"]]
+                )
             else:
                 self.update_specific_device_info(ability)
 
     def update_specific_device_info(self, device_specific_information):
-        pass
+        map = self.get_device_specific_ability_type_maps()
+        if device_specific_information["type"] in map:
+            self.set_ability_field(
+                device_specific_information, map[device_specific_information["type"]]
+            )
+
+    def get_device_specific_ability_type_maps(self):
+        return {}
 
     def set_ability_field(self, hashmap, fields_hashmap):
         for prop in hashmap["properties"]:
