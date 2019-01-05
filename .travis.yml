@@ -9,7 +9,7 @@ python:
 - '3.7-dev'
 install:
 - pip install -r requirements.txt
-- pip install codecov versioneer
+- pip install codecov versioneer wheel cmarkgfm
 before_script:
 - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
   > ./cc-test-reporter
@@ -30,4 +30,4 @@ deploy:
     tags: true
     branch: master
     python: '3.7-dev'
-  distributions: "register sdist upload"
+  distributions: "register sdist bdist_wheel"
