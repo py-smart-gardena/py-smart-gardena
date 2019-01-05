@@ -26,7 +26,7 @@ just want to reward me for my time spent), you
  are very welcome !   
 Your help is very much appreciated.
 
-Here are the link to show your support :  
+Here are the links if you want to show your support :  
 <span class="badge-paypal"><a href="https://paypal.me/grmklein" title="Donate to this project using Paypal"><img src="https://img.shields.io/badge/paypal-donate-yellow.svg" alt="PayPal donate button" /></a></span>
 
 ## Installation
