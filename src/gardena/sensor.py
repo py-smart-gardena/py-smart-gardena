@@ -8,7 +8,7 @@ class Sensor(BaseGardenaDeviceClass):
     sensor_soil_humidity = None
     sensor_light = None
 
-    """Used to map data between 'mower' ability fields and class fields"""
+    """Used to map data between 'sensor' ability fields and class fields"""
     soil_temperature_sensor_ability_fields = {"temperature": "sensor_soil_temperature"}
 
     soil_humidity_sensor_ability_fields = {"humidity": "sensor_soil_humidity"}
