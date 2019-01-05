@@ -50,14 +50,6 @@ You just have to replace email and password with your own.
 Then, here is the sample script containing all functions.
 
 ```python
-from gardena.smart_system import SmartSystem
-
-smart_system = SmartSystem(email="test@test.com", password="password")
-smart_system.authenticate()
-
-# To update locations (gardens, ..)
-smart_system.update_locations()
-
 for location in smart_system.locations.values():
     print("location : " + location.name + "(" + location.id + ")")
     print("-> latitude : " + str(location.latitude))
@@ -129,6 +121,10 @@ for location in smart_system.locations.values():
         print("---> soil temperature : " + str(sensor.sensor_soil_temperature))
         print("---> soil humidity : " + str(sensor.sensor_soil_humidity))
         print("---> light : " + str(sensor.sensor_light))
+        # Commands :
+        # sensor.refresh_ambient_temperature()
+        # sensor.refresh_light_intensity()
+        # sensor.refresh_soil_moisture()
 
     # Iterate over water control
     for water_control in location.water_controls.values():
@@ -151,6 +147,10 @@ for location in smart_system.locations.values():
         print("---> frost warning : " + water_control.frost_warning)
         print("---> valve open : " + str(water_control.watering_valve_open))
         print("---> manual override : " + water_control.watering_manual_override)
+        # Commands :
+        # water_control.open_valve()  # 30 minutes by default
+        # water_control.open_valve(duration=10)  # 10 minutes before closing
+        # water_control.close_valve()  ## close manual override
 
 ```
 
