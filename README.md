@@ -111,7 +111,7 @@ for location in smart_system.locations.values():
         print("---> radio quality : " + str(sensor.radio_quality))
         print("---> radio connection status : " + sensor.radio_connection_status)
         print("---> radio state : " + sensor.radio_state)
-        print("---> firmware status : " + water_control.firmware_status)
+        print("---> firmware status : " + sensor.firmware_status)
         print("---> ambient temperature : " + str(sensor.ambient_temperature))
         print("---> frost warning : " + sensor.frost_warning)
         print("---> soil temperature : " + str(sensor.sensor_soil_temperature))
