@@ -5,7 +5,7 @@ class BaseGardenaClass:
     name = None
 
     def __init__(self, smart_system=None):
-        """Constructor, create instance of a gardena device"""
+        """Constructor, create instance of a gardena object"""
         if smart_system is None:
             raise ValueError("Argument 'smart_system' is missing")
         self.smart_system = smart_system
