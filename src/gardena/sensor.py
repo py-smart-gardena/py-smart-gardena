@@ -21,8 +21,5 @@ class Sensor(BaseGardenaDeviceClass):
         "light_sensor": light_sensor_ability_fields,
     }
 
-    def update_information(self, information):
-        super(Sensor, self).update_information(information)
-
     def get_device_specific_ability_type_maps(self):
         return self.sensor_ability_type_maps

@@ -17,8 +17,5 @@ class WaterControl(BaseGardenaDeviceClass):
         "watering_outlet": watering_outlet_ability_fields
     }
 
-    def update_information(self, information):
-        super(WaterControl, self).update_information(information)
-
     def get_device_specific_ability_type_maps(self):
         return self.water_control_ability_type_maps

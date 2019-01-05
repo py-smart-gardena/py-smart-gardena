@@ -23,8 +23,5 @@ class Mower(BaseGardenaDeviceClass):
         "internal_temperature_sensor": temperature_ability_fields,
     }
 
-    def update_information(self, information):
-        super(Mower, self).update_information(information)
-
     def get_device_specific_ability_type_maps(self):
         return self.mower_ability_type_maps
