@@ -6,4 +6,3 @@ select = B,C,E,F,W,T4,B9
 exclude =
     .git,
     __pycache__,
-    versioneer.py

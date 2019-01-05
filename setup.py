@@ -1,5 +1,4 @@
 import setuptools
-import versioneer
 from os.path import splitext, basename
 from glob import glob
 
@@ -8,8 +7,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="py-smart-gardena",
-    version=versioneer.get_version(),
-    cmdclass=versioneer.get_cmdclass(),
+    version_format="{tag}",
     author="Jérémie Klein",
     author_email="grm.klein@gmail.com",
     description="This library aims to provide python way to communicate "
@@ -20,7 +18,7 @@ setuptools.setup(
     packages=setuptools.find_packages("src"),
     package_dir={"": "src"},
     install_requires=["requests"],
-    setup_requires=["pytest-runner"],
+    setup_requires=["pytest-runner", "setuptools-git-version"],
     tests_require=["pytest", "coverage", "pytest-cov", "requests_mock"],
     extras_require={"dev": ["pre-commit"]},
     py_modules={splitext(basename(path))[0] for path in glob("src/*py")},
