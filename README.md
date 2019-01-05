@@ -17,7 +17,7 @@ This library aims to provide python way to communicate with gardena smart gatewa
 For now, this library only supports retrieving information, it should soon be able ot
  interact with devices to integrate in your automation system.
 
-## Donate
+## Donate / H
 
 **This project needs your support.**  
 Gardena equipments are expensive, and I need to buy them in order to add support.
