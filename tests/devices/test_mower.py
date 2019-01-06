@@ -3,9 +3,10 @@ import unittest
 from gardena.devices.mower import Mower
 from tests.gardena_api_return.devices_return import device_mower_return
 from tests.fixtures import SmartSystemFixture, LocationFixture
+from tests.devices.base_device_test_class import BaseDeviceTestClass
 
 
-class MowerTestCase(unittest.TestCase):
+class MowerTestCase(unittest.TestCase, BaseDeviceTestClass):
     def test_mower_information(self):
         mower = Mower(
             smart_system=SmartSystemFixture.get_smart_system_fixture(),

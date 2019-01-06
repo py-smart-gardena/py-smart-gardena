@@ -3,9 +3,10 @@ import unittest
 from gardena.devices.gateway import Gateway
 from tests.gardena_api_return.devices_return import device_gateway_return
 from tests.fixtures import SmartSystemFixture, LocationFixture
+from tests.devices.base_device_test_class import BaseDeviceTestClass
 
 
-class GatewayTestCase(unittest.TestCase):
+class GatewayTestCase(unittest.TestCase, BaseDeviceTestClass):
     def test_gateway_information(self):
         smart_system_fixture = SmartSystemFixture.get_smart_system_fixture()
         gateway = Gateway(

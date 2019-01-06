@@ -82,6 +82,19 @@ class GardenaApiMock:
             status_code=204,
         )
 
+    def register_device_water_control_open__close_valve_command(
+        self, device_id, location_id
+    ):
+        return self.adapter.register_uri(
+            "POST",
+            "https://smart.gardena.com/sg-1/devices/"
+            + device_id
+            + "/abilities/outlet/command?locationId="
+            + location_id,
+            json={},
+            status_code=204,
+        )
+
 
 def init_failed_mock(smart_system):
     adapter = requests_mock.Adapter()

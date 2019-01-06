@@ -1,20 +1,12 @@
 import unittest
 
 from gardena.devices.sensor import Sensor
-from tests.mocks.gardena_api_mock import GardenaApiMock
 from tests.gardena_api_return.devices_return import device_sensor_return
 from tests.fixtures import SmartSystemFixture, LocationFixture
+from tests.devices.base_device_test_class import BaseDeviceTestClass
 
 
-class SensorTestCase(unittest.TestCase):
-    def create_mock(self, smart_system):
-        api_mock = GardenaApiMock()
-        api_mock.register_sessions()
-        api_mock.register_locations()
-        api_mock.register_devices()
-        api_mock.mount(smart_system)
-        return api_mock
-
+class SensorTestCase(unittest.TestCase, BaseDeviceTestClass):
     def test_sensor_information(self):
         sensor = Sensor(
             smart_system=SmartSystemFixture.get_smart_system_fixture(),
