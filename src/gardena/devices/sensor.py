@@ -48,8 +48,8 @@ class Sensor(BaseGardenaDeviceClass):
         url = (
             "https://smart.gardena.com/sg-1/devices/"
             + self.id
-            + "/abilities/light/command?locationId="
+            + "/abilities/humidity/command?locationId="
             + self.location.id
         )
-        data = {"name": "measure_light", "parameters": {}}
+        data = {"name": "measure_soil_humidity", "parameters": {}}
         self.smart_system.call_smart_system(url=url, request_type="post", data=data)
