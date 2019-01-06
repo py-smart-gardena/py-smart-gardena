@@ -11,7 +11,7 @@ class WaterControlTestCase(unittest.TestCase):
             smart_system=SmartSystemFixture.get_smart_system_fixture(),
             location=LocationFixture.get_location_fixture(),
         )
-        water_control.update_information(information=device_water_control_return)
+        water_control.update_information(device_water_control_return)
         assert water_control.id == device_water_control_return["id"]
         assert water_control.name == device_water_control_return["name"]
         # XXX : no description for water_control ?

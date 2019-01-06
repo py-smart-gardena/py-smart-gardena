@@ -2,7 +2,7 @@ import pytest
 import unittest
 
 from gardena.devices.base_gardena_device_class import BaseGardenaDeviceClass
-from tests.mocks.gardena_api_mock import init_mock
+from tests.mocks.gardena_api_mock import GardenaApiMock
 from tests.fixtures import SmartSystemFixture, LocationFixture
 
 
@@ -12,7 +12,10 @@ class BaseGardenaDeviceClassTestCase(unittest.TestCase):
 
     def setup_method(self, method):
         self.smart_system_test_info = SmartSystemFixture.get_smart_system_fixture()
-        init_mock(self.smart_system_test_info)
+        api_mock = GardenaApiMock()
+        api_mock.register_sessions()
+        api_mock.register_locations()
+        api_mock.mount(self.smart_system_test_info)
         self.smart_system_test_info.authenticate()
         self.location_test_info = LocationFixture.get_location_fixture()
 

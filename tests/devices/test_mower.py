@@ -11,7 +11,7 @@ class MowerTestCase(unittest.TestCase):
             smart_system=SmartSystemFixture.get_smart_system_fixture(),
             location=LocationFixture.get_location_fixture(),
         )
-        mower.update_information(information=device_mower_return)
+        mower.update_information(device_mower_return)
         assert mower.id == device_mower_return["id"]
         assert mower.name == device_mower_return["name"]
         # XXX : no description for mower ?

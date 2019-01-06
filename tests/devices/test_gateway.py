@@ -12,7 +12,7 @@ class GatewayTestCase(unittest.TestCase):
             smart_system=smart_system_fixture,
             location=LocationFixture.get_location_fixture(),
         )
-        gateway.update_information(information=device_gateway_return)
+        gateway.update_information(device_gateway_return)
         assert gateway.id == device_gateway_return["id"]
         assert gateway.name == device_gateway_return["name"]
         assert gateway.description == device_gateway_return["description"]

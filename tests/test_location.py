@@ -5,7 +5,7 @@ from requests import HTTPError
 from gardena.smart_system import SmartSystem
 from gardena.location import Location
 from tests.fixtures import SmartSystemFixture
-from tests.mocks.gardena_api_mock import init_mock, init_failed_mock
+from tests.mocks.gardena_api_mock import GardenaApiMock, init_failed_mock
 from tests.gardena_api_return.locations_return import location_return
 
 
@@ -33,9 +33,17 @@ class LocationTestCase(unittest.TestCase):
         },
     }
 
+    m_sessions = None
+    m_locations = None
+    m_devices = None
+
     def setup_method(self, method):
         self.smart_system_test_info = SmartSystemFixture.get_smart_system_fixture()
-        init_mock(self.smart_system_test_info)
+        api_mock = GardenaApiMock()
+        self.m_sessions = api_mock.register_sessions()
+        self.m_locations = api_mock.register_locations()
+        self.m_devices = api_mock.register_devices()
+        api_mock.mount(self.smart_system_test_info)
         self.smart_system_test_info.authenticate()
 
     def test_init(self):
@@ -67,6 +75,7 @@ class LocationTestCase(unittest.TestCase):
         location = Location(smart_system=self.smart_system_test_info)
         location.update_information(location_return)
         location.update_devices()
+        assert self.m_devices.call_count == 1
         assert len(location.gateways) == 1
         assert len(location.mowers) == 1
         assert len(location.sensors) == 1
@@ -76,6 +85,7 @@ class LocationTestCase(unittest.TestCase):
         location = Location(smart_system=self.smart_system_test_info)
         location.update_information(location_return)
         location.update_devices()
+        assert self.m_devices.call_count == 1
         assert len(location.gateways) == 1
         assert len(location.mowers) == 1
         location.add_or_update_device(
@@ -95,6 +105,7 @@ class LocationTestCase(unittest.TestCase):
         location = Location(smart_system=self.smart_system_test_info)
         location.update_information(location_return)
         location.update_devices()
+        assert self.m_devices.call_count == 1
         assert len(location.gateways) == 1
         assert len(location.mowers) == 1
         assert len(location.sensors) == 1
@@ -118,6 +129,7 @@ class LocationTestCase(unittest.TestCase):
         location = Location(smart_system=self.smart_system_test_info)
         location.update_information(location_return)
         location.update_devices()
+        assert self.m_devices.call_count == 1
         assert len(location.gateways) == 1
         assert len(location.mowers) == 1
         assert "75cfc1f8-a20c-51d6-c5ea-1b5ecdde80c1" in location.gateways.keys()
