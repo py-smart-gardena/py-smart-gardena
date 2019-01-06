@@ -21,16 +21,13 @@ class WaterControl(BaseGardenaDeviceClass):
         return self.water_control_ability_type_maps
 
     def open_valve(self, duration=30):
-        data = {
-            "name": "manual_override",
-            "parameters": {"manual_override": "open", "duration": duration},
-        }
-        self.smart_system.call_smart_system(
-            url=self.get_ability_command_url("outlet"), request_type="post", data=data
+        self.call_command(
+            "outlet",
+            {
+                "name": "manual_override",
+                "parameters": {"manual_override": "open", "duration": duration},
+            },
         )
 
     def close_valve(self):
-        data = {"name": "cancel_override", "parameters": {}}
-        self.smart_system.call_smart_system(
-            url=self.get_ability_command_url("outlet"), request_type="post", data=data
-        )
+        self.call_command("outlet", {"name": "cancel_override", "parameters": {}})

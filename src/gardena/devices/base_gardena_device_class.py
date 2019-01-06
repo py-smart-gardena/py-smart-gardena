@@ -102,8 +102,8 @@ class BaseGardenaDeviceClass(BaseGardenaClass):
         if "abilities" in information:
             self.handle_abilities(information["abilities"])
 
-    def get_ability_command_url(self, command):
-        return (
+    def call_command(self, command, data):
+        url = (
             "https://smart.gardena.com/sg-1/devices/"
             + self.id
             + "/abilities/"
@@ -111,3 +111,4 @@ class BaseGardenaDeviceClass(BaseGardenaClass):
             + "/command?locationId="
             + self.location.id
         )
+        self.smart_system.call_smart_system(url=url, request_type="post", data=data)

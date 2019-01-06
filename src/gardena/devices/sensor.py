@@ -25,21 +25,15 @@ class Sensor(BaseGardenaDeviceClass):
         return self.sensor_ability_type_maps
 
     def refresh_ambient_temperature(self):
-        data = {"name": "measure_ambient_temperature", "parameters": {}}
-        self.smart_system.call_smart_system(
-            url=self.get_ability_command_url("ambient_temperature"),
-            request_type="post",
-            data=data,
+        self.call_command(
+            "ambient_temperature",
+            {"name": "measure_ambient_temperature", "parameters": {}},
         )
 
     def refresh_light_intensity(self):
-        data = {"name": "measure_light", "parameters": {}}
-        self.smart_system.call_smart_system(
-            url=self.get_ability_command_url("light"), request_type="post", data=data
-        )
+        self.call_command("light", {"name": "measure_light", "parameters": {}})
 
     def refresh_soil_moisture(self):
-        data = {"name": "measure_soil_humidity", "parameters": {}}
-        self.smart_system.call_smart_system(
-            url=self.get_ability_command_url("humidity"), request_type="post", data=data
+        self.call_command(
+            "humidity", {"name": "measure_soil_humidity", "parameters": {}}
         )
