@@ -35,3 +35,63 @@ class MowerTestCase(unittest.TestCase, BaseDeviceTestClass):
         assert mower.mower_status == "off_disabled"
         assert not mower.mower_manual_operation
         assert mower.mower_timestamp_next_start == "2016-07-22T08:00:00.000000001Z"
+
+    def test_park_until_next_timer(self):
+        smart_system = SmartSystemFixture.get_smart_system_fixture()
+        mock = self.create_mock(smart_system)
+        smart_system.authenticate()
+        smart_system.update_locations()
+        location = smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1377"]
+        m_result = mock.register_mower_command(
+            "e3c1b615-7351-25fc-a551-1908254a2b3e",
+            "1c8b301f-22c8-423d-1b4d-ec25315d1377",
+        )
+        mower = Mower(smart_system=smart_system, location=location)
+        mower.update_information(device_mower_return)
+        mower.park_until_next_timer()
+        assert m_result.call_count == 1
+
+    def test_park_until_further_notice(self):
+        smart_system = SmartSystemFixture.get_smart_system_fixture()
+        mock = self.create_mock(smart_system)
+        smart_system.authenticate()
+        smart_system.update_locations()
+        location = smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1377"]
+        m_result = mock.register_mower_command(
+            "e3c1b615-7351-25fc-a551-1908254a2b3e",
+            "1c8b301f-22c8-423d-1b4d-ec25315d1377",
+        )
+        mower = Mower(smart_system=smart_system, location=location)
+        mower.update_information(device_mower_return)
+        mower.park_until_further_notice()
+        assert m_result.call_count == 1
+
+    def test_start_resume_schedule(self):
+        smart_system = SmartSystemFixture.get_smart_system_fixture()
+        mock = self.create_mock(smart_system)
+        smart_system.authenticate()
+        smart_system.update_locations()
+        location = smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1377"]
+        m_result = mock.register_mower_command(
+            "e3c1b615-7351-25fc-a551-1908254a2b3e",
+            "1c8b301f-22c8-423d-1b4d-ec25315d1377",
+        )
+        mower = Mower(smart_system=smart_system, location=location)
+        mower.update_information(device_mower_return)
+        mower.start_resume_schedule()
+        assert m_result.call_count == 1
+
+    def test_start_override_timer(self):
+        smart_system = SmartSystemFixture.get_smart_system_fixture()
+        mock = self.create_mock(smart_system)
+        smart_system.authenticate()
+        smart_system.update_locations()
+        location = smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1377"]
+        m_result = mock.register_mower_command(
+            "e3c1b615-7351-25fc-a551-1908254a2b3e",
+            "1c8b301f-22c8-423d-1b4d-ec25315d1377",
+        )
+        mower = Mower(smart_system=smart_system, location=location)
+        mower.update_information(device_mower_return)
+        mower.start_override_timer()
+        assert m_result.call_count == 1

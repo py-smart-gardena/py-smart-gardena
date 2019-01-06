@@ -25,3 +25,18 @@ class Mower(BaseGardenaDeviceClass):
 
     def get_device_specific_ability_type_maps(self):
         return self.mower_ability_type_maps
+
+    def park_until_next_timer(self):
+        self.call_command("mower", {"name": "park_until_next_timer"})
+
+    def park_until_further_notice(self):
+        self.call_command("mower", {"name": "park_until_further_notice"})
+
+    def start_resume_schedule(self):
+        self.call_command("mower", {"name": "start_resume_schedule"})
+
+    def start_override_timer(self, duration=240):
+        self.call_command(
+            "mower",
+            {"name": "start_override_timer", "parameters": {"duration": duration}},
+        )
