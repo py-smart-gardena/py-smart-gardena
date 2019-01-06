@@ -1,21 +1,20 @@
-from gardena.devices.base_gardena_device_class import BaseGardenaDeviceClass
+from gardena.devices.abilities.base_gardena_ability_class import BaseGardenaAbilityClass
 
 
-class AmbientTemperatureSensorAbility(BaseGardenaDeviceClass):
+class AmbientTemperatureSensorAbility(BaseGardenaAbilityClass):
 
     # Ambient temperature
     ambient_temperature = None
     frost_warning = None
+    ambient_temperatures_abilities = {
+        "ambient_temperature_sensor": {
+            "temperature": "ambient_temperature",
+            "frost_warning": "frost_warning",
+        }
+    }
 
     def __init__(self, smart_system=None, location=None):
         super(AmbientTemperatureSensorAbility, self).__init__(
             smart_system=smart_system, location=location
         )
-        self.register_abilities(
-            {
-                "ambient_temperature_sensor": {
-                    "temperature": "ambient_temperature",
-                    "frost_warning": "frost_warning",
-                }
-            }
-        )
+        self.register_abilities(self.ambient_temperatures_abilities)

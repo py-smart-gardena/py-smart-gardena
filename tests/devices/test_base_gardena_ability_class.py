@@ -1,7 +1,7 @@
 import pytest
 import unittest
 
-from gardena.devices.base_gardena_device_class import BaseGardenaDeviceClass
+from gardena.devices.abilities.base_gardena_ability_class import BaseGardenaAbilityClass
 from tests.mocks.gardena_api_mock import GardenaApiMock
 from tests.fixtures import SmartSystemFixture, LocationFixture
 
@@ -20,7 +20,7 @@ class BaseGardenaDeviceClassTestCase(unittest.TestCase):
         self.location_test_info = LocationFixture.get_location_fixture()
 
     def test_init(self):
-        base_device_class = BaseGardenaDeviceClass(
+        base_device_class = BaseGardenaAbilityClass(
             smart_system=self.smart_system_test_info, location=self.location_test_info
         )
         assert base_device_class.smart_system == self.smart_system_test_info
@@ -28,8 +28,8 @@ class BaseGardenaDeviceClassTestCase(unittest.TestCase):
 
     def test_init_exception_without_smart_system(self):
         with pytest.raises(ValueError):
-            BaseGardenaDeviceClass(location=self.location_test_info)
+            BaseGardenaAbilityClass(location=self.location_test_info)
 
     def test_init_exception_without_location(self):
         with pytest.raises(ValueError):
-            BaseGardenaDeviceClass(smart_system=self.smart_system_test_info)
+            BaseGardenaAbilityClass(smart_system=self.smart_system_test_info)

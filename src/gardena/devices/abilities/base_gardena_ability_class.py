@@ -1,7 +1,7 @@
 from gardena.base_gardena_class import BaseGardenaClass
 
 
-class BaseGardenaDeviceClass(BaseGardenaClass):
+class BaseGardenaAbilityClass(BaseGardenaClass):
     """Base class for Gardena devices"""
 
     # Common fields
@@ -13,7 +13,7 @@ class BaseGardenaDeviceClass(BaseGardenaClass):
 
     def __init__(self, smart_system=None, location=None):
         """Constructor, create instance of a gardena location"""
-        super(BaseGardenaDeviceClass, self).__init__(smart_system)
+        super(BaseGardenaAbilityClass, self).__init__(smart_system)
         if location is None:
             raise ValueError("Argument 'location' is missing")
         self.location = location
@@ -33,7 +33,7 @@ class BaseGardenaDeviceClass(BaseGardenaClass):
                 setattr(self, fields_hashmap[prop["name"]], prop["value"])
 
     def update_information(self, information):
-        super(BaseGardenaDeviceClass, self).update_information(information)
+        super(BaseGardenaAbilityClass, self).update_information(information)
         self.set_field_if_exists(information, "description", "description")
         self.set_field_if_exists(information, "category", "category")
         self.set_field_if_exists(information, "device_state", "device_state")
