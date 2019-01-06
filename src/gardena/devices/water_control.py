@@ -19,17 +19,16 @@ class WaterControl(
     watering_valve_open = None
     watering_manual_override = None
 
-    """Used to map data between 'watering' ability fields and class fields"""
-    watering_outlet_ability_fields = {
-        "valve_open": "watering_valve_open",
-        "manual_override": "watering_manual_override",
+    watering_abilities = {
+        "watering_outlet": {
+            "valve_open": "watering_valve_open",
+            "manual_override": "watering_manual_override",
+        }
     }
 
     def __init__(self, smart_system=None, location=None):
         super(WaterControl, self).__init__(smart_system=smart_system, location=location)
-        self.register_abilities(
-            {"watering_outlet": self.watering_outlet_ability_fields}
-        )
+        self.register_abilities(self.watering_abilities)
 
     def open_valve(self, duration=30):
         self.call_command(

@@ -8,11 +8,10 @@ class Gateway(RadioAbility, DeviceInfoAbility):
     ip_address = None
     timezone = None
 
-    """Used to map data between 'gateway' ability fields and class fields"""
-    gateway_ability_fields = {"ip_address": "ip_address", "time_zone": "timezone"}
-
-    gateway_ability_type_maps = {"gateway": gateway_ability_fields}
+    gateway_abilities = {
+        "gateway": {"ip_address": "ip_address", "time_zone": "timezone"}
+    }
 
     def __init__(self, smart_system=None, location=None):
         super(Gateway, self).__init__(smart_system=smart_system, location=location)
-        self.register_abilities({"gateway": self.gateway_ability_fields})
+        self.register_abilities(self.gateway_abilities)
