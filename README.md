@@ -11,6 +11,7 @@
 [![Known Vulnerabilities](https://snyk.io/test/github/grm/py-smart-gardena/badge.svg?targetFile=requirements.txt)](https://snyk.io/test/github/grm/py-smart-gardena?targetFile=requirements.txt)
 [![Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 [![PEP8](https://img.shields.io/badge/code%20style-pep8-orange.svg)](https://www.python.org/dev/peps/pep-0008/)
+[![Downloads](https://pepy.tech/badge/py-smart-gardena)](https://pepy.tech/project/py-smart-gardena)
 
 ## Description
 
