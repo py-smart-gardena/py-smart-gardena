@@ -34,6 +34,8 @@ class WaterControlTestCase(unittest.TestCase, BaseDeviceTestClass):
         assert water_control.ambient_temperature == 22
         assert water_control.frost_warning == "no_frost"
         assert water_control.firmware_status == "up_to_date"
+        assert water_control.firmware_upload_progress == 0
+        assert water_control.firmware_update_start
         assert not water_control.watering_valve_open
         assert water_control.watering_manual_override == "inactive"
 

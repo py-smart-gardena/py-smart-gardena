@@ -37,6 +37,8 @@ class SensorTestCase(unittest.TestCase, BaseDeviceTestClass):
         assert sensor.sensor_soil_humidity == 0
         assert sensor.sensor_light == 0
         assert sensor.firmware_status == "up_to_date"
+        assert sensor.firmware_upload_progress == 0
+        assert sensor.firmware_update_start
 
     def test_refresh_ambient_temperature(self):
         smart_system = SmartSystemFixture.get_smart_system_fixture()
