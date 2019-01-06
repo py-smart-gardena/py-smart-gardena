@@ -98,6 +98,11 @@ for location in smart_system.locations.values():
         print("---> mower status : " + mower.mower_status)
         print("---> manual operation : " + str(mower.mower_manual_operation))
         print("---> timestamp next start : " + mower.mower_timestamp_next_start)
+        # Commands (Untested)
+        # mower.park_until_next_timer()
+        # mower.park_until_further_notice()
+        # mower.start_resume_schedule()
+        # mower.start_override_timer()
 
     # Iterate over sensors
     for sensor in location.sensors.values():
