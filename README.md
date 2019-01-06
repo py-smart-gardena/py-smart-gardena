@@ -14,7 +14,9 @@
 
 ## Description
 
-This library aims to provide python way to communicate with gardena smart gateway and all smart gardena systems.
+This library aims to provide python way to communicate with gardena smart systems and 
+all gardena smart equipments. Configuration of the equipement and inclusion has still
+ to be done using the Gardena application or web site.
 For now, this library only supports retrieving information, it should soon be able ot
  interact with devices to integrate in your automation system.
 
@@ -23,8 +25,7 @@ For now, this library only supports retrieving information, it should soon be ab
 **This project needs your support.**  
 Gardena equipments are expensive, and I need to buy them in order to add support.
 If you find this library useful and want to help me support more devices (or if you 
-just want to reward me for my time spent), you
- are very welcome !   
+just want to reward me for my spent time), you are very welcome !   
 Your help is very much appreciated.
 
 Here are the links if you want to show your support :  
@@ -51,17 +52,19 @@ $ pip install py-smart-gardena
 The entrypoint of the library is the the SmartSytem class (in gardena.smart_system 
 package).
 From there, you can get all locations from your account, and for each of these 
-locations, and get the declared devices.
+locations, get the declared devices.
 
 All communcations are not done directly with the gateway. This library communicates 
 with gardena web services hosted on internet and then, Gardena services communicates 
-with the gateways and the devices.  When asking for a refresh, the information is not
- immediately updated but only after a few seconds.
+with the gateways and the devices.  That's why, when asking for a refresh, the 
+information is not immediately updated but only after a few seconds.
 
 ### Authentication
 
-You need to authenticate with your email and passwords created on this site : 
-https://sg-api.dss.husqvarnagroup.net/sg-1/index/ios/. The library manages the token 
+You need to authenticate with your email and passwords created on this [site]
+(https://sg-api.dss.husqvarnagroup.net/sg-1/index/ios/) or the IOS/Android application. 
+The 
+library manages the token 
 for you then.
 An exception is raised if authentication fails.
 
@@ -72,13 +75,13 @@ smart_system = SmartSystem(email="email@gmail.com", password="my_password")
 smart_system.authenticate()
 
 ```
-Once authentication is successful, you can go locations.
+Once authentication is successful, you can update locations.
 
 ### Locations
 
-Locations represents places where the devices are connected. It can be used to manage
+Locations are the places where the devices are connected. It can be used to manage
  different gardens or different places from one garden, or both. You need first to 
- get the locations before querying locations.
+ get the locations before querying devices.
 
 Here is the list of the current available fields and methods :
 
@@ -110,7 +113,7 @@ Devices must be queried on a specific location.
 #### Gateway
 
 The gateway is the hardware used to communicate with devices.
-There is no commands on it but there is only general information.
+There is no commands on it but there are general information.
 
 ```python
     for gateway in location.gateways.values():
@@ -130,7 +133,7 @@ There is no commands on it but there is only general information.
 #### Mower
 
 Mowers can be controlled through the API. 
-Here is the list of availble information and commands.
+Here is the list of available information and commands.
 
 ```python
     for mower in location.mowers:
@@ -209,11 +212,11 @@ In a future release, there will probably have a function to refresh information 
  specific device.
  
 Commands :
-* **sensor.refresh_ambient_temperature()** : Asks the refresh of the temperature 
+* **sensor.refresh_ambient_temperature()** : Asks to refresh of the temperature 
 information to the gateway
-* **sensor.refresh_light_intensity()** : Asks the refresh of the light intensity 
+* **sensor.refresh_light_intensity()** : Asks to refresh of the light intensity 
 information to the gateway
-* **sensor.refresh_soil_moisture()** : Asks the refresh of the soil moisture 
+* **sensor.refresh_soil_moisture()** : Asks to refresh of the soil moisture 
 information to the gateway
 
 #### Water control
@@ -250,15 +253,15 @@ garden.
 
 Commands :
 * **water_control.open_valve()** : Asks the water control to open the valve for X 
-minutes (default duration si 30 minutes)
-* **water_control.close_valve()** : Asks the water control to close the valve, 
-apprently only when ithas been opened manually
+minutes (default duration is 30 minutes)
+* **water_control.close_valve()** : Asks the water control to close the valve( it 
+seems to only work when the valve has been manually opened)
 
 
 ### Sample script
 
 Here is a sample script listing all available functionnalities for fast reference.
-Commands have been commented to avoid unintentional commands.
+Commands have been commented to avoid unintentional triggers.
 
 ```python
 from gardena.smart_system import SmartSystem
