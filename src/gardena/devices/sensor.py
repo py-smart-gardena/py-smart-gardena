@@ -25,31 +25,21 @@ class Sensor(BaseGardenaDeviceClass):
         return self.sensor_ability_type_maps
 
     def refresh_ambient_temperature(self):
-        url = (
-            "https://smart.gardena.com/sg-1/devices/"
-            + self.id
-            + "/abilities/ambient_temperature/command?locationId="
-            + self.location.id
-        )
         data = {"name": "measure_ambient_temperature", "parameters": {}}
-        self.smart_system.call_smart_system(url=url, request_type="post", data=data)
+        self.smart_system.call_smart_system(
+            url=self.get_ability_command_url("ambient_temperature"),
+            request_type="post",
+            data=data,
+        )
 
     def refresh_light_intensity(self):
-        url = (
-            "https://smart.gardena.com/sg-1/devices/"
-            + self.id
-            + "/abilities/light/command?locationId="
-            + self.location.id
-        )
         data = {"name": "measure_light", "parameters": {}}
-        self.smart_system.call_smart_system(url=url, request_type="post", data=data)
+        self.smart_system.call_smart_system(
+            url=self.get_ability_command_url("light"), request_type="post", data=data
+        )
 
     def refresh_soil_moisture(self):
-        url = (
-            "https://smart.gardena.com/sg-1/devices/"
-            + self.id
-            + "/abilities/humidity/command?locationId="
-            + self.location.id
-        )
         data = {"name": "measure_soil_humidity", "parameters": {}}
-        self.smart_system.call_smart_system(url=url, request_type="post", data=data)
+        self.smart_system.call_smart_system(
+            url=self.get_ability_command_url("humidity"), request_type="post", data=data
+        )

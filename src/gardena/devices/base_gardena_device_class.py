@@ -101,3 +101,13 @@ class BaseGardenaDeviceClass(BaseGardenaClass):
         )
         if "abilities" in information:
             self.handle_abilities(information["abilities"])
+
+    def get_ability_command_url(self, command):
+        return (
+            "https://smart.gardena.com/sg-1/devices/"
+            + self.id
+            + "/abilities/"
+            + command
+            + "/command?locationId="
+            + self.location.id
+        )
