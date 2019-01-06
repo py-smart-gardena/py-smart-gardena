@@ -1,7 +1,19 @@
-from gardena.devices.base_gardena_device_class import BaseGardenaDeviceClass
+from gardena.devices.abilities.ambient_temperature_sensor import (
+    AmbientTemperatureSensorAbility,
+)
+from gardena.devices.abilities.device_info import DeviceInfoAbility
+from gardena.devices.abilities.disposable_battery import DisposableBatteryAbility
+from gardena.devices.abilities.firmware import FirmwareAbility
+from gardena.devices.abilities.radio import RadioAbility
 
 
-class Sensor(BaseGardenaDeviceClass):
+class Sensor(
+    AmbientTemperatureSensorAbility,
+    DisposableBatteryAbility,
+    RadioAbility,
+    DeviceInfoAbility,
+    FirmwareAbility,
+):
     """Class to communicate with a sensor"""
 
     sensor_soil_temperature = None
@@ -15,14 +27,15 @@ class Sensor(BaseGardenaDeviceClass):
 
     light_sensor_ability_fields = {"light": "sensor_light"}
 
-    sensor_ability_type_maps = {
-        "soil_temperature_sensor": soil_temperature_sensor_ability_fields,
-        "soil_humidity_sensor": soil_humidity_sensor_ability_fields,
-        "light_sensor": light_sensor_ability_fields,
-    }
-
-    def get_device_specific_ability_type_maps(self):
-        return self.sensor_ability_type_maps
+    def __init__(self, smart_system=None, location=None):
+        super(Sensor, self).__init__(smart_system=smart_system, location=location)
+        self.register_abilities(
+            {
+                "soil_temperature_sensor": self.soil_temperature_sensor_ability_fields,
+                "soil_humidity_sensor": self.soil_humidity_sensor_ability_fields,
+                "light_sensor": self.light_sensor_ability_fields,
+            }
+        )
 
     def refresh_ambient_temperature(self):
         self.call_command(

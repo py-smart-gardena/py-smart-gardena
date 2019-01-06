@@ -1,7 +1,9 @@
-from gardena.devices.base_gardena_device_class import BaseGardenaDeviceClass
+from gardena.devices.abilities.device_info import DeviceInfoAbility
+from gardena.devices.abilities.radio import RadioAbility
+from gardena.devices.abilities.rechargeable_battery import RechargeableBatteryAbility
 
 
-class Mower(BaseGardenaDeviceClass):
+class Mower(RechargeableBatteryAbility, RadioAbility, DeviceInfoAbility):
     """Class to communicate with a mower"""
 
     internal_temperature = None
@@ -18,13 +20,14 @@ class Mower(BaseGardenaDeviceClass):
 
     temperature_ability_fields = {"temperature": "internal_temperature"}
 
-    mower_ability_type_maps = {
-        "robotic_mower": mower_ability_fields,
-        "internal_temperature_sensor": temperature_ability_fields,
-    }
-
-    def get_device_specific_ability_type_maps(self):
-        return self.mower_ability_type_maps
+    def __init__(self, smart_system=None, location=None):
+        super(Mower, self).__init__(smart_system=smart_system, location=location)
+        self.register_abilities(
+            {
+                "robotic_mower": self.mower_ability_fields,
+                "internal_temperature_sensor": self.temperature_ability_fields,
+            }
+        )
 
     def park_until_next_timer(self):
         self.call_command("mower", {"name": "park_until_next_timer"})

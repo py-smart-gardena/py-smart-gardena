@@ -1,7 +1,8 @@
-from gardena.devices.base_gardena_device_class import BaseGardenaDeviceClass
+from gardena.devices.abilities.device_info import DeviceInfoAbility
+from gardena.devices.abilities.radio import RadioAbility
 
 
-class Gateway(BaseGardenaDeviceClass):
+class Gateway(RadioAbility, DeviceInfoAbility):
     """Class to hold informations about gateways"""
 
     ip_address = None
@@ -12,5 +13,6 @@ class Gateway(BaseGardenaDeviceClass):
 
     gateway_ability_type_maps = {"gateway": gateway_ability_fields}
 
-    def get_device_specific_ability_type_maps(self):
-        return self.gateway_ability_type_maps
+    def __init__(self, smart_system=None, location=None):
+        super(Gateway, self).__init__(smart_system=smart_system, location=location)
+        self.register_abilities({"gateway": self.gateway_ability_fields})
