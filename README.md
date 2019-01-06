@@ -179,6 +179,7 @@ schedule (using **mower.start_resume_schedule()**)
 The sensor is used to get information from the garden.
 Here are the information and commands available :
 ```python
+    # Iterate over sensors
     for sensor in location.sensors.values():
         print("-> sensor : " + sensor.name + "(" + sensor.id + ")")
         print("---> category : " + sensor.category)
@@ -195,6 +196,8 @@ Here are the information and commands available :
         print("---> radio connection status : " + sensor.radio_connection_status)
         print("---> radio state : " + sensor.radio_state)
         print("---> firmware status : " + sensor.firmware_status)
+        print("---> firmware upload in progress : " + sensor.firmware_upload_progress)
+        print("---> firmware upload start : " + sensor.firmware_update_start)
         print("---> ambient temperature : " + str(sensor.ambient_temperature))
         print("---> frost warning : " + sensor.frost_warning)
         print("---> soil temperature : " + str(sensor.sensor_soil_temperature))
@@ -226,6 +229,7 @@ The water control equipment is used to control the irrgation fo the plants in th
 garden.
 
 ```python
+    # Iterate over water control
     for water_control in location.water_controls.values():
         print("-> water control : " + water_control.name + "(" + water_control.id + ")")
         print("---> category : " + water_control.category)
@@ -242,6 +246,8 @@ garden.
         print("---> radio connection status : " + water_control.radio_connection_status)
         print("---> radio state : " + water_control.radio_state)
         print("---> firmware status : " + water_control.firmware_status)
+        print("---> firmware upload in progress : " + water_control.firmware_upload_progress)
+        print("---> firmware upload start : " + water_control.firmware_update_start)
         print("---> ambient temperature : " + str(water_control.ambient_temperature))
         print("---> frost warning : " + water_control.frost_warning)
         print("---> valve open : " + str(water_control.watering_valve_open))
@@ -343,6 +349,8 @@ for location in smart_system.locations.values():
         print("---> radio connection status : " + sensor.radio_connection_status)
         print("---> radio state : " + sensor.radio_state)
         print("---> firmware status : " + sensor.firmware_status)
+        print("---> firmware upload in progress : " + sensor.firmware_upload_progress)
+        print("---> firmware upload start : " + sensor.firmware_update_start)
         print("---> ambient temperature : " + str(sensor.ambient_temperature))
         print("---> frost warning : " + sensor.frost_warning)
         print("---> soil temperature : " + str(sensor.sensor_soil_temperature))
@@ -370,6 +378,8 @@ for location in smart_system.locations.values():
         print("---> radio connection status : " + water_control.radio_connection_status)
         print("---> radio state : " + water_control.radio_state)
         print("---> firmware status : " + water_control.firmware_status)
+        print("---> firmware upload in progress : " + water_control.firmware_upload_progress)
+        print("---> firmware upload start : " + water_control.firmware_update_start)
         print("---> ambient temperature : " + str(water_control.ambient_temperature))
         print("---> frost warning : " + water_control.frost_warning)
         print("---> valve open : " + str(water_control.watering_valve_open))
