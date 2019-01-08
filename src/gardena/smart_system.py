@@ -53,6 +53,19 @@ class SmartSystem:
         self.token = response_data["sessions"]["token"]
         self.user_id = response_data["sessions"]["user_id"]
 
+    def get_session(self):
+        return self.request_session
+
+    def call_smart_system(self, url=None, params=None, request_type="get", data={}):
+        response = getattr(self.request_session, request_type)(
+            url,
+            headers=self.create_header(),
+            params=params,
+            data=json.dumps(data, ensure_ascii=False),
+        )
+        response.raise_for_status()
+        return response
+
     def update_locations(self):
         """Update locations (gardens, ..) """
         url = "https://smart.gardena.com/sg-1/locations/"
@@ -67,15 +80,25 @@ class SmartSystem:
                 self.locations[location["id"]] = Location(smart_system=self)
             self.locations[location["id"]].update_information(location)
 
-    def get_session(self):
-        return self.request_session
+    def update_all_devices(self):
+        for location in self.locations.values():
+            location.update_devices()
 
-    def call_smart_system(self, url=None, params=None, request_type="get", data={}):
-        response = getattr(self.request_session, request_type)(
-            url,
-            headers=self.create_header(),
-            params=params,
-            data=json.dumps(data, ensure_ascii=False),
-        )
-        response.raise_for_status()
-        return response
+    def get_all_devices_from_type(self, device_type):
+        devices = {}
+        for location in self.locations.values():
+            for device in getattr(location, device_type).values():
+                devices[device.id] = device
+        return devices
+
+    def get_all_gateways(self):
+        return self.get_all_devices_from_type("gateways")
+
+    def get_all_mowers(self):
+        return self.get_all_devices_from_type("mowers")
+
+    def get_all_sensors(self):
+        return self.get_all_devices_from_type("sensors")
+
+    def get_all_water_controls(self):
+        return self.get_all_devices_from_type("water_controls")

@@ -7,6 +7,10 @@ from tests.gardena_api_return.devices_return import (
     device_gateway_return,
     device_mower_return,
     device_sensor_return,
+    device_second_gateway_return,
+    device_second_mower_return,
+    device_second_sensor_return,
+    device_second_water_control_return,
 )
 
 
@@ -24,26 +28,43 @@ class GardenaApiMock:
             status_code=200,
         )
 
-    def register_locations(self):
+    def register_locations(self, locations=None):
+        if locations is None:
+            locations = [location_return]
         return self.adapter.register_uri(
             "GET",
             "https://smart.gardena.com/sg-1/locations/?user_id=196ab891-a521-872c-ab1d-1685d1e77afc",
-            json={"locations": [location_return]},
+            json={"locations": locations},
             status_code=200,
         )
 
-    def register_devices(self):
+    def register_devices(self, devices=None):
+        if devices is None:
+            devices = [
+                device_gateway_return,
+                device_mower_return,
+                device_sensor_return,
+                device_water_control_return,
+            ]
         return self.adapter.register_uri(
             "GET",
             "https://smart.gardena.com/sg-1/devices/?locationId=1c8b301f-22c8-423d-1b4d-ec25315d1377",
-            json={
-                "devices": [
-                    device_gateway_return,
-                    device_mower_return,
-                    device_sensor_return,
-                    device_water_control_return,
-                ]
-            },
+            json={"devices": devices},
+            status_code=200,
+        )
+
+    def register_second_location_devices(self, devices=None):
+        if devices is None:
+            devices = [
+                device_second_gateway_return,
+                device_second_mower_return,
+                device_second_sensor_return,
+                device_second_water_control_return,
+            ]
+        return self.adapter.register_uri(
+            "GET",
+            "https://smart.gardena.com/sg-1/devices/?locationId=1c8b301f-22c8-423d-1b4d-ec25315d1378",
+            json={"devices": devices},
             status_code=200,
         )
 
