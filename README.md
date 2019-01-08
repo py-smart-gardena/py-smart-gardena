@@ -21,7 +21,7 @@ all gardena smart equipments. Configuration of the equipement and inclusion has 
 For now, this library only supports retrieving information, it should soon be able ot
  interact with devices to integrate in your automation system.
 
-## Support / Donate
+## Support
 
 **This project needs your support.**  
 Gardena equipments are expensive, and I need to buy them in order to add support.
