@@ -1,4 +1,6 @@
 import setuptools
+import sys
+from setuptools.command.test import test as TestCommand
 from os.path import splitext, basename
 from glob import glob
 from subprocess import check_output
@@ -27,6 +29,9 @@ def get_git_version():
     return format_version(version=git_version)
 
 
+tests_require = ["pytest>=3.6", "coverage", "pytest-cov", "requests_mock"]
+
+
 setuptools.setup(
     name="py-smart-gardena",
     version=get_git_version(),
@@ -41,7 +46,7 @@ setuptools.setup(
     package_dir={"": "src"},
     install_requires=["requests"],
     setup_requires=["pytest-runner"],
-    tests_require=["pytest>=3.6", "coverage", "pytest-cov", "requests_mock"],
+    tests_require=tests_require,
     extras_require={"dev": ["pre-commit"]},
     py_modules={splitext(basename(path))[0] for path in glob("src/*py")},
     license="MIT",
