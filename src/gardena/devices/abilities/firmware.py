@@ -3,9 +3,6 @@ from gardena.devices.abilities.base_gardena_ability_class import BaseGardenaAbil
 
 class FirmwareAbility(BaseGardenaAbilityClass):
 
-    firmware_status = None
-    firmware_upload_progress = 0
-    firmware_update_start = False
     firmware_abilities = {
         "firmware": {
             "firmware_status": "firmware_status",
@@ -19,3 +16,6 @@ class FirmwareAbility(BaseGardenaAbilityClass):
             smart_system=smart_system, location=location
         )
         self.register_abilities(self.firmware_abilities)
+        self.firmware_status = None
+        self.firmware_upload_progress = 0
+        self.firmware_update_start = False

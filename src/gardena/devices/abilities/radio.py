@@ -4,10 +4,6 @@ from gardena.devices.abilities.base_gardena_ability_class import BaseGardenaAbil
 class RadioAbility(BaseGardenaAbilityClass):
 
     # Radio fields
-    radio_quality = None
-    radio_connection_status = None
-    radio_state = None
-    device_state = None
     radio_abilities = {
         "radio_link": {
             "quality": "radio_quality",
@@ -19,3 +15,7 @@ class RadioAbility(BaseGardenaAbilityClass):
     def __init__(self, smart_system=None, location=None):
         super(RadioAbility, self).__init__(smart_system=smart_system, location=location)
         self.register_abilities(self.radio_abilities)
+        self.radio_quality = None
+        self.radio_connection_status = None
+        self.radio_state = None
+        self.device_state = None

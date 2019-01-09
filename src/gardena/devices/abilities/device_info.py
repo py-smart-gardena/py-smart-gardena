@@ -4,9 +4,6 @@ from gardena.devices.abilities.base_gardena_ability_class import BaseGardenaAbil
 class DeviceInfoAbility(BaseGardenaAbilityClass):
 
     # Ambient temperature
-    serial_number = None
-    version = None
-    last_time_online = None
     device_info_abilities = {
         "device_info": {
             "serial_number": "serial_number",
@@ -20,3 +17,6 @@ class DeviceInfoAbility(BaseGardenaAbilityClass):
             smart_system=smart_system, location=location
         )
         self.register_abilities(self.device_info_abilities)
+        self.serial_number = None
+        self.version = None
+        self.last_time_online = None

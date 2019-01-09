@@ -16,10 +16,6 @@ class Sensor(
 ):
     """Class to communicate with a sensor"""
 
-    sensor_soil_temperature = None
-    sensor_soil_humidity = None
-    sensor_light = None
-
     """Used to map data between 'sensor' ability fields and class fields"""
     soil_temperature_sensor_ability_fields = {"temperature": "sensor_soil_temperature"}
 
@@ -36,6 +32,9 @@ class Sensor(
                 "light_sensor": self.light_sensor_ability_fields,
             }
         )
+        self.sensor_soil_temperature = None
+        self.sensor_soil_humidity = None
+        self.sensor_light = None
 
     def refresh_ambient_temperature(self):
         self.call_command(

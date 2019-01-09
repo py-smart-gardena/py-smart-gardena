@@ -6,11 +6,6 @@ from gardena.devices.abilities.rechargeable_battery import RechargeableBatteryAb
 class Mower(RechargeableBatteryAbility, RadioAbility, DeviceInfoAbility):
     """Class to communicate with a mower"""
 
-    internal_temperature = None
-    mower_manual_operation = None
-    mower_status = None
-    mower_timestamp_next_start = None
-
     """Used to map data between 'mower' ability fields and class fields"""
     mower_ability_fields = {
         "manual_operation": "mower_manual_operation",
@@ -28,6 +23,10 @@ class Mower(RechargeableBatteryAbility, RadioAbility, DeviceInfoAbility):
                 "internal_temperature_sensor": self.temperature_ability_fields,
             }
         )
+        self.internal_temperature = None
+        self.mower_manual_operation = None
+        self.mower_status = None
+        self.mower_timestamp_next_start = None
 
     def park_until_next_timer(self):
         self.call_command("mower", {"name": "park_until_next_timer"})

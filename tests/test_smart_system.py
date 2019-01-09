@@ -5,12 +5,7 @@ import requests_mock
 
 from requests import HTTPError
 from gardena.smart_system import SmartSystem
-from tests.gardena_api_return.devices_return import (
-    device_second_gateway_return,
-    device_second_mower_return,
-    device_second_sensor_return,
-    device_second_water_control_return,
-)
+from tests.gardena_api_return.authentication_return import authentication_return
 from tests.mocks.gardena_api_mock import GardenaApiMock, init_failed_mock
 from tests.gardena_api_return.locations_return import (
     location_return,
@@ -34,6 +29,14 @@ class SmartSystemTestCase(unittest.TestCase):
 
     def test_authenticate(self):
         smart_system = SmartSystem(email="test@test.com", password="password")
+        adapter = requests_mock.Adapter()
+        adapter.register_uri(
+            "POST",
+            "https://smart.gardena.com/sg-1/sessions",
+            json=authentication_return,
+            status_code=200,
+        )
+        smart_system.request_session.mount("https://smart.gardena.com/", adapter)
         smart_system.authenticate()
         assert smart_system.token == "7867e26c-05eb-4a60-bf30-7c3a1b4480aa"
         assert smart_system.user_id == "196ab891-a521-872c-ab1d-1685d1e77afc"
@@ -86,6 +89,7 @@ class SmartSystemTestCase(unittest.TestCase):
 
     def test_update_locations(self):
         smart_system = SmartSystem(email="test@test.com", password="password")
+        print("Taille test : " + str(len(smart_system.locations)))
         api_mock = GardenaApiMock()
         m_sessions = api_mock.register_sessions()
         m_locations = api_mock.register_locations()
@@ -126,13 +130,11 @@ class SmartSystemTestCase(unittest.TestCase):
         assert m_sessions.call_count == 1
         assert m_locations.call_count == 2
 
-    def test_update_locationswith_two_locations(self):
+    def test_update_locations_with_two_locations(self):
         smart_system = SmartSystem(email="test@test.com", password="password")
         api_mock = GardenaApiMock()
         m_sessions = api_mock.register_sessions()
-        m_locations = api_mock.register_locations(
-            [location_return, location_return_two]
-        )
+        m_locations = api_mock.register_two_locations()
         api_mock.mount(smart_system)
         smart_system.authenticate()
         smart_system.update_locations()
@@ -173,7 +175,7 @@ class SmartSystemTestCase(unittest.TestCase):
         smart_system = SmartSystem(email="test@test.com", password="password")
         api_mock = GardenaApiMock()
         api_mock.register_sessions()
-        api_mock.register_locations([location_return, location_return_two])
+        api_mock.register_two_locations()
         m_devices = api_mock.register_devices()
         m_devices_2 = api_mock.register_second_location_devices()
         api_mock.mount(smart_system)
@@ -196,7 +198,7 @@ class SmartSystemTestCase(unittest.TestCase):
             == location_return_two["id"]
         )
         assert (
-            smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1377"]
+            smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1378"]
             .gateways["75cfc1f8-a20c-51d6-c5ea-1b5ecdde80c2"]
             .name
             == "Gardena Zentrale 2"
@@ -208,7 +210,7 @@ class SmartSystemTestCase(unittest.TestCase):
         smart_system = SmartSystem(email="test@test.com", password="password")
         api_mock = GardenaApiMock()
         api_mock.register_sessions()
-        api_mock.register_locations([location_return, location_return_two])
+        api_mock.register_two_locations()
         m_devices = api_mock.register_devices()
         m_devices_2 = api_mock.register_second_location_devices()
         api_mock.mount(smart_system)
@@ -231,7 +233,7 @@ class SmartSystemTestCase(unittest.TestCase):
             == location_return_two["id"]
         )
         assert (
-            smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1377"]
+            smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1378"]
             .mowers["e3c1b615-7351-25fc-a551-1908254a2b3f"]
             .name
             == "Rosi 2"
@@ -243,7 +245,7 @@ class SmartSystemTestCase(unittest.TestCase):
         smart_system = SmartSystem(email="test@test.com", password="password")
         api_mock = GardenaApiMock()
         api_mock.register_sessions()
-        api_mock.register_locations([location_return, location_return_two])
+        api_mock.register_two_locations()
         m_devices = api_mock.register_devices()
         m_devices_2 = api_mock.register_second_location_devices()
         api_mock.mount(smart_system)
@@ -266,7 +268,7 @@ class SmartSystemTestCase(unittest.TestCase):
             == location_return_two["id"]
         )
         assert (
-            smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1377"]
+            smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1378"]
             .sensors["a130596e-6627-4030-aea5-b6d2f24d0e04"]
             .name
             == "Sensor 2"
@@ -278,7 +280,7 @@ class SmartSystemTestCase(unittest.TestCase):
         smart_system = SmartSystem(email="test@test.com", password="password")
         api_mock = GardenaApiMock()
         api_mock.register_sessions()
-        api_mock.register_locations([location_return, location_return_two])
+        api_mock.register_two_locations()
         m_devices = api_mock.register_devices()
         m_devices_2 = api_mock.register_second_location_devices()
         api_mock.mount(smart_system)
@@ -301,7 +303,7 @@ class SmartSystemTestCase(unittest.TestCase):
             == location_return_two["id"]
         )
         assert (
-            smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1377"]
+            smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1378"]
             .water_controls["d6259669-3241-488c-a88e-bcf3a07a58c0"]
             .name
             == "Water Control 2"

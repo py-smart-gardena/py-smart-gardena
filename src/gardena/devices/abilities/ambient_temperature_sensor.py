@@ -4,8 +4,6 @@ from gardena.devices.abilities.base_gardena_ability_class import BaseGardenaAbil
 class AmbientTemperatureSensorAbility(BaseGardenaAbilityClass):
 
     # Ambient temperature
-    ambient_temperature = None
-    frost_warning = None
     ambient_temperatures_abilities = {
         "ambient_temperature_sensor": {
             "temperature": "ambient_temperature",
@@ -18,3 +16,5 @@ class AmbientTemperatureSensorAbility(BaseGardenaAbilityClass):
             smart_system=smart_system, location=location
         )
         self.register_abilities(self.ambient_temperatures_abilities)
+        self.ambient_temperature = None
+        self.frost_warning = None

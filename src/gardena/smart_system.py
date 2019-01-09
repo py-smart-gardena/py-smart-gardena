@@ -7,15 +7,6 @@ from gardena.location import Location
 class SmartSystem:
     """Base class to communicate with gardena and handle network calls"""
 
-    debug = False
-    email = None
-    password = None
-    token = None
-    refresh_token = None
-    user_id = None
-    locations = {}
-    request_session = requests.session()
-
     def __init__(self, email=None, password=None, debug=False):
         """Constructor, create instance of gateway"""
         if email is None or password is None:
@@ -23,6 +14,12 @@ class SmartSystem:
         self.debug = debug
         self.email = email
         self.password = password
+        self.locations = {}
+        self.debug = False
+        self.token = None
+        self.refresh_token = None
+        self.user_id = None
+        self.request_session = requests.session()
 
     def create_header(self):
         headers = {"Content-Type": "application/json"}
@@ -75,10 +72,13 @@ class SmartSystem:
         )
         response.raise_for_status()
         response_data = json.loads(response.content.decode("utf-8"))
+        print("Taille avant : " + str(len(self.locations)))
         for location in response_data["locations"]:
+            print("location : " + location["id"])
             if location["id"] not in self.locations:
                 self.locations[location["id"]] = Location(smart_system=self)
             self.locations[location["id"]].update_information(location)
+        print("Taille : " + str(len(self.locations)))
 
     def update_all_devices(self):
         for location in self.locations.values():

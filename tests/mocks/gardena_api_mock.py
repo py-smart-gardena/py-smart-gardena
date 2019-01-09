@@ -1,7 +1,10 @@
 import requests_mock
 
 from tests.gardena_api_return.authentication_return import authentication_return
-from tests.gardena_api_return.locations_return import location_return
+from tests.gardena_api_return.locations_return import (
+    location_return,
+    location_return_two,
+)
 from tests.gardena_api_return.devices_return import (
     device_water_control_return,
     device_gateway_return,
@@ -28,13 +31,19 @@ class GardenaApiMock:
             status_code=200,
         )
 
-    def register_locations(self, locations=None):
-        if locations is None:
-            locations = [location_return]
+    def register_locations(self):
         return self.adapter.register_uri(
             "GET",
             "https://smart.gardena.com/sg-1/locations/?user_id=196ab891-a521-872c-ab1d-1685d1e77afc",
-            json={"locations": locations},
+            json={"locations": [location_return]},
+            status_code=200,
+        )
+
+    def register_two_locations(self):
+        return self.adapter.register_uri(
+            "GET",
+            "https://smart.gardena.com/sg-1/locations/?user_id=196ab891-a521-872c-ab1d-1685d1e77afc",
+            json={"locations": [location_return, location_return_two]},
             status_code=200,
         )
 

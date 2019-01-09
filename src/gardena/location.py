@@ -10,26 +10,28 @@ from gardena.devices.water_control import WaterControl
 class Location(BaseGardenaClass):
     """Keep informations about gardena locations (gardens, ..) and devices"""
 
-    latitude = None
-    longitude = None
-    address = None
-    city = None
-    sunrise = None
-    sunset = None
-    time_zone = None
-    time_zone_offset = None
-    gateways = {}
-    mowers = {}
-    sensors = {}
-    water_controls = {}
-
     """Used to configure device instance assignements"""
-    device_types_configuration = {
-        "gateway": {"class": Gateway, "map": gateways},
-        "mower": {"class": Mower, "map": mowers},
-        "sensor": {"class": Sensor, "map": sensors},
-        "watering_computer": {"class": WaterControl, "map": water_controls},
-    }
+
+    def __init__(self, smart_system=None):
+        super(Location, self).__init__(smart_system=smart_system)
+        self.latitude = None
+        self.longitude = None
+        self.address = None
+        self.city = None
+        self.sunrise = None
+        self.sunset = None
+        self.time_zone = None
+        self.time_zone_offset = None
+        self.gateways = {}
+        self.mowers = {}
+        self.sensors = {}
+        self.water_controls = {}
+        self.device_types_configuration = {
+            "gateway": {"class": Gateway, "map": self.gateways},
+            "mower": {"class": Mower, "map": self.mowers},
+            "sensor": {"class": Sensor, "map": self.sensors},
+            "watering_computer": {"class": WaterControl, "map": self.water_controls},
+        }
 
     def update_information(self, information):
         super(Location, self).update_information(information)

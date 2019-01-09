@@ -4,8 +4,6 @@ from gardena.devices.abilities.base_gardena_ability_class import BaseGardenaAbil
 class DisposableBatteryAbility(BaseGardenaAbilityClass):
 
     # Battery specific fields
-    battery_level = None
-    battery_status = None
     disposable_battery_abilities = {
         "battery_power": {
             "level": "battery_level",
@@ -18,3 +16,5 @@ class DisposableBatteryAbility(BaseGardenaAbilityClass):
             smart_system=smart_system, location=location
         )
         self.register_abilities(self.disposable_battery_abilities)
+        self.battery_level = None
+        self.battery_status = None

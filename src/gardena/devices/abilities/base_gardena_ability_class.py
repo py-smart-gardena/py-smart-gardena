@@ -4,11 +4,6 @@ from gardena.base_gardena_class import BaseGardenaClass
 class BaseGardenaAbilityClass(BaseGardenaClass):
     """Base class for Gardena devices"""
 
-    # Common fields
-    description = None
-    category = None
-    is_configuration_synchronized = False
-
     abilities = {}
 
     def __init__(self, smart_system=None, location=None):
@@ -17,6 +12,9 @@ class BaseGardenaAbilityClass(BaseGardenaClass):
         if location is None:
             raise ValueError("Argument 'location' is missing")
         self.location = location
+        self.description = None
+        self.category = None
+        self.is_configuration_synchronized = False
 
     def handle_abilities(self, abilities):
         for ability in abilities:

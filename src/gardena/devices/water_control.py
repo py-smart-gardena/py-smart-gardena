@@ -16,9 +16,6 @@ class WaterControl(
 ):
     """Class to communicate with a water control device"""
 
-    watering_valve_open = None
-    watering_manual_override = None
-
     watering_abilities = {
         "watering_outlet": {
             "valve_open": "watering_valve_open",
@@ -29,6 +26,8 @@ class WaterControl(
     def __init__(self, smart_system=None, location=None):
         super(WaterControl, self).__init__(smart_system=smart_system, location=location)
         self.register_abilities(self.watering_abilities)
+        self.watering_valve_open = None
+        self.watering_manual_override = None
 
     def open_valve(self, duration=30):
         self.call_command(
