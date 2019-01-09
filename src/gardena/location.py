@@ -70,11 +70,6 @@ class Location(BaseGardenaClass):
     def update_devices(self):
         url = "https://smart.gardena.com/sg-1/devices/"
         params = (("locationId", self.id),)
-        print(
-            "calling : "
-            + "https://smart.gardena.com/sg-1/devices/?locationId="
-            + self.id
-        )
         response = self.smart_system.request_session.get(
             url, headers=self.smart_system.create_header(), params=params
         )
