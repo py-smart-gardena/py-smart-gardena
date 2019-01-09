@@ -95,3 +95,33 @@ class MowerTestCase(unittest.TestCase, BaseDeviceTestClass):
         mower.update_information(device_mower_return)
         mower.start_override_timer()
         assert m_result.call_count == 1
+
+    def test_get_all_infos(self):
+        mower = Mower(
+            smart_system=SmartSystemFixture.get_smart_system_fixture(),
+            location=LocationFixture.get_location_fixture(),
+        )
+        mower.update_information(device_mower_return)
+        infos = mower.get_all_infos()
+        assert infos["id"] == device_mower_return["id"]
+        assert infos["name"] == device_mower_return["name"]
+        # XXX : no description for mower ?
+        # assert infos["description"] == device_mower_return["description"]
+        assert infos["category"] == device_mower_return["category"]
+        assert (
+            infos["is_configuration_synchronized"]
+            == device_mower_return["configuration_synchronized"]
+        )
+        assert infos["serial_number"] == "12345678"
+        assert infos["version"] == "3-2.4.7-1.2.0-4380-MODIFIED-ICD1.16_1.2.0"
+        assert infos["last_time_online"] == "2016-07-21T13:28:48Z"
+        assert infos["battery_level"] == 100
+        assert infos["battery_status"] == "ok"
+        assert not infos["battery_charging"]
+        assert infos["radio_quality"] == 50
+        assert infos["radio_connection_status"] == "status_device_unreachable"
+        assert infos["radio_state"] == "good"
+        assert infos["internal_temperature"] == 32
+        assert infos["mower_status"] == "off_disabled"
+        assert not infos["mower_manual_operation"]
+        assert infos["mower_timestamp_next_start"] == "2016-07-22T08:00:00.000000001Z"

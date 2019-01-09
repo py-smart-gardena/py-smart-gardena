@@ -42,3 +42,24 @@ class Mower(RechargeableBatteryAbility, RadioAbility, DeviceInfoAbility):
             "mower",
             {"name": "start_override_timer", "parameters": {"duration": duration}},
         )
+
+    def get_all_infos(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "category": self.category,
+            "is_configuration_synchronized": self.is_configuration_synchronized,
+            "serial_number": self.serial_number,
+            "version": self.version,
+            "last_time_online": self.last_time_online,
+            "battery_level": self.battery_level,
+            "battery_status": self.battery_status,
+            "battery_charging": self.battery_charging,
+            "radio_quality": self.radio_quality,
+            "radio_connection_status": self.radio_connection_status,
+            "radio_state": self.radio_state,
+            "internal_temperature": self.internal_temperature,
+            "mower_status": self.mower_status,
+            "mower_manual_operation": self.mower_manual_operation,
+            "mower_timestamp_next_start": self.mower_timestamp_next_start,
+        }
