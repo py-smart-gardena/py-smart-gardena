@@ -104,7 +104,6 @@ for location in smart_system.locations.values():
     print("-> time zone : " + location.time_zone)
     print("-> time zone offset : " + str(location.time_zone_offset))
     
-    location.update_devices()
 ```
 
 The function *location.update_devices()* is used to update devices for a location.
@@ -114,6 +113,23 @@ This function needs to be called first before walking through devices.
 
 Before getting devices, you first need to authenticate and update locations.
 Devices must be queried on a specific location.
+
+There is two ways to update devices, either on a locations, or all devices at a time.
+```python
+    smart_system.update_all_devices()
+    # Or
+    for location in smart_system.locations.values():
+        locations.update_devices()
+```
+
+All devices fields can also been queried using **get_all_info()**.
+Keys of the hashmap are the field names :
+```python
+    for gateway in location.gateways.values():
+        info = gateway.get_all_info()
+        print("-> gateway : " + info["name"] + "(" + gateway["id"] + ")")
+
+```
 
 #### Gateway
 
@@ -141,7 +157,7 @@ Mowers can be controlled through the API.
 Here is the list of available information and commands.
 
 ```python
-    for mower in location.mowers:
+    for mower in location.mowers.values():
         print("-> mower : " + mower.name + "(" + mower.id + ")")
         print("---> category : " + mower.category)
         print("---> description : " + mower.description)
@@ -310,7 +326,7 @@ for location in smart_system.locations.values():
         print("---> device state : " + gateway.device_state)
 
     # Iterate over mowers
-    for mower in location.mowers:
+    for mower in location.mowers.values():
         print("-> mower : " + mower.name + "(" + mower.id + ")")
         print("---> category : " + mower.category)
         print("---> description : " + mower.description)
@@ -408,3 +424,4 @@ $ pip install -e .[dev]
 This library would not have been possible without the work of :
 * DXSdata (http://www.dxsdata.com/2016/07/php-class-for-gardena-smart-system-api/)
 * Gerrieg (https://www.roboter-forum.com/index.php?thread/16777-gardena-smart-system-analyse/&l=2)
+* Wijnandtop (https://github.com/wijnandtop/home_assistant_gardena)
