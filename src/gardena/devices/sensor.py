@@ -49,3 +49,11 @@ class Sensor(
         self.call_command(
             "humidity", {"name": "measure_soil_humidity", "parameters": {}}
         )
+
+    def get_all_info(self):
+        values = {
+            "sensor_soil_temperature": self.sensor_soil_temperature,
+            "sensor_soil_humidity": self.sensor_soil_humidity,
+            "sensor_light": self.sensor_light,
+        }
+        return {**values, **super(Sensor, self).get_all_info()}

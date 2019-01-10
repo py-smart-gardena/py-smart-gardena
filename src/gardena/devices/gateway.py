@@ -14,3 +14,7 @@ class Gateway(RadioAbility, DeviceInfoAbility):
         self.register_abilities(self.gateway_abilities)
         self.ip_address = None
         self.timezone = None
+
+    def get_all_info(self):
+        values = {"ip_address": self.ip_address, "timezone": self.timezone}
+        return {**values, **super(Gateway, self).get_all_info()}

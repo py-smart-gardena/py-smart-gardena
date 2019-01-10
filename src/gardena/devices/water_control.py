@@ -40,3 +40,10 @@ class WaterControl(
 
     def close_valve(self):
         self.call_command("outlet", {"name": "cancel_override", "parameters": {}})
+
+    def get_all_info(self):
+        values = {
+            "watering_valve_open": self.watering_valve_open,
+            "watering_manual_override": self.watering_manual_override,
+        }
+        return {**values, **super(WaterControl, self).get_all_info()}

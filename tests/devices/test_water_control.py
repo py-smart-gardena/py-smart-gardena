@@ -68,3 +68,36 @@ class WaterControlTestCase(unittest.TestCase, BaseDeviceTestClass):
         water_control.update_information(device_water_control_return)
         water_control.close_valve()
         assert m_result.call_count == 1
+
+    def test_get_all_info(self):
+        water_control = WaterControl(
+            smart_system=SmartSystemFixture.get_smart_system_fixture(),
+            location=LocationFixture.get_location_fixture(),
+        )
+        water_control.update_information(device_water_control_return)
+        info = water_control.get_all_info()
+        assert info["id"] == device_water_control_return["id"]
+        assert info["name"] == device_water_control_return["name"]
+        # XXX : no description for water_control ?
+        # assert info["description"] == device_water_control_return["description"]
+        assert info["category"] == device_water_control_return["category"]
+        assert (
+            info["is_configuration_synchronized"]
+            == device_water_control_return["configuration_synchronized"]
+        )
+        assert info["serial_number"] == "12345678"
+        assert info["version"] == "0.3.5-2.5.2-1.2.5-ICD1.17_1.0.20"
+        assert info["last_time_online"] == "2019-01-03T23:25:56.050Z"
+        assert info["device_state"] == "ok"
+        assert info["battery_level"] == 97
+        assert info["battery_status"] == "ok"
+        assert info["radio_quality"] == 100
+        assert info["radio_connection_status"] == "unknown"
+        assert info["radio_state"] == "good"
+        assert info["ambient_temperature"] == 22
+        assert info["frost_warning"] == "no_frost"
+        assert info["firmware_status"] == "up_to_date"
+        assert info["firmware_upload_progress"] == 0
+        assert info["firmware_update_start"]
+        assert not info["watering_valve_open"]
+        assert info["watering_manual_override"] == "inactive"

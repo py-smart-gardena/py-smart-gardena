@@ -18,3 +18,10 @@ class DisposableBatteryAbility(BaseGardenaAbilityClass):
         self.register_abilities(self.disposable_battery_abilities)
         self.battery_level = None
         self.battery_status = None
+
+    def get_all_info(self):
+        values = {
+            "battery_level": self.battery_level,
+            "battery_status": self.battery_status,
+        }
+        return {**super(DisposableBatteryAbility, self).get_all_info(), **values}

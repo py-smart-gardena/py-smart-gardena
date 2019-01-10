@@ -19,3 +19,11 @@ class FirmwareAbility(BaseGardenaAbilityClass):
         self.firmware_status = None
         self.firmware_upload_progress = 0
         self.firmware_update_start = False
+
+    def get_all_info(self):
+        values = {
+            "firmware_status": self.firmware_status,
+            "firmware_upload_progress": self.firmware_upload_progress,
+            "firmware_update_start": self.firmware_update_start,
+        }
+        return {**super(FirmwareAbility, self).get_all_info(), **values}

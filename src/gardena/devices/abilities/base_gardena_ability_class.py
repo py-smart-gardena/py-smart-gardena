@@ -14,6 +14,7 @@ class BaseGardenaAbilityClass(BaseGardenaClass):
         self.location = location
         self.description = None
         self.category = None
+        self.device_state = None
         self.is_configuration_synchronized = False
 
     def handle_abilities(self, abilities):
@@ -51,3 +52,12 @@ class BaseGardenaAbilityClass(BaseGardenaClass):
             + self.location.id
         )
         self.smart_system.call_smart_system(url=url, request_type="post", data=data)
+
+    def get_all_info(self):
+        values = {
+            "description": self.description,
+            "category": self.category,
+            "is_configuration_synchronized": self.is_configuration_synchronized,
+            "device_state": self.device_state,
+        }
+        return {**super(BaseGardenaAbilityClass, self).get_all_info(), **values}

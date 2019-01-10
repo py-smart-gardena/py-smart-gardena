@@ -7,7 +7,6 @@ class RechargeableBatteryAbility(BaseGardenaAbilityClass):
     rechargeable_abilities = {
         "battery_power": {
             "level": "battery_level",
-            "disposable_battery_status": "battery_status",
             "rechargable_battery_status": "battery_status",
             "charging": "battery_charging",
         }
@@ -21,4 +20,11 @@ class RechargeableBatteryAbility(BaseGardenaAbilityClass):
         self.battery_level = None
         self.battery_status = None
         self.battery_charging = False
-        self.battery_status = None
+
+    def get_all_info(self):
+        values = {
+            "battery_level": self.battery_level,
+            "battery_status": self.battery_status,
+            "battery_charging": self.battery_charging,
+        }
+        return {**super(RechargeableBatteryAbility, self).get_all_info(), **values}

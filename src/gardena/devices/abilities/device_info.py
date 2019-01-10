@@ -20,3 +20,11 @@ class DeviceInfoAbility(BaseGardenaAbilityClass):
         self.serial_number = None
         self.version = None
         self.last_time_online = None
+
+    def get_all_info(self):
+        values = {
+            "serial_number": self.serial_number,
+            "version": self.version,
+            "last_time_online": self.last_time_online,
+        }
+        return {**super(DeviceInfoAbility, self).get_all_info(), **values}

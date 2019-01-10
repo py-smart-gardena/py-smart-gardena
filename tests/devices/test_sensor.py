@@ -84,3 +84,37 @@ class SensorTestCase(unittest.TestCase, BaseDeviceTestClass):
         sensor.update_information(device_sensor_return)
         sensor.refresh_soil_moisture()
         assert m_result.call_count == 1
+
+    def test_sensor_get_all_info(self):
+        sensor = Sensor(
+            smart_system=SmartSystemFixture.get_smart_system_fixture(),
+            location=LocationFixture.get_location_fixture(),
+        )
+        sensor.update_information(device_sensor_return)
+        info = sensor.get_all_info()
+        assert info["id"] == device_sensor_return["id"]
+        assert info["name"] == device_sensor_return["name"]
+        # XXX : no description for sensor ?
+        # assert info["description"] == device_sensor_return["description"]
+        assert info["category"] == device_sensor_return["category"]
+        assert (
+            info["is_configuration_synchronized"]
+            == device_sensor_return["configuration_synchronized"]
+        )
+        assert info["serial_number"] == "12345678"
+        assert info["version"] == "1.0.3-2.5.2-1.2.5-ICD1.17_1.0.18"
+        assert info["last_time_online"] == "2019-01-03T23:57:34.549Z"
+        assert info["device_state"] == "ok"
+        assert info["battery_level"] == 97
+        assert info["battery_status"] == "ok"
+        assert info["radio_quality"] == 90
+        assert info["radio_connection_status"] == "unknown"
+        assert info["radio_state"] == "good"
+        assert info["ambient_temperature"] == 22
+        assert info["frost_warning"] == "no_frost"
+        assert info["sensor_soil_temperature"] == 22
+        assert info["sensor_soil_humidity"] == 0
+        assert info["sensor_light"] == 0
+        assert info["firmware_status"] == "up_to_date"
+        assert info["firmware_upload_progress"] == 0
+        assert info["firmware_update_start"]

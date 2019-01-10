@@ -16,3 +16,7 @@ class BaseGardenaClass:
     def update_information(self, information):
         self.set_field_if_exists(information, "id", "id")
         self.set_field_if_exists(information, "name", "name")
+
+    def get_all_info(self):
+        values = {"id": self.id, "name": self.name}
+        return values
