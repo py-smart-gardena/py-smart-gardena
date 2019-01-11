@@ -72,13 +72,10 @@ class SmartSystem:
         )
         response.raise_for_status()
         response_data = json.loads(response.content.decode("utf-8"))
-        print("Taille avant : " + str(len(self.locations)))
         for location in response_data["locations"]:
-            print("location : " + location["id"])
             if location["id"] not in self.locations:
                 self.locations[location["id"]] = Location(smart_system=self)
             self.locations[location["id"]].update_information(location)
-        print("Taille : " + str(len(self.locations)))
 
     def update_all_devices(self):
         for location in self.locations.values():
