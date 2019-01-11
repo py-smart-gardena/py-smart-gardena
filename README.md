@@ -424,4 +424,3 @@ $ pip install -e .[dev]
 This library would not have been possible without the work of :
 * DXSdata (http://www.dxsdata.com/2016/07/php-class-for-gardena-smart-system-api/)
 * Gerrieg (https://www.roboter-forum.com/index.php?thread/16777-gardena-smart-system-analyse/&l=2)
-* Wijnandtop (https://github.com/wijnandtop/home_assistant_gardena)
