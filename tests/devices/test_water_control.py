@@ -38,6 +38,9 @@ class WaterControlTestCase(unittest.TestCase, BaseDeviceTestClass):
         assert water_control.firmware_update_start
         assert not water_control.watering_valve_open
         assert water_control.watering_manual_override == "inactive"
+        assert water_control.sgtin == "3034F8EE90126D4000004D54"
+        assert water_control.manufacturer == "Gardena"
+        assert water_control.firmware_available_version == ""
 
     def test_open_valve(self):
         smart_system = SmartSystemFixture.get_smart_system_fixture()
@@ -101,3 +104,6 @@ class WaterControlTestCase(unittest.TestCase, BaseDeviceTestClass):
         assert info["firmware_update_start"]
         assert not info["watering_valve_open"]
         assert info["watering_manual_override"] == "inactive"
+        assert info["sgtin"] == "3034F8EE90126D4000004D54"
+        assert info["manufacturer"] == "Gardena"
+        assert info["firmware_available_version"] == ""

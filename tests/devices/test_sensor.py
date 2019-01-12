@@ -39,6 +39,9 @@ class SensorTestCase(unittest.TestCase, BaseDeviceTestClass):
         assert sensor.firmware_status == "up_to_date"
         assert sensor.firmware_upload_progress == 0
         assert sensor.firmware_update_start
+        assert sensor.sgtin == "3034F8EE9012674000006F2E"
+        assert sensor.manufacturer == "Gardena"
+        assert sensor.firmware_available_version == ""
 
     def test_refresh_ambient_temperature(self):
         smart_system = SmartSystemFixture.get_smart_system_fixture()
@@ -118,3 +121,6 @@ class SensorTestCase(unittest.TestCase, BaseDeviceTestClass):
         assert info["firmware_status"] == "up_to_date"
         assert info["firmware_upload_progress"] == 0
         assert info["firmware_update_start"]
+        assert info["sgtin"] == "3034F8EE9012674000006F2E"
+        assert info["manufacturer"] == "Gardena"
+        assert info["firmware_available_version"] == ""

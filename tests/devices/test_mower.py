@@ -35,6 +35,8 @@ class MowerTestCase(unittest.TestCase, BaseDeviceTestClass):
         assert mower.mower_status == "off_disabled"
         assert not mower.mower_manual_operation
         assert mower.mower_timestamp_next_start == "2016-07-22T08:00:00.000000001Z"
+        assert mower.sgtin == "3034F8EE90060080000020F6"
+        assert mower.manufacturer == "Gardena"
 
     def test_park_until_next_timer(self):
         smart_system = SmartSystemFixture.get_smart_system_fixture()
@@ -125,3 +127,5 @@ class MowerTestCase(unittest.TestCase, BaseDeviceTestClass):
         assert infos["mower_status"] == "off_disabled"
         assert not infos["mower_manual_operation"]
         assert infos["mower_timestamp_next_start"] == "2016-07-22T08:00:00.000000001Z"
+        assert infos["sgtin"] == "3034F8EE90060080000020F6"
+        assert infos["manufacturer"] == "Gardena"

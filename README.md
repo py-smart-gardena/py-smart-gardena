@@ -149,6 +149,8 @@ There is no commands on it but there are general information.
         print("---> ip address : " + gateway.ip_address)
         print("---> timezone : " + gateway.timezone)
         print("---> device state : " + gateway.device_state)
+        print("---> sgtin : " + gateway.sgtin)
+        print("---> manufacturer : " + gateway.manufacturer)
 ```
 
 #### Mower
@@ -177,6 +179,8 @@ Here is the list of available information and commands.
         print("---> mower status : " + mower.mower_status)
         print("---> manual operation : " + str(mower.mower_manual_operation))
         print("---> timestamp next start : " + mower.mower_timestamp_next_start)
+        print("---> sgtin : " + mower.sgtin)
+        print("---> manufacturer : " + mower.manufacturer)
         # Commands (Untested)
         # mower.park_until_next_timer()
         # mower.park_until_further_notice()
@@ -223,6 +227,9 @@ Here are the information and commands available :
         print("---> soil temperature : " + str(sensor.sensor_soil_temperature))
         print("---> soil humidity : " + str(sensor.sensor_soil_humidity))
         print("---> light : " + str(sensor.sensor_light))
+        print("---> sgtin : " + sensor.sgtin)
+        print("---> manufacturer : " + sensor.manufacturer)
+        print("---> firmware_available_version : " + str(sensor.firmware_available_version))
         # Commands :
         # sensor.refresh_ambient_temperature()
         # sensor.refresh_light_intensity()
@@ -272,6 +279,9 @@ garden.
         print("---> frost warning : " + water_control.frost_warning)
         print("---> valve open : " + str(water_control.watering_valve_open))
         print("---> manual override : " + water_control.watering_manual_override)
+        print("---> sgtin : " + water_control.sgtin)
+        print("---> manufacturer : " + water_control.manufacturer)
+        print("---> firmware_available_version : " + str(water_control.firmware_available_version))
         # Commands :
         # water_control.open_valve()  # 30 minutes by default
         # water_control.open_valve(duration=10)  # 10 minutes before closing valve
@@ -324,6 +334,8 @@ for location in smart_system.locations.values():
         print("---> ip address : " + gateway.ip_address)
         print("---> timezone : " + gateway.timezone)
         print("---> device state : " + gateway.device_state)
+        print("---> sgtin : " + gateway.sgtin)
+        print("---> manufacturer : " + gateway.manufacturer)
 
     # Iterate over mowers
     for mower in location.mowers.values():
@@ -346,6 +358,8 @@ for location in smart_system.locations.values():
         print("---> mower status : " + mower.mower_status)
         print("---> manual operation : " + str(mower.mower_manual_operation))
         print("---> timestamp next start : " + mower.mower_timestamp_next_start)
+        print("---> sgtin : " + mower.sgtin)
+        print("---> manufacturer : " + mower.manufacturer)
         # Commands (Untested)
         # mower.park_until_next_timer()
         # mower.park_until_further_notice()
@@ -376,6 +390,9 @@ for location in smart_system.locations.values():
         print("---> soil temperature : " + str(sensor.sensor_soil_temperature))
         print("---> soil humidity : " + str(sensor.sensor_soil_humidity))
         print("---> light : " + str(sensor.sensor_light))
+        print("---> sgtin : " + sensor.sgtin)
+        print("---> manufacturer : " + sensor.manufacturer)
+        print("---> firmware_available_version : " + str(sensor.firmware_available_version))
         # Commands :
         # sensor.refresh_ambient_temperature()
         # sensor.refresh_light_intensity()
@@ -404,6 +421,9 @@ for location in smart_system.locations.values():
         print("---> frost warning : " + water_control.frost_warning)
         print("---> valve open : " + str(water_control.watering_valve_open))
         print("---> manual override : " + water_control.watering_manual_override)
+        print("---> sgtin : " + water_control.sgtin)
+        print("---> manufacturer : " + water_control.manufacturer)
+        print("---> firmware_available_version : " + str(water_control.firmware_available_version))
         # Commands :
         # water_control.open_valve()  # 30 minutes by default
         # water_control.open_valve(duration=10)  # 10 minutes before closing valve

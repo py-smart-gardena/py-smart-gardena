@@ -28,6 +28,8 @@ class GatewayTestCase(unittest.TestCase, BaseDeviceTestClass):
         assert gateway.ip_address == "192.168.1.217"
         assert gateway.timezone == "Europe/Vienna (CEST, +0200)"
         assert gateway.device_state == "ok"
+        assert gateway.sgtin == "N/A"
+        assert gateway.manufacturer == "Seluxit"
 
     def test_gateway_get_all_info(self):
         smart_system_fixture = SmartSystemFixture.get_smart_system_fixture()
@@ -51,3 +53,5 @@ class GatewayTestCase(unittest.TestCase, BaseDeviceTestClass):
         assert info["ip_address"] == "192.168.1.217"
         assert info["timezone"] == "Europe/Vienna (CEST, +0200)"
         assert info["device_state"] == "ok"
+        assert info["sgtin"] == "N/A"
+        assert info["manufacturer"] == "Seluxit"
