@@ -113,3 +113,48 @@ class PowerTestCase(unittest.TestCase, BaseDeviceTestClass):
         power.update_information(device_power_return)
         power.refresh_link_status()
         assert m_result.call_count == 1
+
+    def test_upload_firmware(self):
+        smart_system = SmartSystemFixture.get_smart_system_fixture()
+        mock = self.create_mock(smart_system)
+        smart_system.authenticate()
+        smart_system.update_locations()
+        location = smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1377"]
+        m_result = mock.register_firmware_ability(
+            "c6e981e9-8ec6-438f-b400-c720d7f313c8",
+            "1c8b301f-22c8-423d-1b4d-ec25315d1377",
+        )
+        power = Power(smart_system=smart_system, location=location)
+        power.update_information(device_power_return)
+        power.upload_firmware()
+        assert m_result.call_count == 1
+
+    def test_firmware_cancel(self):
+        smart_system = SmartSystemFixture.get_smart_system_fixture()
+        mock = self.create_mock(smart_system)
+        smart_system.authenticate()
+        smart_system.update_locations()
+        location = smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1377"]
+        m_result = mock.register_firmware_ability(
+            "c6e981e9-8ec6-438f-b400-c720d7f313c8",
+            "1c8b301f-22c8-423d-1b4d-ec25315d1377",
+        )
+        power = Power(smart_system=smart_system, location=location)
+        power.update_information(device_power_return)
+        power.firmware_cancel()
+        assert m_result.call_count == 1
+
+    def test_firmware_flash(self):
+        smart_system = SmartSystemFixture.get_smart_system_fixture()
+        mock = self.create_mock(smart_system)
+        smart_system.authenticate()
+        smart_system.update_locations()
+        location = smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1377"]
+        m_result = mock.register_firmware_ability(
+            "c6e981e9-8ec6-438f-b400-c720d7f313c8",
+            "1c8b301f-22c8-423d-1b4d-ec25315d1377",
+        )
+        power = Power(smart_system=smart_system, location=location)
+        power.update_information(device_power_return)
+        power.firmware_flash()
+        assert m_result.call_count == 1

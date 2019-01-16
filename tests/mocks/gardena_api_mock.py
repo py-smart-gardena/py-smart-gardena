@@ -163,6 +163,17 @@ class GardenaApiMock:
             status_code=200,
         )
 
+    def register_firmware_ability(self, device_id, location_id):
+        return self.adapter.register_uri(
+            "PUT",
+            "https://smart.gardena.com/sg-1/devices/"
+            + device_id
+            + "/abilities/firmware/properties/firmware_command?locationId="
+            + location_id,
+            json={},
+            status_code=200,
+        )
+
 
 def init_failed_mock(smart_system):
     adapter = requests_mock.Adapter()
