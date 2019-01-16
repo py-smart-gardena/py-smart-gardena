@@ -1,5 +1,6 @@
 import requests
 import json
+import logging
 
 from gardena.location import Location
 
@@ -7,11 +8,11 @@ from gardena.location import Location
 class SmartSystem:
     """Base class to communicate with gardena and handle network calls"""
 
-    def __init__(self, email=None, password=None, debug=False):
+    def __init__(self, email=None, password=None, level=logging.WARN):
         """Constructor, create instance of gateway"""
         if email is None or password is None:
             raise ValueError("Arguments 'email' and 'passwords' are required")
-        self.debug = debug
+        logging.basicConfig(level=level)
         self.email = email
         self.password = password
         self.locations = {}
@@ -61,7 +62,7 @@ class SmartSystem:
         this function because it is programmed to be pretty
         printed and may differ from the actual request.
         """
-        print(
+        logging.debug(
             "{}\n{}\n{}\n\n{}".format(
                 "-----------START-----------",
                 req.method + " " + req.url,
@@ -79,8 +80,7 @@ class SmartSystem:
             data=json.dumps(data, ensure_ascii=False),
         )
         prepared = req.prepare()
-        if self.debug:
-            self.pretty_print_POST(prepared)
+        self.pretty_print_POST(prepared)
         response = self.request_session.send(prepared)
         response.raise_for_status()
         return response
