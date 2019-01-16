@@ -30,7 +30,7 @@ class WaterControl(
         self.watering_manual_override = None
 
     def open_valve(self, duration=30):
-        self.call_command(
+        self.call_ability_command(
             "outlet",
             {
                 "name": "manual_override",
@@ -39,7 +39,9 @@ class WaterControl(
         )
 
     def close_valve(self):
-        self.call_command("outlet", {"name": "cancel_override", "parameters": {}})
+        self.call_ability_command(
+            "outlet", {"name": "cancel_override", "parameters": {}}
+        )
 
     def get_all_info(self):
         values = {

@@ -80,6 +80,7 @@ class LocationTestCase(unittest.TestCase):
         assert len(location.mowers) == 1
         assert len(location.sensors) == 1
         assert len(location.water_controls) == 1
+        assert len(location.powers) == 1
 
     def test_update_devices_unknown_category(self):
         location = Location(smart_system=self.smart_system_test_info)
@@ -88,6 +89,9 @@ class LocationTestCase(unittest.TestCase):
         assert self.m_devices.call_count == 1
         assert len(location.gateways) == 1
         assert len(location.mowers) == 1
+        assert len(location.sensors) == 1
+        assert len(location.water_controls) == 1
+        assert len(location.powers) == 1
         location.add_or_update_device(
             device={
                 "id": "75cfc1f8-a20c-51d6-c5ea-1b5eccce80c1",
@@ -100,6 +104,7 @@ class LocationTestCase(unittest.TestCase):
         assert len(location.mowers) == 1
         assert len(location.sensors) == 1
         assert len(location.water_controls) == 1
+        assert len(location.powers) == 1
 
     def test_update_devices_exception_with_none_device(self):
         location = Location(smart_system=self.smart_system_test_info)
@@ -110,11 +115,13 @@ class LocationTestCase(unittest.TestCase):
         assert len(location.mowers) == 1
         assert len(location.sensors) == 1
         assert len(location.water_controls) == 1
+        assert len(location.powers) == 1
         location.add_or_update_device()
         assert len(location.gateways) == 1
         assert len(location.mowers) == 1
         assert len(location.sensors) == 1
         assert len(location.water_controls) == 1
+        assert len(location.powers) == 1
 
     def test_get_devices_failed(self):
         smart_system = SmartSystem(email="test@test.com", password="password")
@@ -136,3 +143,4 @@ class LocationTestCase(unittest.TestCase):
         assert "e3c1b615-7351-25fc-a551-1908254a2b3e" in location.mowers.keys()
         assert "a130596e-6627-4030-aea5-b6d2f24d0e03" in location.sensors.keys()
         assert "d6259669-3241-488c-a88e-bcf3a07a58bf" in location.water_controls.keys()
+        assert "c6e981e9-8ec6-438f-b400-c720d7f313c8" in location.powers.keys()

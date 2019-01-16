@@ -1,5 +1,6 @@
 import requests_mock
 
+
 from tests.gardena_api_return.authentication_return import authentication_return
 from tests.gardena_api_return.locations_return import (
     location_return,
@@ -14,6 +15,8 @@ from tests.gardena_api_return.devices_return import (
     device_second_mower_return,
     device_second_sensor_return,
     device_second_water_control_return,
+    device_power_return,
+    device_second_power_return,
 )
 
 
@@ -54,6 +57,7 @@ class GardenaApiMock:
                 device_mower_return,
                 device_sensor_return,
                 device_water_control_return,
+                device_power_return,
             ]
         return self.adapter.register_uri(
             "GET",
@@ -69,6 +73,7 @@ class GardenaApiMock:
                 device_second_mower_return,
                 device_second_sensor_return,
                 device_second_water_control_return,
+                device_second_power_return,
             ]
         return self.adapter.register_uri(
             "GET",
@@ -131,6 +136,17 @@ class GardenaApiMock:
             "https://smart.gardena.com/sg-1/devices/"
             + device_id
             + "/abilities/mower/command?locationId="
+            + location_id,
+            json={},
+            status_code=204,
+        )
+
+    def register_power_command(self, device_id, location_id):
+        return self.adapter.register_uri(
+            "PUT",
+            "https://smart.gardena.com/sg-1/devices/"
+            + device_id
+            + "/abilities/power/properties/power_timer?locationId="
             + location_id,
             json={},
             status_code=204,

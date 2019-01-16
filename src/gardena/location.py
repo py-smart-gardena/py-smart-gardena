@@ -3,6 +3,7 @@ import json
 from gardena.base_gardena_class import BaseGardenaClass
 from gardena.devices.gateway import Gateway
 from gardena.devices.mower import Mower
+from gardena.devices.power import Power
 from gardena.devices.sensor import Sensor
 from gardena.devices.water_control import WaterControl
 
@@ -26,11 +27,13 @@ class Location(BaseGardenaClass):
         self.mowers = {}
         self.sensors = {}
         self.water_controls = {}
+        self.powers = {}
         self.device_types_configuration = {
             "gateway": {"class": Gateway, "map": self.gateways},
             "mower": {"class": Mower, "map": self.mowers},
             "sensor": {"class": Sensor, "map": self.sensors},
             "watering_computer": {"class": WaterControl, "map": self.water_controls},
+            "power": {"class": Power, "map": self.powers},
         }
 
     def update_information(self, information):

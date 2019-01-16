@@ -43,6 +43,7 @@ For now, only few devices are supported. I may add new ones in the future :
 * Smart Mower (not tested yet)
 * Smart water control
 * Smart sensor
+* Power plugs
 
 ## Installation
 
@@ -252,7 +253,7 @@ information to the gateway
 
 #### Water control
 
-The water control equipment is used to control the irrgation fo the plants in the 
+The water control equipment is used to control the irrigation fo the plants in the 
 garden.
 
 ```python
@@ -293,6 +294,43 @@ Commands :
 minutes (default duration is 30 minutes)
 * **water_control.close_valve()** : Asks the water control to close the valve( it 
 seems to only work when the valve has been manually opened)
+
+
+#### Power
+
+The power equipment is used to control a smart power plug 
+
+```python
+    # Iterate over water control
+    for power in location.powers.values():
+        print("->power : " + power.name + "(" + power.id + ")")
+        print("---> category : " + power.category)
+        print(
+            "---> is_configuration_synchronized : " +
+            str(power.is_configuration_synchronized))
+        print("---> serial number : " + power.serial_number)
+        print("---> version : " + power.version)
+        print("---> last time online : " + power.last_time_online)
+        print("---> device state : " + power.device_state)
+        print("---> radio quality : " + str(power.radio_quality))
+        print("---> radio connection status : " + str(power.radio_connection_status))
+        print("---> radio state : " + str(power.radio_state))
+        print("---> firmware status : " + str(power.firmware_status))
+        print("---> firmware upload in progress : " + str(
+            power.firmware_upload_progress))
+        print("---> firmware update start : " + str(
+            power.firmware_update_start))
+        print("---> power timer : " + str(power.power_timer))
+        print("---> power error : " + str(power.power_error))
+        # Commands :
+        # power.power_on(60) # In seconds
+        # power.power_off()
+```
+
+Commands :
+* **power.power_on(60)** : Asks the power plug to switch on for 60 seconds. If no 
+duration is specified, the plug will remain online all the time.
+* **power.power_off()** : Asks the power plug to switch off
 
 
 ### Sample script
@@ -428,6 +466,31 @@ for location in smart_system.locations.values():
         # water_control.open_valve()  # 30 minutes by default
         # water_control.open_valve(duration=10)  # 10 minutes before closing valve
         # water_control.close_valve()  ## close manual override
+        
+    # Iterate over water control
+    for power in location.powers.values():
+        print("->power : " + power.name + "(" + power.id + ")")
+        print("---> category : " + power.category)
+        print(
+            "---> is_configuration_synchronized : " +
+            str(power.is_configuration_synchronized))
+        print("---> serial number : " + power.serial_number)
+        print("---> version : " + power.version)
+        print("---> last time online : " + power.last_time_online)
+        print("---> device state : " + power.device_state)
+        print("---> radio quality : " + str(power.radio_quality))
+        print("---> radio connection status : " + str(power.radio_connection_status))
+        print("---> radio state : " + str(power.radio_state))
+        print("---> firmware status : " + str(power.firmware_status))
+        print("---> firmware upload in progress : " + str(
+            power.firmware_upload_progress))
+        print("---> firmware update start : " + str(
+            power.firmware_update_start))
+        print("---> power timer : " + str(power.power_timer))
+        print("---> power error : " + str(power.power_error))
+        # Commands :
+        # power.power_on(60) # In seconds
+        # power.power_off()
 ```
 
 ## Development environment

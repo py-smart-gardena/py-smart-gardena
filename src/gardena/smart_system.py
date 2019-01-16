@@ -15,7 +15,6 @@ class SmartSystem:
         self.email = email
         self.password = password
         self.locations = {}
-        self.debug = False
         self.token = None
         self.refresh_token = None
         self.user_id = None
@@ -53,13 +52,36 @@ class SmartSystem:
     def get_session(self):
         return self.request_session
 
-    def call_smart_system(self, url=None, params=None, request_type="get", data={}):
-        response = getattr(self.request_session, request_type)(
+    def pretty_print_POST(self, req):
+        """
+        At this point it is completely built and ready
+        to be fired; it is "prepared".
+
+        However pay attention at the formatting used in
+        this function because it is programmed to be pretty
+        printed and may differ from the actual request.
+        """
+        print(
+            "{}\n{}\n{}\n\n{}".format(
+                "-----------START-----------",
+                req.method + " " + req.url,
+                "\n".join("{}: {}".format(k, v) for k, v in req.headers.items()),
+                req.body,
+            )
+        )
+
+    def call_smart_system(self, url=None, params=None, request_type="GET", data={}):
+        req = requests.Request(
+            request_type,
             url,
             headers=self.create_header(),
             params=params,
             data=json.dumps(data, ensure_ascii=False),
         )
+        prepared = req.prepare()
+        if self.debug:
+            self.pretty_print_POST(prepared)
+        response = self.request_session.send(prepared)
         response.raise_for_status()
         return response
 
@@ -99,3 +121,6 @@ class SmartSystem:
 
     def get_all_water_controls(self):
         return self.get_all_devices_from_type("water_controls")
+
+    def get_all_powers(self):
+        return self.get_all_devices_from_type("powers")

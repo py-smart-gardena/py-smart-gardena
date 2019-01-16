@@ -37,16 +37,16 @@ class Sensor(
         self.sensor_light = None
 
     def refresh_ambient_temperature(self):
-        self.call_command(
+        self.call_ability_command(
             "ambient_temperature",
             {"name": "measure_ambient_temperature", "parameters": {}},
         )
 
     def refresh_light_intensity(self):
-        self.call_command("light", {"name": "measure_light", "parameters": {}})
+        self.call_ability_command("light", {"name": "measure_light", "parameters": {}})
 
     def refresh_soil_moisture(self):
-        self.call_command(
+        self.call_ability_command(
             "humidity", {"name": "measure_soil_humidity", "parameters": {}}
         )
 

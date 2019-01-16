@@ -310,3 +310,38 @@ class SmartSystemTestCase(unittest.TestCase):
         )
         assert m_devices.call_count == 1
         assert m_devices_2.call_count == 1
+
+    def test_get_all_powers(self):
+        smart_system = SmartSystem(email="test@test.com", password="password")
+        api_mock = GardenaApiMock()
+        api_mock.register_sessions()
+        api_mock.register_two_locations()
+        m_devices = api_mock.register_devices()
+        m_devices_2 = api_mock.register_second_location_devices()
+        api_mock.mount(smart_system)
+        smart_system.authenticate()
+        smart_system.update_locations()
+        smart_system.update_all_devices()
+        assert len(smart_system.get_all_powers()) == 2
+        assert (
+            smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1377"].id
+            == location_return["id"]
+        )
+        assert (
+            smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1377"]
+            .powers["c6e981e9-8ec6-438f-b400-c720d7f313c8"]
+            .name
+            == "Power"
+        )
+        assert (
+            smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1378"].id
+            == location_return_two["id"]
+        )
+        assert (
+            smart_system.locations["1c8b301f-22c8-423d-1b4d-ec25315d1378"]
+            .powers["c6e981e9-8ec6-438f-b400-c720d7f313c9"]
+            .name
+            == "Power 2"
+        )
+        assert m_devices.call_count == 1
+        assert m_devices_2.call_count == 1

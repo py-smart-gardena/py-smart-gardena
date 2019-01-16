@@ -29,16 +29,16 @@ class Mower(RechargeableBatteryAbility, RadioAbility, DeviceInfoAbility):
         self.mower_timestamp_next_start = None
 
     def park_until_next_timer(self):
-        self.call_command("mower", {"name": "park_until_next_timer"})
+        self.call_ability_command("mower", {"name": "park_until_next_timer"})
 
     def park_until_further_notice(self):
-        self.call_command("mower", {"name": "park_until_further_notice"})
+        self.call_ability_command("mower", {"name": "park_until_further_notice"})
 
     def start_resume_schedule(self):
-        self.call_command("mower", {"name": "start_resume_schedule"})
+        self.call_ability_command("mower", {"name": "start_resume_schedule"})
 
     def start_override_timer(self, duration=240):
-        self.call_command(
+        self.call_ability_command(
             "mower",
             {"name": "start_override_timer", "parameters": {"duration": duration}},
         )
