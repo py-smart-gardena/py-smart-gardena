@@ -18,7 +18,6 @@ class RadioAbility(BaseGardenaAbilityClass):
         self.radio_quality = None
         self.radio_connection_status = None
         self.radio_state = None
-        self.device_state = None
 
     def get_all_info(self):
         values = {
