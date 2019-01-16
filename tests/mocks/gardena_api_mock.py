@@ -152,6 +152,17 @@ class GardenaApiMock:
             status_code=204,
         )
 
+    def register_refresh_link_command(self, device_id, location_id):
+        return self.adapter.register_uri(
+            "POST",
+            "https://smart.gardena.com/sg-1/devices/"
+            + device_id
+            + "/abilities/radio/command?locationId="
+            + location_id,
+            json={},
+            status_code=200,
+        )
+
 
 def init_failed_mock(smart_system):
     adapter = requests_mock.Adapter()
