@@ -151,18 +151,18 @@ their own abilities. When a device inherits of an ability, it gets all the field
 None
 
 #### Abilities
-##### AmbientTemperatureSensorAbility
-###### Properties
+#### AmbientTemperatureSensorAbility
+##### Properties
 
 * **ambient_temperature** : the ambient temperature of the device
 * **frost_warning** : A field indicating that there frost may occur 
 
-###### Methods
+##### Methods
 
 None
 
-##### DeviceInfoAbility
-###### Fields
+#### DeviceInfoAbility
+##### Fields
 
 * **serial_number** : Serial number of the device
 * **version** : The current firmware/software version
@@ -170,29 +170,29 @@ None
 * **sgtin** : A unique product code 
 * **manufacturer** : the manufacturer of the device
 
-###### Methods
+##### Methods
 
 None
 
-##### DisposableBatteryAbility
-###### Fields
+#### DisposableBatteryAbility
+##### Fields
 
 * **battery_level** : The battery level in %
 * **battery_status** : The current status of the battery
 
-###### Methods
+##### Methods
 
 None
 
-##### FirmwareAbility
-###### Fields
+#### FirmwareAbility
+##### Fields
 
 * **firmware_status** : The status of the firware (up to date or not)
 * **firmware_upload_progress** : The progression of the upload of the firmware
 * **firmware_update_start** : -
 * **firmware_available_version** : The version available for the device
 
-###### Methods
+##### Methods
 
 * **upload_firmware()** : start the upload process of the new firmware. Latest 
 available version is used
@@ -200,63 +200,63 @@ available version is used
 * **firmware_flash()** : start the flash procedure of the already downloaded new 
 firmware
 
-##### RadioAbility
-###### Fields
+#### RadioAbility
+##### Fields
 
 * **radio_quality** : The quality of the radio link in %
 * **radio_connection_status** : Current status of the radio link
 * **radio_state** : The current state of the radio link
 
-###### Methods
+##### Methods
 
 None
 
-##### RechargeableBatteryAbility
-###### Fields
+#### RechargeableBatteryAbility
+##### Fields
 
 * **battery_level** : The battery level in %
 * **battery_status** : The current status of the battery
 * **battery_charging** : Boolean indicating if the battery is currently charging
 
-###### Methods
+##### Methods
 
 None
 
 #### Devices
 
-Each devices supports a list of abilities and their own fields and methods :
+Each devices supports a list of abilities and their own fields and methods.
 
-##### Gateway
+#### Gateway
 
 The gateway is the hardware used to communicate with devices.
 There are no commands on it.
 
-###### Supported abilities :
+##### Supported abilities :
 
 * **RadioAbility**
 * **DeviceInfoAbility**
 
-###### Specific properties
+##### Specific properties
 
 * **ip_address** : the ip adress of the gateway in the home network
 * **timezone** : the timezone used by the gateway
 
-###### Specific methods
+##### Specific methods
 
 None
 
-##### Mower
+#### Mower
 
 Mowers can be controlled through the API. 
 Here is the list of available information and commands.
 
-###### Supported abilities :
+##### Supported abilities :
 
 * **DeviceInfoAbility**
 * **RechargeableBatteryAbility**
 * **RadioAbility**
 
-###### Specific properties
+##### Specific properties
 
 * **internal_temperature** : the ip adress of the gateway in the home network
 * **mower_manual_operation** : the timezone used by the gateway
@@ -264,7 +264,7 @@ Here is the list of available information and commands.
 * **mower_timestamp_next_start** : A date time indicating when the mower will start 
 automatically next time
 
-###### Specific methods
+##### Specific methods
 
 * **mower.park_until_next_timer()** : This function park the mower until the 
 next 
@@ -275,12 +275,12 @@ schedule (using **mower.start_resume_schedule()**)
  the command **mower.park_until_further_notice()**
 * **mower.start_override_timer()** : I don't know what it is doing yet :)
 
-##### Sensor
+#### Sensor
 
 The sensor is used to get information from the garden.
 Here are the information and commands available.
 
-###### Supported abilities :
+##### Supported abilities :
 
 * **AmbientTemperatureSensorAbility**
 * **DisposableBatteryAbility**
@@ -288,13 +288,13 @@ Here are the information and commands available.
 * **DeviceInfoAbility**
 * **FirmwareAbility**
 
-###### Specific properties
+##### Specific properties
 
 * **sensor_soil_temperature** : the soil temperature
 * **sensor_soil_humidity** : the soil humidity in % 
 * **sensor_light** : the luminostiy in Lux
 
-###### Specific methods
+##### Specific methods
 
 The commands from the sensor are asynchronous. The information will **not** be 
 updated immediately. After a few seconds, you can call **location.update_devices()** 
@@ -309,12 +309,12 @@ information to the gateway
 * **sensor.refresh_soil_moisture()** : Asks to refresh of the soil moisture 
 information to the gateway
 
-##### Water control
+#### Water control
 
 The water control equipment is used to control the irrigation fo the plants in the 
 garden.
 
-###### Supported abilities :
+##### Supported abilities :
 
 * **AmbientTemperatureSensorAbility**
 * **DisposableBatteryAbility**
@@ -322,12 +322,12 @@ garden.
 * **DeviceInfoAbility**
 * **FirmwareAbility**
 
-###### Specific properties
+##### Specific properties
 
 * **watering_valve_open** : a boolean indicating of the valve is currently opened
 * **watering_manual_override** : -
 
-###### Specific methods
+##### Specific methods
 
 The commands from the sensor are asynchronous. The information will **not** be 
 updated immediately. After a few seconds, you can call **location.update_devices()** 
@@ -340,22 +340,22 @@ minutes (default duration is 30 minutes)
 * **water_control.close_valve()** : Asks the water control to close the valve( it 
 seems to only work when the valve has been manually opened)
 
-##### Power
+#### Power
 
 The power equipment is used to control a smart power plug 
 
-###### Supported abilities :
+##### Supported abilities :
 
 * **DeviceInfoAbility**
 * **DisposableBatteryAbility**
 * **FirmwareAbility**
 
-###### Specific properties
+##### Specific properties
 
 * **power_timer** : How long the plug will be on
 * **power_error** : indicates if there is an error with the plug
 
-###### Specific methods
+##### Specific methods
 
 * **power.power_on(60)** : Asks the power plug to switch on for 60 seconds. If no 
 duration is specified, the plug will remain online all the time.
