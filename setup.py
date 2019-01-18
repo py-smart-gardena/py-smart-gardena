@@ -1,6 +1,4 @@
 import setuptools
-import sys
-from setuptools.command.test import test as TestCommand
 from os.path import splitext, basename
 from glob import glob
 from subprocess import check_output
