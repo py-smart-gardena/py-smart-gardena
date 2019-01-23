@@ -538,6 +538,6 @@ $ pip install -e .[dev]
 ## Credits
 
 This library would not have been possible without the work of :
-*   DXSdata (http://www.dxsdata.com/2016/07/php-class-for-gardena-smart-system-api/)
-*   Gerrieg (https://www.roboter-forum.com/index
+*   [DXSdata](http://www.dxsdata.com/2016/07/php-class-for-gardena-smart-system-api/)
+*   [Gerrieg](https://www.roboter-forum.com/index)
 .php?thread/16777-gardena-smart-system-analyse/&l=2)
