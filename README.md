@@ -142,15 +142,10 @@ their own abilities. When a device inherits of an ability, it gets all the field
 ##### Properties
 
 *   **id** : the smart system id of the device
-
 *   **name** : the name of the device
-
 *   **description** : a string describing the device
-
 *   **category** : the category of the device (gateway, mower, ..)
-
 *   **device_state** : The current state of the device
-
 *   **is_configuration_synchronized** : indicates if the configuration is synchronized
 
 ##### Methods
@@ -162,7 +157,6 @@ None
 ###### Properties
 
 *   **ambient_temperature** : the ambient temperature of the device
-
 *   **frost_warning** : A field indicating that there frost may occur 
 
 ###### Methods
@@ -173,12 +167,9 @@ None
 ###### Fields
 
 *   **serial_number** : Serial number of the device
-
 *   **version** : The current firmware/software version
-
 *   **last_time_online** : When the device was seen online for the last time
 *   **sgtin** : A unique product code 
-
 *   **manufacturer** : the manufacturer of the device
 
 ###### Methods
@@ -189,7 +180,6 @@ None
 ###### Fields
 
 *   **battery_level** : The battery level in %
-
 *   **battery_status** : The current status of the battery
 
 ###### Methods
@@ -200,11 +190,8 @@ None
 ###### Fields
 
 *   **firmware_status** : The status of the firware (up to date or not)
-
 *   **firmware_upload_progress** : The progression of the upload of the firmware
-
 *   **firmware_update_start** : -
-
 *   **firmware_available_version** : The version available for the device
 
 ###### Methods
@@ -221,9 +208,7 @@ firmware
 ###### Fields
 
 *   **radio_quality** : The quality of the radio link in %
-
 *   **radio_connection_status** : Current status of the radio link
-
 *   **radio_state** : The current state of the radio link
 
 ###### Methods
@@ -234,9 +219,7 @@ None
 ###### Fields
 
 *   **battery_level** : The battery level in %
-
 *   **battery_status** : The current status of the battery
-
 *   **battery_charging** : Boolean indicating if the battery is currently charging
 
 ###### Methods
@@ -260,7 +243,6 @@ There are no commands on it.
 ###### Specific properties
 
 *   **ip_address** : the ip adress of the gateway in the home network
-
 *   **timezone** : the timezone used by the gateway
 
 ###### Specific methods
@@ -272,7 +254,7 @@ None
 Mowers can be controlled through the API. 
 Here is the list of available information and commands.
 
-###### Supported abilities :
+###### Supported abilities
 
 *   **DeviceInfoAbility**
 *   **RechargeableBatteryAbility**
@@ -318,9 +300,7 @@ Here are the information and commands available.
 ###### Specific properties
 
 *   **sensor_soil_temperature** : the soil temperature
-
 *   **sensor_soil_humidity** : the soil humidity in % 
-
 *   **sensor_light** : the luminostiy in Lux
 
 ###### Specific methods
