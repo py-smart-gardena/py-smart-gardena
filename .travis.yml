@@ -20,7 +20,7 @@ script:
 - python setup.py test
 after_script:
 - "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
-- python-codacy-coverage -r coverage.xml
+- python-codacy-coverage -r reports/coverage.xml
 - codecov
 deploy:
   provider: pypi

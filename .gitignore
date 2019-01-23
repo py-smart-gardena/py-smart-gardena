@@ -8,6 +8,7 @@ pip-selfcheck.json
 .eggs/
 src/py_smart_gardena.egg-info/
 venv/
+reports/
 
 request.sample
 src/test_functions.py
