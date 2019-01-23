@@ -36,12 +36,12 @@ Here are the links if you want to show your support :
 
 ## Requirements
 
-*    **Python 3.5+**
+*   **Python 3.5+**
 
 ## Supported devices
 
 For now, only few devices are supported. I may add new ones in the future :  
-*    Gateway
+*   Gateway
 *    Smart Mower (not tested yet)
 *    Smart water control
 *    Smart sensor
