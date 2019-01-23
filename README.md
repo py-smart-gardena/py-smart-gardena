@@ -142,10 +142,15 @@ their own abilities. When a device inherits of an ability, it gets all the field
 ##### Properties
 
 *   **id** : the smart system id of the device
+
 *   **name** : the name of the device
+
 *   **description** : a string describing the device
+
 *   **category** : the category of the device (gateway, mower, ..)
+
 *   **device_state** : The current state of the device
+
 *   **is_configuration_synchronized** : indicates if the configuration is synchronized
 
 ##### Methods
@@ -157,6 +162,7 @@ None
 ###### Properties
 
 *   **ambient_temperature** : the ambient temperature of the device
+
 *   **frost_warning** : A field indicating that there frost may occur 
 
 ###### Methods
@@ -167,9 +173,12 @@ None
 ###### Fields
 
 *   **serial_number** : Serial number of the device
+
 *   **version** : The current firmware/software version
+
 *   **last_time_online** : When the device was seen online for the last time
 *   **sgtin** : A unique product code 
+
 *   **manufacturer** : the manufacturer of the device
 
 ###### Methods
@@ -180,6 +189,7 @@ None
 ###### Fields
 
 *   **battery_level** : The battery level in %
+
 *   **battery_status** : The current status of the battery
 
 ###### Methods
@@ -190,15 +200,20 @@ None
 ###### Fields
 
 *   **firmware_status** : The status of the firware (up to date or not)
+
 *   **firmware_upload_progress** : The progression of the upload of the firmware
+
 *   **firmware_update_start** : -
+
 *   **firmware_available_version** : The version available for the device
 
 ###### Methods
 
 *   **upload_firmware()** : start the upload process of the new firmware. Latest 
 available version is used
+
 *   **firmware_cancel()** : Cancel the firmware upload
+
 *   **firmware_flash()** : start the flash procedure of the already downloaded new 
 firmware
 
@@ -206,7 +221,9 @@ firmware
 ###### Fields
 
 *   **radio_quality** : The quality of the radio link in %
+
 *   **radio_connection_status** : Current status of the radio link
+
 *   **radio_state** : The current state of the radio link
 
 ###### Methods
@@ -217,7 +234,9 @@ None
 ###### Fields
 
 *   **battery_level** : The battery level in %
+
 *   **battery_status** : The current status of the battery
+
 *   **battery_charging** : Boolean indicating if the battery is currently charging
 
 ###### Methods
@@ -233,7 +252,7 @@ Each devices supports a list of abilities and their own fields and methods.
 The gateway is the hardware used to communicate with devices.
 There are no commands on it.
 
-###### Supported abilities :
+###### Supported abilities
 
 *   **RadioAbility**
 *   **DeviceInfoAbility**
@@ -241,6 +260,7 @@ There are no commands on it.
 ###### Specific properties
 
 *   **ip_address** : the ip adress of the gateway in the home network
+
 *   **timezone** : the timezone used by the gateway
 
 ###### Specific methods
@@ -261,21 +281,25 @@ Here is the list of available information and commands.
 ###### Specific properties
 
 *   **internal_temperature** : the ip adress of the gateway in the home network
+
 *   **mower_manual_operation** : the timezone used by the gateway
+
 *   **mower_status** : The current status of the mower
+
 *   **mower_timestamp_next_start** : A date time indicating when the mower will start 
 automatically next time
 
 ###### Specific methods
 
-*   **mower.park_until_next_timer()** : This function park the mower until the 
-next 
+*   **mower.park_until_next_timer()** : This function park the mower until the next 
 scheduled time
+
 *   **mower.park_until_further_notice()** : The mower will stay park until you resume 
-the 
-schedule (using **mower.start_resume_schedule()**)
+the schedule (using **mower.start_resume_schedule()**)
+
 *   **mower.start_resume_schedule()** : Using this function, the mower will resume from
  the command **mower.park_until_further_notice()**
+ 
 *   **mower.start_override_timer()** : I don't know what it is doing yet :)
 
 ##### Sensor
@@ -283,7 +307,7 @@ schedule (using **mower.start_resume_schedule()**)
 The sensor is used to get information from the garden.
 Here are the information and commands available.
 
-###### Supported abilities :
+###### Supported abilities
 
 *   **AmbientTemperatureSensorAbility**
 *   **DisposableBatteryAbility**
@@ -294,7 +318,9 @@ Here are the information and commands available.
 ###### Specific properties
 
 *   **sensor_soil_temperature** : the soil temperature
+
 *   **sensor_soil_humidity** : the soil humidity in % 
+
 *   **sensor_light** : the luminostiy in Lux
 
 ###### Specific methods
@@ -307,8 +333,10 @@ In a future release, there will probably have a function to refresh information 
  
 *   **sensor.refresh_ambient_temperature()** : Asks to refresh of the temperature 
 information to the gateway
+
 *   **sensor.refresh_light_intensity()** : Asks to refresh of the light intensity 
 information to the gateway
+
 *   **sensor.refresh_soil_moisture()** : Asks to refresh of the soil moisture 
 information to the gateway
 
@@ -317,7 +345,7 @@ information to the gateway
 The water control equipment is used to control the irrigation fo the plants in the 
 garden.
 
-###### Supported abilities :
+###### Supported abilities
 
 *   **AmbientTemperatureSensorAbility**
 *   **DisposableBatteryAbility**
@@ -340,6 +368,7 @@ In a future release, there will probably have a function to refresh information 
  
 *   **water_control.open_valve()** : Asks the water control to open the valve for X 
 minutes (default duration is 30 minutes)
+
 *   **water_control.close_valve()** : Asks the water control to close the valve( it 
 seems to only work when the valve has been manually opened)
 
@@ -347,7 +376,7 @@ seems to only work when the valve has been manually opened)
 
 The power equipment is used to control a smart power plug 
 
-###### Supported abilities :
+###### Supported abilities
 
 *   **DeviceInfoAbility**
 *   **DisposableBatteryAbility**
@@ -362,7 +391,9 @@ The power equipment is used to control a smart power plug
 
 *   **power.power_on(60)** : Asks the power plug to switch on for 60 seconds. If no 
 duration is specified, the plug will remain online all the time.
+
 *   **power.power_off()** : Asks the power plug to switch off
+
 *   **refresh_link_status** : refresh the current link status
 
 ### Sample script
@@ -534,10 +565,8 @@ To install the dev environment, you just have to do, in the source code director
 $ pip install -e .[dev]
 ```
 
-
 ## Credits
 
 This library would not have been possible without the work of :
 *   [DXSdata](http://www.dxsdata.com/2016/07/php-class-for-gardena-smart-system-api/)
-*   [Gerrieg](https://www.roboter-forum.com/index)
-.php?thread/16777-gardena-smart-system-analyse/&l=2)
+*   [Gerrieg](https://www.roboter-forum.com/index.php?thread/16777-gardena-smart-system-analyse/&l=2)
