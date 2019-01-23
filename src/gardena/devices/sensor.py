@@ -16,7 +16,6 @@ class Sensor(
 ):
     """Class to communicate with a sensor"""
 
-    """Used to map data between 'sensor' ability fields and class fields"""
     soil_temperature_sensor_ability_fields = {"temperature": "sensor_soil_temperature"}
 
     soil_humidity_sensor_ability_fields = {"humidity": "sensor_soil_humidity"}

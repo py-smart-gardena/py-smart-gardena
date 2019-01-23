@@ -11,8 +11,6 @@ from gardena.devices.water_control import WaterControl
 class Location(BaseGardenaClass):
     """Keep informations about gardena locations (gardens, ..) and devices"""
 
-    """Used to configure device instance assignements"""
-
     def __init__(self, smart_system=None):
         super(Location, self).__init__(smart_system=smart_system)
         self.latitude = None

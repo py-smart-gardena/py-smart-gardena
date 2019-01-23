@@ -6,7 +6,6 @@ from gardena.devices.abilities.rechargeable_battery import RechargeableBatteryAb
 class Mower(RechargeableBatteryAbility, RadioAbility, DeviceInfoAbility):
     """Class to communicate with a mower"""
 
-    """Used to map data between 'mower' ability fields and class fields"""
     mower_ability_fields = {
         "manual_operation": "mower_manual_operation",
         "status": "mower_status",

@@ -53,14 +53,14 @@ class BaseGardenaAbilityClass(BaseGardenaClass):
         )
         self.smart_system.call_smart_system(url=url, request_type="post", data=data)
 
-    def call_property_command(self, ability, property, data):
+    def call_property_command(self, ability, prop, data):
         url = (
             "https://smart.gardena.com/sg-1/devices/"
             + self.id
             + "/abilities/"
             + ability
             + "/properties/"
-            + property
+            + prop
             + "?locationId="
             + self.location.id
         )

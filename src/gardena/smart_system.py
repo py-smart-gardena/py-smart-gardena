@@ -53,7 +53,8 @@ class SmartSystem:
     def get_session(self):
         return self.request_session
 
-    def pretty_print_POST(self, req):
+    @classmethod
+    def pretty_print(self, req):
         """
         At this point it is completely built and ready
         to be fired; it is "prepared".
@@ -71,7 +72,7 @@ class SmartSystem:
             )
         )
 
-    def call_smart_system(self, url=None, params=None, request_type="GET", data={}):
+    def call_smart_system(self, url=None, params=None, request_type="GET", data=None):
         req = requests.Request(
             request_type,
             url,
@@ -80,7 +81,7 @@ class SmartSystem:
             data=json.dumps(data, ensure_ascii=False),
         )
         prepared = req.prepare()
-        self.pretty_print_POST(prepared)
+        self.pretty_print(prepared)
         response = self.request_session.send(prepared)
         response.raise_for_status()
         return response
