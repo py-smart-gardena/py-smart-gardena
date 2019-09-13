@@ -1,30 +1,71 @@
 import requests
 import json
 import logging
+from oauthlib.oauth2 import LegacyApplicationClient
+from requests_oauthlib import OAuth2Session
+
+import websocket
+from threading import Thread
+import time
+import sys
 
 from gardena.location import Location
+
+import pprint
+
+
+class Client:
+    def __init__(self, smart_system=None):
+        self.smart_system = smart_system
+
+    def on_message(self, message):
+        self.smart_system.on_message(message)
+
+    def on_error(self, error):
+        print("error", error)
+        pprint.pprint(error)
+
+    def on_close(self):
+        self.live = False
+        print("### closed ###")
+        sys.exit(0)
+
+    def on_open(self):
+        print("### connected ###")
+
+        self.live = True
+
+        def run(*args):
+            while self.live:
+                time.sleep(1)
+
+        Thread(target=run).start()
 
 
 class SmartSystem:
     """Base class to communicate with gardena and handle network calls"""
 
-    def __init__(self, email=None, password=None, level=logging.WARN):
+    def __init__(self, email=None, password=None, client_id=None, level=logging.WARN):
         """Constructor, create instance of gateway"""
-        if email is None or password is None:
-            raise ValueError("Arguments 'email' and 'passwords' are required")
+        if email is None or password is None or client_id is None:
+            raise ValueError(
+                "Arguments 'email', 'passwords' and 'client_id' are required"
+            )
         logging.basicConfig(level=level)
         self.email = email
         self.password = password
+        self.client_id = client_id
         self.locations = {}
-        self.token = None
-        self.refresh_token = None
-        self.user_id = None
-        self.request_session = requests.session()
+        self.AUTHENTICATION_HOST = "https://api.authentication.husqvarnagroup.dev"
+        self.SMART_HOST = "https://api.smart.gardena.dev"
+        self.oauth_session = OAuth2Session(
+            client=LegacyApplicationClient(client_id=self.client_id)
+        )
 
-    def create_header(self):
-        headers = {"Content-Type": "application/json"}
-        if self.token is not None:
-            headers["X-Session"] = self.token
+    def create_header(self, include_json=False):
+        headers = {"Authorization-Provider": "husqvarna", "X-Api-Key": self.client_id}
+        if include_json:
+            headers["Content-Type"] = "application/vnd.api+json"
         return headers
 
     def authenticate(self):
@@ -32,44 +73,22 @@ class SmartSystem:
         Authenticate and get tokens.
         This function needs to be called first.
         """
-        url = "https://smart.gardena.com/sg-1/sessions"
-        credentials = {"sessions": {"email": self.email, "password": self.password}}
-        response = self.request_session.post(
-            url,
-            headers=self.create_header(),
-            data=json.dumps(credentials, ensure_ascii=False),
+        url = self.AUTHENTICATION_HOST + "/v1/oauth2/token"
+        self.token = self.oauth_session.fetch_token(
+            token_url=url,
+            username=self.email,
+            password=self.password,
+            client_id=self.client_id,
         )
-        response.raise_for_status()
-        response_data = json.loads(response.content.decode("utf-8"))
-        if (
-            "sessions" not in response_data
-            or "token" not in response_data["sessions"]
-            or "user_id" not in response_data["sessions"]
-        ):
-            raise RuntimeError("Could not authenticate to gateway")
-        self.token = response_data["sessions"]["token"]
-        self.user_id = response_data["sessions"]["user_id"]
 
-    def get_session(self):
-        return self.request_session
-
-    @classmethod
-    def pretty_print(self, req):
-        """
-        At this point it is completely built and ready
-        to be fired; it is "prepared".
-
-        However pay attention at the formatting used in
-        this function because it is programmed to be pretty
-        printed and may differ from the actual request.
-        """
-        logging.debug(
-            "{}\n{}\n{}\n\n{}".format(
-                "-----------START-----------",
-                req.method + " " + req.url,
-                "\n".join("{}: {}".format(k, v) for k, v in req.headers.items()),
-                req.body,
-            )
+    def logout(self):
+        self.oauth_session.delete(
+            f'{self.AUTHENTICATION_HOST}/v1/token/{self.token["refresh_token"]}',
+            headers={"X-Api-Key": self.client_id},
+        )
+        self.oauth_session.delete(
+            f'{self.AUTHENTICATION_HOST}/v1/token/{self.token["access_token"]}',
+            headers={"X-Api-Key": self.client_id},
         )
 
     def call_smart_system(self, url=None, params=None, request_type="GET", data=None):
@@ -82,46 +101,80 @@ class SmartSystem:
         )
         prepared = req.prepare()
         self.pretty_print(prepared)
-        response = self.request_session.send(prepared)
+        response = self.oauth_session.send(prepared)
         response.raise_for_status()
         return response
 
-    def update_locations(self):
-        """Update locations (gardens, ..) """
-        url = "https://smart.gardena.com/sg-1/locations/"
-        params = (("user_id", self.user_id),)
-        response = self.request_session.get(
-            url, headers=self.create_header(), params=params
-        )
+    def start_ws(self):
+        url = f"{self.SMART_HOST}/v1/locations"
+        response = self.oauth_session.get(url, headers=self.create_header())
         response.raise_for_status()
         response_data = json.loads(response.content.decode("utf-8"))
-        for location in response_data["locations"]:
-            if location["id"] not in self.locations:
-                self.locations[location["id"]] = Location(smart_system=self)
-            self.locations[location["id"]].update_information(location)
+        if len(response_data["data"]) < 1:
+            print("No location found. Exiting ...")
+            sys.exit(1)
+        location = response_data["data"][0]
+        args = {
+            "data": {
+                "type": "WEBSOCKET",
+                "attributes": {"locationId": location["id"]},
+                "id": "does-not-matter",
+            }
+        }
+        r = self.oauth_session.post(
+            f"{self.SMART_HOST}/v1/websocket",
+            headers=self.create_header(True),
+            data=json.dumps(args, ensure_ascii=False),
+        )
+        r.raise_for_status()
+        response = r.json()
+        ws_url = response["data"]["attributes"]["url"]
+        client = Client()
+        ws = websocket.WebSocketApp(
+            ws_url,
+            on_message=client.on_message,
+            on_error=client.on_error,
+            on_close=client.on_close,
+        )
+        ws.on_open = client.on_open
+        ws.run_forever(ping_interval=150, ping_timeout=1)
 
-    def update_all_devices(self):
-        for location in self.locations.values():
-            location.update_devices()
+    def on_message(self, message):
+        print("------- Beginning of message ---------")
+        data = json.loads(message)
+        if data["type"] == "LOCATION":
+            print(">>>>>>>>>>>>> Found Location")
+        else:
+            print(">>>>>>>>>>>>> Unkonwn Message")
+        pprint.pprint(data)
+        print("------- End of message ---------")
 
-    def get_all_devices_from_type(self, device_type):
-        devices = {}
-        for location in self.locations.values():
-            for device in getattr(location, device_type).values():
-                devices[device.id] = device
-        return devices
+    def treat_location(self, location):
+        if location["id"] not in self.locations:
+            self.locations["id"] = Location()
 
-    def get_all_gateways(self):
-        return self.get_all_devices_from_type("gateways")
-
-    def get_all_mowers(self):
-        return self.get_all_devices_from_type("mowers")
-
-    def get_all_sensors(self):
-        return self.get_all_devices_from_type("sensors")
-
-    def get_all_water_controls(self):
-        return self.get_all_devices_from_type("water_controls")
-
-    def get_all_powers(self):
-        return self.get_all_devices_from_type("powers")
+    # def update_all_devices(self):
+    #     for location in self.locations.values():
+    #         location.update_devices()
+    #
+    # def get_all_devices_from_type(self, device_type):
+    #     devices = {}
+    #     for location in self.locations.values():
+    #         for device in getattr(location, device_type).values():
+    #             devices[device.id] = device
+    #     return devices
+    #
+    # def get_all_gateways(self):
+    #     return self.get_all_devices_from_type("gateways")
+    #
+    # def get_all_mowers(self):
+    #     return self.get_all_devices_from_type("mowers")
+    #
+    # def get_all_sensors(self):
+    #     return self.get_all_devices_from_type("sensors")
+    #
+    # def get_all_water_controls(self):
+    #     return self.get_all_devices_from_type("water_controls")
+    #
+    # def get_all_powers(self):
+    #     return self.get_all_devices_from_type("powers")
