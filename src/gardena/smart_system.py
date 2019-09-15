@@ -62,7 +62,7 @@ class SmartSystem:
         self.oauth_session = OAuth2Session(
             client=LegacyApplicationClient(client_id=self.client_id)
         )
-        self.supported_services = ["COMMON"]
+        self.supported_services = ["COMMON", "VALVE"]
 
     def create_header(self, include_json=False):
         headers = {"Authorization-Provider": "husqvarna", "X-Api-Key": self.client_id}

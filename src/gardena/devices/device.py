@@ -1,5 +1,6 @@
 from gardena.base_gardena_class import BaseGardenaClass
 from .services.common import Common
+from .services.valve import Valve
 
 
 class Device(BaseGardenaClass):
@@ -14,12 +15,14 @@ class Device(BaseGardenaClass):
 
     def update_service(self, message):
         if message["id"] not in self.services:
-            self.services[message["id"]] = self._build_service(message)
-        self.services[message["id"]].update_service(message)
+            self.services[message["type"]] = self._build_service(message)
+        self.services[message["type"]].update_service(message)
 
     def _build_service(self, message):
         if message["type"] == "COMMON":
-            return Common(message["id"])
+            return Common("COMMON")
+        elif message["type"] == "VALVE":
+            return Valve("VALVE")
         else:
             print(f"message type {message[type]} not handled !")
 
