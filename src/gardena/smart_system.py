@@ -52,15 +52,17 @@ class SmartSystem:
                 "Arguments 'email', 'passwords' and 'client_id' are required"
             )
         logging.basicConfig(level=level)
+        self.AUTHENTICATION_HOST = "https://api.authentication.husqvarnagroup.dev"
+        self.SMART_HOST = "https://api.smart.gardena.dev"
         self.email = email
         self.password = password
         self.client_id = client_id
         self.locations = {}
-        self.AUTHENTICATION_HOST = "https://api.authentication.husqvarnagroup.dev"
-        self.SMART_HOST = "https://api.smart.gardena.dev"
+        self.devices_locations = {}
         self.oauth_session = OAuth2Session(
             client=LegacyApplicationClient(client_id=self.client_id)
         )
+        self.supported_services = ["COMMON"]
 
     def create_header(self, include_json=False):
         headers = {"Authorization-Provider": "husqvarna", "X-Api-Key": self.client_id}
@@ -129,7 +131,7 @@ class SmartSystem:
         r.raise_for_status()
         response = r.json()
         ws_url = response["data"]["attributes"]["url"]
-        client = Client()
+        client = Client(self)
         ws = websocket.WebSocketApp(
             ws_url,
             on_message=client.on_message,
@@ -142,16 +144,37 @@ class SmartSystem:
     def on_message(self, message):
         print("------- Beginning of message ---------")
         data = json.loads(message)
+        pprint.pprint(data)
         if data["type"] == "LOCATION":
-            print(">>>>>>>>>>>>> Found Location")
+            print(">>>>>>>>>>>>> Found LOCATION")
+            self.treat_location(data)
+        elif data["type"] == "DEVICE":
+            print(">>>>>>>>>>>>> Found DEVICE")
+            self.treat_device(data)
+        elif data["type"] in self.supported_services:
+            self.treat_service(data)
         else:
             print(">>>>>>>>>>>>> Unkonwn Message")
-        pprint.pprint(data)
         print("------- End of message ---------")
 
     def treat_location(self, location):
         if location["id"] not in self.locations:
-            self.locations["id"] = Location()
+            self.locations[location["id"]] = Location()
+        self.locations[location["id"]].update_data(location)
+
+    def treat_device(self, device):
+        location_id = device["relationships"]["location"]["data"]["id"]
+        if location_id in self.locations:
+            self.locations[location_id].update_device(device)
+        self.devices_locations[device["id"]] = location_id
+
+    def treat_service(self, service):
+        device_id = service["relationships"]["device"]["data"]["id"]
+        if device_id in self.devices_locations:
+            self.locations[self.devices_locations[device_id]].devices[
+                device_id
+            ].update_service(service)
+            print(self.locations[self.devices_locations[device_id]].devices[device_id])
 
     # def update_all_devices(self):
     #     for location in self.locations.values():
