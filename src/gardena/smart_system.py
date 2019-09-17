@@ -189,29 +189,3 @@ class SmartSystem:
             str += f'"{key}":{value}, '
         str += "}}"
         return str
-
-    # def update_all_devices(self):
-    #     for location in self.locations.values():
-    #         location.update_devices()
-    #
-    # def get_all_devices_from_type(self, device_type):
-    #     devices = {}
-    #     for location in self.locations.values():
-    #         for device in getattr(location, device_type).values():
-    #             devices[device.id] = device
-    #     return devices
-    #
-    # def get_all_gateways(self):
-    #     return self.get_all_devices_from_type("gateways")
-    #
-    # def get_all_mowers(self):
-    #     return self.get_all_devices_from_type("mowers")
-    #
-    # def get_all_sensors(self):
-    #     return self.get_all_devices_from_type("sensors")
-    #
-    # def get_all_water_controls(self):
-    #     return self.get_all_devices_from_type("water_controls")
-    #
-    # def get_all_powers(self):
-    #     return self.get_all_devices_from_type("powers")
