@@ -1,6 +1,5 @@
 from gardena.base_gardena_class import BaseGardenaClass
-from .services.common import Common
-from .services.valve import Valve
+from .services.service import Service
 
 
 class Device(BaseGardenaClass):
@@ -14,25 +13,24 @@ class Device(BaseGardenaClass):
         self._update_field_if_exists(self.data, "id", message["id"])
 
     def update_service(self, message):
-        if message["id"] not in self.services:
-            self.services[message["type"]] = self._build_service(message)
-        self.services[message["type"]].update_service(message)
-
-    def _build_service(self, message):
-        if message["type"] == "COMMON":
-            return Common("COMMON")
-        elif message["type"] == "VALVE":
-            return Valve("VALVE")
-        else:
-            print(f"message type {message[type]} not handled !")
+        if message["type"] not in self.services:
+            self.services[message["type"]] = {}
+        if message["id"] not in self.services[message["type"]]:
+            self.services[message["type"]][message["id"]] = Service()
+            self.services[message["type"]][message["id"]].type = message["type"]
+        self.services[message["type"]][message["id"]].update_service(message)
 
     def __str__(self):
-        str = "{data : {"
+        str = '{"data" : {'
         for key, value in self.data.items():
-            str += f"{key}:{value}, "
-        str += "}}"
-        str += "{services : {"
+            str += f'"{key}":{value}, '
+        str += "}}, "
+        str += '{"services" : {'
         for key, value in self.services.items():
-            str += f"{key}:{value}, "
+            str += f'"{key}": '
+            str += "{"
+            for key2, value2 in self.services[key].items():
+                str += f'"{key2}": {value2}'
+            str += "}"
         str += "}}"
         return str

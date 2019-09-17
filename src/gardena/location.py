@@ -17,3 +17,14 @@ class Location(BaseGardenaClass):
         if device["id"] not in self.devices:
             self.devices[device["id"]] = Device()
         self.devices[device["id"]].update_data(device)
+
+    def __str__(self):
+        str = '{"data" : {'
+        for key, value in self.data.items():
+            str += f'"{key}":{value}, '
+        str += "}}, "
+        str += '{"devices" : {'
+        for key, value in self.devices.items():
+            str += f'"{key}":{value}, '
+        str += "}}"
+        return str

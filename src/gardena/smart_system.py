@@ -62,7 +62,14 @@ class SmartSystem:
         self.oauth_session = OAuth2Session(
             client=LegacyApplicationClient(client_id=self.client_id)
         )
-        self.supported_services = ["COMMON", "VALVE"]
+        self.supported_services = [
+            "COMMON",
+            "VALVE",
+            "VALVE_SET",
+            "SENSOR",
+            "MOWER",
+            "POWER_SOCKET",
+        ]
 
     def create_header(self, include_json=False):
         headers = {"Authorization-Provider": "husqvarna", "X-Api-Key": self.client_id}
@@ -175,6 +182,13 @@ class SmartSystem:
                 device_id
             ].update_service(service)
             print(self.locations[self.devices_locations[device_id]].devices[device_id])
+
+    def __str__(self):
+        str = '{"locations" : {'
+        for key, value in self.locations.items():
+            str += f'"{key}":{value}, '
+        str += "}}"
+        return str
 
     # def update_all_devices(self):
     #     for location in self.locations.values():
