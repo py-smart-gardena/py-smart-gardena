@@ -15,23 +15,24 @@ import pprint
 
 
 class Client:
-    def __init__(self, smart_system=None):
+    def __init__(self, smart_system=None, level=logging.WARN):
         self.smart_system = smart_system
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(level)
 
     def on_message(self, message):
         self.smart_system.on_message(message)
 
     def on_error(self, error):
-        print("error", error)
-        pprint.pprint(error)
+        self.logger.error(f"error : {error}")
 
     def on_close(self):
         self.live = False
-        print("### closed ###")
+        self.logger.info("Connection close to gardena API")
         sys.exit(0)
 
     def on_open(self):
-        print("### connected ###")
+        self.logger.info("Connected to Gardena API")
 
         self.live = True
 
@@ -45,7 +46,7 @@ class Client:
 class SmartSystem:
     """Base class to communicate with gardena and handle network calls"""
 
-    def __init__(self, email=None, password=None, client_id=None, level=logging.WARN):
+    def __init__(self, email=None, password=None, client_id=None, level=logging.INFO):
         """Constructor, create instance of gateway"""
         if email is None or password is None or client_id is None:
             raise ValueError(
@@ -59,6 +60,7 @@ class SmartSystem:
         self.client_id = client_id
         self.locations = {}
         self.devices_locations = {}
+        self.level = level
         self.oauth_session = OAuth2Session(
             client=LegacyApplicationClient(client_id=self.client_id)
         )
@@ -70,6 +72,8 @@ class SmartSystem:
             "MOWER",
             "POWER_SOCKET",
         ]
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(level)
 
     def create_header(self, include_json=False):
         headers = {"Authorization-Provider": "husqvarna", "X-Api-Key": self.client_id}
@@ -100,27 +104,13 @@ class SmartSystem:
             headers={"X-Api-Key": self.client_id},
         )
 
-    def call_smart_system(self, url=None, params=None, request_type="GET", data=None):
-        req = requests.Request(
-            request_type,
-            url,
-            headers=self.create_header(),
-            params=params,
-            data=json.dumps(data, ensure_ascii=False),
-        )
-        prepared = req.prepare()
-        self.pretty_print(prepared)
-        response = self.oauth_session.send(prepared)
-        response.raise_for_status()
-        return response
-
     def start_ws(self):
         url = f"{self.SMART_HOST}/v1/locations"
         response = self.oauth_session.get(url, headers=self.create_header())
         response.raise_for_status()
         response_data = json.loads(response.content.decode("utf-8"))
         if len(response_data["data"]) < 1:
-            print("No location found. Exiting ...")
+            self.logger.error("No location found. Exiting ...")
             sys.exit(1)
         location = response_data["data"][0]
         args = {
@@ -138,7 +128,7 @@ class SmartSystem:
         r.raise_for_status()
         response = r.json()
         ws_url = response["data"]["attributes"]["url"]
-        client = Client(self)
+        client = Client(self, level=self.level)
         ws = websocket.WebSocketApp(
             ws_url,
             on_message=client.on_message,
@@ -149,20 +139,23 @@ class SmartSystem:
         ws.run_forever(ping_interval=150, ping_timeout=1)
 
     def on_message(self, message):
-        print("------- Beginning of message ---------")
+        self.logger.debug("------- Beginning of message ---------")
+        self.logger.debug(message)
         data = json.loads(message)
-        pprint.pprint(data)
+        self.logger.info(f'Received {data["type"]} message')
+        if logging.DEBUG >= self.logger.level:
+            pprint.pprint(data)
         if data["type"] == "LOCATION":
-            print(">>>>>>>>>>>>> Found LOCATION")
+            self.logger.debug(">>>>>>>>>>>>> Found LOCATION")
             self.treat_location(data)
         elif data["type"] == "DEVICE":
-            print(">>>>>>>>>>>>> Found DEVICE")
+            self.logger.debug(">>>>>>>>>>>>> Found DEVICE")
             self.treat_device(data)
         elif data["type"] in self.supported_services:
             self.treat_service(data)
         else:
-            print(">>>>>>>>>>>>> Unkonwn Message")
-        print("------- End of message ---------")
+            self.logger.debug(">>>>>>>>>>>>> Unkonwn Message")
+        self.logger.debug("------- End of message ---------")
 
     def treat_location(self, location):
         if location["id"] not in self.locations:
@@ -181,7 +174,6 @@ class SmartSystem:
             self.locations[self.devices_locations[device_id]].devices[
                 device_id
             ].update_service(service)
-            print(self.locations[self.devices_locations[device_id]].devices[device_id])
 
     def __str__(self):
         str = '{"locations" : {'
