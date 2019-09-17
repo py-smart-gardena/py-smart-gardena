@@ -19,18 +19,3 @@ class Device(BaseGardenaClass):
             self.services[message["type"]][message["id"]] = Service()
             self.services[message["type"]][message["id"]].type = message["type"]
         self.services[message["type"]][message["id"]].update_service(message)
-
-    def __str__(self):
-        str = '{"data" : {'
-        for key, value in self.data.items():
-            str += f'"{key}":{value}, '
-        str += "}}, "
-        str += '{"services" : {'
-        for key, value in self.services.items():
-            str += f'"{key}": '
-            str += "{"
-            for key2, value2 in self.services[key].items():
-                str += f'"{key2}": {value2}'
-            str += "}"
-        str += "}}"
-        return str

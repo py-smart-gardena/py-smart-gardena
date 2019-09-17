@@ -174,10 +174,3 @@ class SmartSystem:
             self.locations[self.devices_locations[device_id]].devices[
                 device_id
             ].update_service(service)
-
-    def __str__(self):
-        str = '{"locations" : {'
-        for key, value in self.locations.items():
-            str += f'"{key}":{value}, '
-        str += "}}"
-        return str
