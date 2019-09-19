@@ -19,12 +19,16 @@ class Client:
         self.smart_system = smart_system
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(level)
+        self.live = False
 
     def on_message(self, message):
         self.smart_system.on_message(message)
 
     def on_error(self, error):
         self.logger.error(f"error : {error}")
+
+    def is_connected(self):
+        return self.live
 
     def on_close(self):
         self.live = False
@@ -61,6 +65,7 @@ class SmartSystem:
         self.locations = {}
         self.devices_locations = {}
         self.level = level
+        self.client = None
         self.oauth_session = OAuth2Session(
             client=LegacyApplicationClient(client_id=self.client_id)
         )
@@ -128,14 +133,14 @@ class SmartSystem:
         r.raise_for_status()
         response = r.json()
         ws_url = response["data"]["attributes"]["url"]
-        client = Client(self, level=self.level)
+        self.client = Client(self, level=self.level)
         ws = websocket.WebSocketApp(
             ws_url,
-            on_message=client.on_message,
-            on_error=client.on_error,
-            on_close=client.on_close,
+            on_message=self.client.on_message,
+            on_error=self.client.on_error,
+            on_close=self.client.on_close,
         )
-        ws.on_open = client.on_open
+        ws.on_open = self.client.on_open
         ws.run_forever(ping_interval=150, ping_timeout=1)
 
     def on_message(self, message):
