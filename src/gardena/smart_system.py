@@ -179,3 +179,11 @@ class SmartSystem:
             self.locations[self.devices_locations[device_id]].devices[
                 device_id
             ].update_service(service)
+
+    def get_all_devices_of_type(self, type):
+        devices = {}
+        for location in self.locations:
+            for device in location.devices:
+                if device["type"] == type or type == "ALL":
+                    devices[device.data["id"]] = device
+        return devices
