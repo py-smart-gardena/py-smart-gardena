@@ -1,4 +1,3 @@
-import requests
 import json
 import logging
 from oauthlib.oauth2 import LegacyApplicationClient
@@ -193,10 +192,10 @@ class SmartSystem:
                 device_id
             ].update_service(service)
 
-    def get_all_devices_of_type(self, type):
+    def get_all_devices_of_type(self, device_type):
         devices = {}
         for location in self.locations:
             for device in location.devices:
-                if device["type"] == type or type == "ALL":
+                if device["type"] == device_type or device_type == "ALL":
                     devices[device.data["id"]] = device
         return devices
