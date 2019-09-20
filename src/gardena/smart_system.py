@@ -109,6 +109,19 @@ class SmartSystem:
             headers={"X-Api-Key": self.client_id},
         )
 
+    def call_smart_system_service(self, service_id, data):
+        args = {"data": data}
+        r = self.oauth_session.put(
+            f"{self.SMART_HOST}/command/{service_id}",
+            headers=self.create_header(True),
+            data=json.dumps(args, ensure_ascii=False),
+        )
+        if r.status_code != 202:
+            response = r.json()
+            raise Exception(
+                f"{r.status_code} : {response['errors'][0]['title']} - {response['errors'][0]['detail']}"
+            )
+
     def start_ws(self):
         url = f"{self.SMART_HOST}/v1/locations"
         response = self.oauth_session.get(url, headers=self.create_header())
@@ -164,7 +177,7 @@ class SmartSystem:
 
     def treat_location(self, location):
         if location["id"] not in self.locations:
-            self.locations[location["id"]] = Location()
+            self.locations[location["id"]] = Location(self)
         self.locations[location["id"]].update_data(location)
 
     def treat_device(self, device):

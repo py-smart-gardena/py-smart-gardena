@@ -76,22 +76,21 @@ class SmartSystemTest(unittest.TestCase):
             "d6259669-8471-488c-a88e-bcf3a07a58bf"
         ]
         assert device.data["id"] == "d6259669-8471-488c-a88e-bcf3a07a58bf"
-        assert len(device.services) == 1
+        assert len(device.services) == 0
+        assert len(device.commons) == 7
 
     def test_service(self):
         self.sm.on_message(location_message)
         self.sm.on_message(device_message)
         self.sm.on_message(service_message)
 
-        service = (
-            self.sm.locations["753aecac-4c46-440e-aa96-d92436a11e77"]
-            .devices["d6259669-8471-488c-a88e-bcf3a07a58bf"]
-            .services["COMMON"]["d6259669-8471-488c-a88e-bcf3a07a58bf"]
-        )
-        assert service.data["batteryLevel"] == 87
-        assert service.data["batteryState"] == "OK"
-        assert service.data["modelType"] == "GARDENA smart Water Control"
-        assert service.data["name"] == "Water Control"
-        assert service.data["rfLinkLevel"] == 70
-        assert service.data["rfLinkState"] == "OFFLINE"
-        assert service.data["serial"] == "00019796"
+        service = self.sm.locations["753aecac-4c46-440e-aa96-d92436a11e77"].devices[
+            "d6259669-8471-488c-a88e-bcf3a07a58bf"
+        ]
+        assert service.commons["batteryLevel"]["value"] == 87
+        assert service.commons["batteryState"]["value"] == "OK"
+        assert service.commons["modelType"]["value"] == "GARDENA smart Water Control"
+        assert service.commons["name"]["value"] == "Water Control"
+        assert service.commons["rfLinkLevel"]["value"] == 70
+        assert service.commons["rfLinkState"]["value"] == "OFFLINE"
+        assert service.commons["serial"]["value"] == "00019796"
