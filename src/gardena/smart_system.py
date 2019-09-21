@@ -78,6 +78,8 @@ class SmartSystem:
         ]
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(level)
+        self.location_message_arrived = False
+        self.awaited_number_of_devices = 0
 
     def create_header(self, include_json=False):
         headers = {"Authorization-Provider": "husqvarna", "X-Api-Key": self.client_id}
@@ -155,6 +157,15 @@ class SmartSystem:
         ws.on_open = self.client.on_open
         ws.run_forever(ping_interval=150, ping_timeout=1)
 
+    def wait_for_ws_start(self):
+        import time
+
+        # Wait for locations
+        while not self.location_message_arrived:
+            time.sleep(1)
+        while len(self.get_all_devices_of_type("ALL")) < self.awaited_number_of_devices:
+            time.sleep(1)
+
     def on_message(self, message):
         self.logger.debug("------- Beginning of message ---------")
         self.logger.debug(message)
@@ -178,6 +189,10 @@ class SmartSystem:
         if location["id"] not in self.locations:
             self.locations[location["id"]] = Location(self)
         self.locations[location["id"]].update_data(location)
+        self.awaited_number_of_devices += len(
+            location["relationships"]["devices"]["data"]
+        )
+        self.location_message_arrived = True
 
     def treat_device(self, device):
         location_id = device["relationships"]["location"]["data"]["id"]
