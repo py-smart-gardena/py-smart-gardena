@@ -162,8 +162,10 @@ class SmartSystem:
 
         # Wait for locations
         while not self.location_message_arrived:
+            self.logger.info("Waiting for location ...")
             time.sleep(1)
         while len(self.get_all_devices_of_type("ALL")) < self.awaited_number_of_devices:
+            self.logger.info("Waiting for devices ...")
             time.sleep(1)
 
     def on_message(self, message):
