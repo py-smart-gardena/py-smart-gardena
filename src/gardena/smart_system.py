@@ -221,6 +221,6 @@ class SmartSystem:
         devices = {}
         for location in self.locations:
             for device in self.locations[location].devices.values():
-                if device["type"] == device_type or device_type == "ALL":
+                if device_type == "ALL" or device.type == device_type:
                     devices[device.data["id"]] = device
         return devices
