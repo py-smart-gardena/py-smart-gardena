@@ -155,7 +155,12 @@ class SmartSystem:
             on_close=self.client.on_close,
         )
         ws.on_open = self.client.on_open
-        ws.run_forever(ping_interval=150, ping_timeout=1)
+        wst = Thread(
+            target=ws.run_forever, kwargs={"ping_interval": 150, "ping_timeout": 1}
+        )
+        wst.daemon = True
+        wst.start()
+        # ws.run_forever(ping_interval=150, ping_timeout=1)
 
     def wait_for_ws_start(self):
         import time
