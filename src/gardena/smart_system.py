@@ -220,7 +220,7 @@ class SmartSystem:
     def get_all_devices_of_type(self, device_type):
         devices = {}
         for location in self.locations:
-            for device in location.devices:
+            for device in self.locations[location].devices.values():
                 if device["type"] == device_type or device_type == "ALL":
                     devices[device.data["id"]] = device
         return devices
