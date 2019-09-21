@@ -161,11 +161,14 @@ class SmartSystem:
         import time
 
         # Wait for locations
+        self.logger.info("Waiting for WS start ...")
         while not self.location_message_arrived:
-            self.logger.info("Waiting for location ...")
+            self.logger.info("Waiting for location message ...")
             time.sleep(1)
         while len(self.get_all_devices_of_type("ALL")) < self.awaited_number_of_devices:
-            self.logger.info("Waiting for devices ...")
+            self.logger.info(
+                f"Waiting for devices ... {len(self.get_all_devices_of_type('ALL'))} / {self.awaited_number_of_devices}"
+            )
             time.sleep(1)
 
     def on_message(self, message):
