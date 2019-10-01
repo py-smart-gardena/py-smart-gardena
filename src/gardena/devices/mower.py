@@ -7,6 +7,7 @@ class Mower(BaseDevice):
     activity = "N/A"
     operating_hours = "N/A"
     state = "N/A"
+    last_error_code = "N/A"
 
     def __init__(self, smart_system, device_map):
         BaseDevice.__init__(self, smart_system, device_map)
@@ -20,6 +21,9 @@ class Mower(BaseDevice):
                 "operating_hours", device_map["MOWER"][0], "operatingHours"
             )
             self.set_attribute_value("state", device_map["MOWER"][0], "state")
+            self.set_attribute_value(
+                "last_error_code", device_map["MOWER"][0], "lastErrorCode"
+            )
 
     def start_seconds_to_override(self, duration):
         data = {

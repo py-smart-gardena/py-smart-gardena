@@ -23,3 +23,4 @@ class MowerTest(unittest.TestCase):
         assert device.activity == "PARKED_PARK_SELECTED"
         assert device.operating_hours == 40
         assert device.state == "OK"
+        assert device.last_error_code == "N/A"
