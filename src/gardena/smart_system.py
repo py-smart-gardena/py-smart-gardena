@@ -162,7 +162,7 @@ class SmartSystem:
                     devices_smart_system[real_id][device["type"]] = []
                 devices_smart_system[real_id][device["type"]].append(device)
             for parsed_device in devices_smart_system.values():
-                location.add_device(DeviceFactory.build(self, device))
+                location.add_device(DeviceFactory.build(self, parsed_device))
 
     def start_ws(self):
         url = f"{self.SMART_HOST}/v1/locations"

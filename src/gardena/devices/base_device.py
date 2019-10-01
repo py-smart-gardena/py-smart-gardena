@@ -35,6 +35,8 @@ class BaseDevice(BaseGardenaClass):
     def update_device_specific_data(self, device_map):
         pass
 
-    def set_attribute_value(self, field_name, map, attribute_name):
-        if attribute_name in map["attributes"]:
-            setattr(self, field_name, map["attributes"][attribute_name]["value"])
+    def set_attribute_value(self, field_name, attributes_map, attribute_name):
+        if attribute_name in attributes_map["attributes"]:
+            setattr(
+                self, field_name, attributes_map["attributes"][attribute_name]["value"]
+            )
