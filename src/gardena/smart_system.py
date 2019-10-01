@@ -11,8 +11,6 @@ import sys
 from gardena.location import Location
 from gardena.devices.device_factory import DeviceFactory
 
-import pprint
-
 
 class Client:
     def __init__(self, smart_system=None, level=logging.WARN):
@@ -149,7 +147,6 @@ class SmartSystem:
         response_data = self.__call_smart_system_get(
             f"{self.SMART_HOST}/v1/locations/{location.data['id']}"
         )
-        pprint.pprint(response_data)
         if len(response_data["data"]["relationships"]["devices"]["data"]) < 1:
             self.logger.error("No device found....")
         else:
@@ -211,8 +208,6 @@ class SmartSystem:
         self.logger.debug(message)
         data = json.loads(message)
         self.logger.info(f'Received {data["type"]} message')
-        if logging.DEBUG >= self.logger.level:
-            pprint.pprint(data)
         if data["type"] == "LOCATION":
             self.logger.debug(">>>>>>>>>>>>> Found LOCATION")
             self.parse_location(data)
