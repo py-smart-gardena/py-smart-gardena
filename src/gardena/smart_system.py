@@ -135,7 +135,7 @@ class SmartSystem:
             return {}
         return json.loads(response.content.decode("utf-8"))
 
-    def get_locations(self):
+    def update_locations(self):
         response_data = self.__call_smart_system_get(f"{self.SMART_HOST}/v1/locations")
         if len(response_data["data"]) < 1:
             self.logger.error("No location found....")
@@ -144,7 +144,7 @@ class SmartSystem:
             new_location.update_location_data(location)
             self.locations[new_location.id] = new_location
 
-    def get_devices(self, location):
+    def update_devices(self, location):
         response_data = self.__call_smart_system_get(
             f"{self.SMART_HOST}/v1/locations/{location.id}"
         )
@@ -165,19 +165,11 @@ class SmartSystem:
                 if device_obj is not None:
                     location.add_device(device_obj)
 
-    def start_ws(self):
-        url = f"{self.SMART_HOST}/v1/locations"
-        response = self.oauth_session.get(url, headers=self.create_header())
-        response.raise_for_status()
-        response_data = json.loads(response.content.decode("utf-8"))
-        if len(response_data["data"]) < 1:
-            self.logger.error("No location found. Exiting ...")
-            sys.exit(1)
-        location = response_data["data"][0]
+    def start_ws(self, location):
         args = {
             "data": {
                 "type": "WEBSOCKET",
-                "attributes": {"locationId": location["id"]},
+                "attributes": {"locationId": location.id},
                 "id": "does-not-matter",
             }
         }
@@ -195,14 +187,13 @@ class SmartSystem:
             on_message=self.client.on_message,
             on_error=self.client.on_error,
             on_close=self.client.on_close,
+            on_open=self.client.on_open,
         )
-        ws.on_open = self.client.on_open
         wst = Thread(
             target=ws.run_forever, kwargs={"ping_interval": 150, "ping_timeout": 1}
         )
         wst.daemon = True
         wst.start()
-        # ws.run_forever(ping_interval=150, ping_timeout=1)
 
     def on_message(self, message):
         self.logger.debug("------- Beginning of message ---------")
