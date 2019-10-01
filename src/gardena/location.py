@@ -18,3 +18,10 @@ class Location(BaseGardenaClass):
 
     def add_device(self, device):
         self.devices[device.id] = device
+
+    def find_device_by_type(self, type):
+        devices = []
+        for device in self.devices.values():
+            if device.type == type:
+                devices.append(device)
+        return devices
