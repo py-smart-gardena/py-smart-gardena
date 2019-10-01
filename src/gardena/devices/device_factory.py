@@ -6,7 +6,7 @@ from .smart_irrigation_control import SmartIrrigationControl
 
 class DeviceFactory:
     @staticmethod
-    def build(self, smart_system, device_map):
+    def build(smart_system, device_map):
         if "MOWER" in device_map:
             return Mower(smart_system, device_map)
         elif "SENSOR" in device_map:
@@ -15,8 +15,6 @@ class DeviceFactory:
             pass
         elif "VALVE" in device_map:
             if len(device_map["VALVE"]) > 1:
-                return SmartIrrigationControl(
-                    smart_system, device_map
-                )  # Smart irrigation control
+                return SmartIrrigationControl(smart_system, device_map)
             else:
                 return WaterControl(smart_system, device_map)
