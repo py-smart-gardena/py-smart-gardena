@@ -9,6 +9,7 @@ import time
 import sys
 
 from gardena.location import Location
+from gardena.devices.device_factory import DeviceFactory
 
 import pprint
 
@@ -62,7 +63,6 @@ class SmartSystem:
         self.password = password
         self.client_id = client_id
         self.locations = {}
-        self.devices_locations = {}
         self.level = level
         self.client = None
         self.oauth_session = OAuth2Session(
@@ -78,8 +78,6 @@ class SmartSystem:
         ]
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(level)
-        self.location_message_arrived = False
-        self.awaited_number_of_devices = 0
 
     def create_header(self, include_json=False):
         headers = {"Authorization-Provider": "husqvarna", "X-Api-Key": self.client_id}
@@ -123,6 +121,52 @@ class SmartSystem:
                 f"{r.status_code} : {response['errors'][0]['title']} - {response['errors'][0]['detail']}"
             )
 
+    def __response_has_errors(self, response):
+        if response.status_code not in (200, 202):
+            r = response.json()
+            self.logger.error(
+                f"{response.status_code} : {r['errors'][0]['title']} - {r['errors'][0]['detail']}"
+            )
+            return True
+        return False
+
+    def __call_smart_system_get(self, url):
+        response = self.oauth_session.get(url, headers=self.create_header())
+        if self.__response_has_errors(response):
+            return {}
+        return json.loads(response.content.decode("utf-8"))
+
+    def get_locations(self):
+        response_data = self.__call_smart_system_get(f"{self.SMART_HOST}/v1/locations")
+        if len(response_data["data"]) < 1:
+            self.logger.error("No location found....")
+        for location in response_data["data"]:
+            new_location = Location(self, location)
+            new_location.update_data(location)
+            self.locations[new_location.data["id"]] = new_location
+
+    def get_devices(self, location):
+        response_data = self.__call_smart_system_get(
+            f"{self.SMART_HOST}/v1/locations/{location.data['id']}"
+        )
+        pprint.pprint(response_data)
+        if len(response_data["data"]["relationships"]["devices"]["data"]) < 1:
+            self.logger.error("No device found....")
+        else:
+            devices_smart_system = {}
+            for device in response_data["included"]:
+                real_id = device["id"].split(":")[0]
+                if real_id not in devices_smart_system:
+                    devices_smart_system[real_id] = {}
+                if (
+                    device["type"] in self.supported_services
+                    and device["type"] not in devices_smart_system[real_id]
+                ):
+                    devices_smart_system[real_id][device["type"]] = []
+                devices_smart_system[real_id][device["type"]].append(device)
+            for parsed_device in devices_smart_system.values():
+                location.add_device(DeviceFactory.build(self, device))
+
     def start_ws(self):
         url = f"{self.SMART_HOST}/v1/locations"
         response = self.oauth_session.get(url, headers=self.create_header())
@@ -162,20 +206,6 @@ class SmartSystem:
         wst.start()
         # ws.run_forever(ping_interval=150, ping_timeout=1)
 
-    def wait_for_ws_start(self):
-        import time
-
-        # Wait for locations
-        self.logger.info("Waiting for WS start ...")
-        while not self.location_message_arrived:
-            self.logger.info("Waiting for location message ...")
-            time.sleep(1)
-        while len(self.get_all_devices_of_type("ALL")) < self.awaited_number_of_devices:
-            self.logger.info(
-                f"Waiting for devices ... {len(self.get_all_devices_of_type('ALL'))} / {self.awaited_number_of_devices}"
-            )
-            time.sleep(1)
-
     def on_message(self, message):
         self.logger.debug("------- Beginning of message ---------")
         self.logger.debug(message)
@@ -185,42 +215,31 @@ class SmartSystem:
             pprint.pprint(data)
         if data["type"] == "LOCATION":
             self.logger.debug(">>>>>>>>>>>>> Found LOCATION")
-            self.treat_location(data)
-        elif data["type"] == "DEVICE":
-            self.logger.debug(">>>>>>>>>>>>> Found DEVICE")
-            self.treat_device(data)
+            self.parse_location(data)
+        # elif data["type"] == "DEVICE":
+        #     self.logger.debug(">>>>>>>>>>>>> Found DEVICE")
+        #     self.parse_device(data)
         elif data["type"] in self.supported_services:
-            self.treat_service(data)
+            self.parse_device(data)
         else:
             self.logger.debug(">>>>>>>>>>>>> Unkonwn Message")
         self.logger.debug("------- End of message ---------")
 
-    def treat_location(self, location):
+    def parse_location(self, location):
         if location["id"] not in self.locations:
-            self.locations[location["id"]] = Location(self)
-        self.locations[location["id"]].update_data(location)
-        self.awaited_number_of_devices += len(
-            location["relationships"]["devices"]["data"]
-        )
-        self.location_message_arrived = True
+            self.logger.debug(f"Location not found : {location['attributes']['name']}")
+        self.locations[location["id"]].update_location_data(location)
 
-    def treat_device(self, device):
-        location_id = device["relationships"]["location"]["data"]["id"]
-        if location_id in self.locations:
-            self.locations[location_id].update_device(device)
-        self.devices_locations[device["id"]] = location_id
+    def parse_device(self, device):
+        for location in self.locations.values():
+            device_id = device["id"].split(":")[0]
+            if device_id in location.devices:
+                location.devices[device_id].update_data(device)
+                break
 
-    def treat_service(self, service):
-        device_id = service["relationships"]["device"]["data"]["id"]
-        if device_id in self.devices_locations:
-            self.locations[self.devices_locations[device_id]].devices[
-                device_id
-            ].update_service(service)
-
-    def get_all_devices_of_type(self, device_type):
-        devices = {}
-        for location in self.locations:
-            for device in self.locations[location].devices.values():
-                if device_type == "ALL" or device.type == device_type:
-                    devices[device.data["id"]] = device
-        return devices
+    # def parse_service(self, service):
+    #     for location in self.locations.values():
+    #         device_id = device['id'].split(":")[0]
+    #         if device_id in location.devices:
+    #             location.devices[device_id].update_data(device)
+    #             break
