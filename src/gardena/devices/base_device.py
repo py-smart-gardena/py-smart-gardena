@@ -12,6 +12,7 @@ class BaseDevice(BaseGardenaClass):
     rf_link_level = "N/A"
     rf_link_state = "N/A"
     serial = "N/A"
+    callbacks = []
 
     def __init__(self, smart_system, device_map):
         self.smart_system = smart_system
@@ -19,10 +20,15 @@ class BaseDevice(BaseGardenaClass):
         self.id = device_map["COMMON"][0]["id"]
         self.update_data(device_map)
 
+    def add_callback(self, callback):
+        self.callbacks.append(callback)
+
     def update_data(self, device_map):
         if "COMMON" in device_map:
             self.update_common_data(device_map["COMMON"][0])
         self.update_device_specific_data(device_map)
+        for callback in self.callbacks:
+            callback()
 
     def update_common_data(self, common_map):
         self.set_attribute_value("battery_level", common_map, "batteryLevel")
