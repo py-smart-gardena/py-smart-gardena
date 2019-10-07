@@ -109,13 +109,21 @@ class SmartSystem:
 
     def call_smart_system_service(self, service_id, data):
         args = {"data": data}
+        headers = self.create_header(True)
+        import pprint
+
+        pprint.pprint(headers)
+        pprint.pprint(self.token)
         r = self.oauth_session.put(
-            f"{self.SMART_HOST}/command/{service_id}",
-            headers=self.create_header(True),
+            f"{self.SMART_HOST}/v1/command/{service_id}",
+            headers=headers,
             data=json.dumps(args, ensure_ascii=False),
         )
         if r.status_code != 202:
             response = r.json()
+            import pprint
+
+            pprint.pprint(response)
             raise Exception(
                 f"{r.status_code} : {response['errors'][0]['title']} - {response['errors'][0]['detail']}"
             )
