@@ -18,14 +18,16 @@ class BaseDevice(BaseGardenaClass):
         self.smart_system = smart_system
         # Only one common field
         self.id = device_map["COMMON"][0]["id"]
-        self.update_data(device_map)
+        for messages_list in device_map.values():
+            for message in messages_list:
+                self.update_data(message)
 
     def add_callback(self, callback):
         self.callbacks.append(callback)
 
     def update_data(self, device_map):
-        if "COMMON" in device_map:
-            self.update_common_data(device_map["COMMON"][0])
+        if device_map["type"] == "COMMON":
+            self.update_common_data(device_map)
         self.update_device_specific_data(device_map)
         for callback in self.callbacks:
             callback()
@@ -37,9 +39,6 @@ class BaseDevice(BaseGardenaClass):
         self.set_attribute_value("rf_link_level", common_map, "rfLinkLevel")
         self.set_attribute_value("rf_link_state", common_map, "rfLinkState")
         self.set_attribute_value("serial", common_map, "serial")
-
-    def update_device_specific_data(self, device_map):
-        pass
 
     def set_attribute_value(self, field_name, attributes_map, attribute_name):
         if attribute_name in attributes_map["attributes"]:

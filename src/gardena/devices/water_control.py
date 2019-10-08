@@ -15,16 +15,13 @@ class WaterControl(BaseDevice):
         self.type = "WATER_CONTROL"
 
     def update_device_specific_data(self, device_map):
-        if "VALVE_SET" in device_map:
-            # Water Control has only one item
-            self.valve_set_id = device_map["VALVE_SET"][0]["id"]
-        if "VALVE" in device_map:
-            self.valve_id = device_map["VALVE"][0]["id"]
-            self.set_attribute_value(
-                "valve_activity", device_map["VALVE"][0], "activity"
-            )
-            self.set_attribute_value("valve_name", device_map["VALVE"][0], "name")
-            self.set_attribute_value("valve_state", device_map["VALVE"][0], "state")
+        if device_map["type"] == "VALVE_SET":
+            self.valve_set_id = device_map["id"]
+        if device_map["type"] == "VALVE":
+            self.valve_id = device_map["id"]
+            self.set_attribute_value("valve_activity", device_map, "activity")
+            self.set_attribute_value("valve_name", device_map, "name")
+            self.set_attribute_value("valve_state", device_map, "state")
 
     def start_seconds_to_override(self, duration):
         data = {

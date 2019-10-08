@@ -15,15 +15,11 @@ class Mower(BaseDevice):
 
     def update_device_specific_data(self, device_map):
         # Mower has only one item
-        if "MOWER" in device_map:
-            self.set_attribute_value("activity", device_map["MOWER"][0], "activity")
-            self.set_attribute_value(
-                "operating_hours", device_map["MOWER"][0], "operatingHours"
-            )
-            self.set_attribute_value("state", device_map["MOWER"][0], "state")
-            self.set_attribute_value(
-                "last_error_code", device_map["MOWER"][0], "lastErrorCode"
-            )
+        if device_map["type"] == "MOWER":
+            self.set_attribute_value("activity", device_map, "activity")
+            self.set_attribute_value("operating_hours", device_map, "operatingHours")
+            self.set_attribute_value("state", device_map, "state")
+            self.set_attribute_value("last_error_code", device_map, "lastErrorCode")
 
     def start_seconds_to_override(self, duration):
         data = {

@@ -14,24 +14,21 @@ class SmartIrrigationControl(BaseDevice):
         self.type = "SMART_IRRIGATION_CONTROL"
 
     def update_device_specific_data(self, device_map):
-        if "VALVE_SET" in device_map:
+        if device_map["type"] == "VALVE_SET":
             # SmartIrrigationControl has only one item
-            self.valve_set_id = device_map["VALVE_SET"][0]["id"]
+            self.valve_set_id = device_map["id"]
+            self.set_attribute_value("valve_set_state", device_map, "state")
             self.set_attribute_value(
-                "valve_set_state", device_map["VALVE_SET"][0], "state"
+                "valve_set_last_error_code", device_map, "lastErrorCode"
             )
-            self.set_attribute_value(
-                "valve_set_last_error_code", device_map["VALVE_SET"][0], "lastErrorCode"
-            )
-        if "VALVE" in device_map:
-            for valve in device_map["VALVE"]:
-                self.valves[valve["id"]] = {
-                    "id": valve["id"],
-                    "activity": valve["attributes"]["activity"]["value"],
-                    "last_error_code": valve["attributes"]["lastErrorCode"]["value"],
-                    "name": valve["attributes"]["name"]["value"],
-                    "state": valve["attributes"]["state"]["value"],
-                }
+        if device_map["type"] == "VALVE":
+            self.valves[device_map["id"]] = {
+                "id": device_map["id"],
+                "activity": device_map["attributes"]["activity"]["value"],
+                "last_error_code": device_map["attributes"]["lastErrorCode"]["value"],
+                "name": device_map["attributes"]["name"]["value"],
+                "state": device_map["attributes"]["state"]["value"],
+            }
 
     def start_seconds_to_override(self, duration, valve_id):
         data = {

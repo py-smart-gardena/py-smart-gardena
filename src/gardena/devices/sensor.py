@@ -13,17 +13,11 @@ class Sensor(BaseDevice):
         self.type = "SENSOR"
 
     def update_device_specific_data(self, device_map):
-        if "SENSOR" in device_map:
+        if device_map["type"] == "SENSOR":
             # Sensor has only one item
             self.set_attribute_value(
-                "ambient_temperature", device_map["SENSOR"][0], "ambientTemperature"
+                "ambient_temperature", device_map, "ambientTemperature"
             )
-            self.set_attribute_value(
-                "light_intensity", device_map["SENSOR"][0], "lightIntensity"
-            )
-            self.set_attribute_value(
-                "soil_humidity", device_map["SENSOR"][0], "soilHumidity"
-            )
-            self.set_attribute_value(
-                "soil_temperature", device_map["SENSOR"][0], "soilTemperature"
-            )
+            self.set_attribute_value("light_intensity", device_map, "lightIntensity")
+            self.set_attribute_value("soil_humidity", device_map, "soilHumidity")
+            self.set_attribute_value("soil_temperature", device_map, "soilTemperature")
