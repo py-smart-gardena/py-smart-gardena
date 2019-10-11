@@ -73,7 +73,7 @@ class SmartSystem:
             "VALVE_SET",
             "SENSOR",
             "MOWER",
-            # "POWER_SOCKET",
+            "POWER_SOCKET",
             "DEVICE",
         ]
         self.logger = logging.getLogger(__name__)
