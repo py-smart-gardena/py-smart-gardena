@@ -13,11 +13,13 @@ from gardena.devices.device_factory import DeviceFactory
 
 
 class Client:
-    def __init__(self, smart_system=None, level=logging.WARN):
+    def __init__(self, smart_system=None, level=logging.WARN, location=None):
         self.smart_system = smart_system
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(level)
         self.live = False
+        self.location = location
+        self.should_stop = False
 
     def on_message(self, message):
         self.smart_system.on_message(message)
@@ -31,18 +33,19 @@ class Client:
     def on_close(self):
         self.live = False
         self.logger.info("Connection close to gardena API")
-        sys.exit(0)
+        if not self.should_stop:
+            self.logger.info("Restarting websocket")
+            self.smart_system.start_ws(self.location)
 
     def on_open(self):
         self.logger.info("Connected to Gardena API")
-
         self.live = True
 
-        def run(*args):
-            while self.live:
-                time.sleep(1)
-
-        Thread(target=run).start()
+        # def run(*args):
+        #     while self.live:
+        #         time.sleep(1)
+        #
+        # Thread(target=run).start()
 
 
 class SmartSystem:
@@ -63,9 +66,7 @@ class SmartSystem:
         self.locations = {}
         self.level = level
         self.client = None
-        self.oauth_session = OAuth2Session(
-            client=LegacyApplicationClient(client_id=self.client_id)
-        )
+        self.oauth_session = None
         self.supported_services = [
             "COMMON",
             "VALVE",
@@ -90,6 +91,13 @@ class SmartSystem:
         This function needs to be called first.
         """
         url = self.AUTHENTICATION_HOST + "/v1/oauth2/token"
+        extra = {"client_id": self.client_id}
+        self.oauth_session = OAuth2Session(
+            client=LegacyApplicationClient(client_id=self.client_id),
+            auto_refresh_url=url,
+            auto_refresh_kwargs=extra,
+            token_updater=self.token_saver,
+        )
         self.token = self.oauth_session.fetch_token(
             token_url=url,
             username=self.email,
@@ -97,15 +105,23 @@ class SmartSystem:
             client_id=self.client_id,
         )
 
-    def logout(self):
-        self.oauth_session.delete(
-            f'{self.AUTHENTICATION_HOST}/v1/token/{self.token["refresh_token"]}',
-            headers={"X-Api-Key": self.client_id},
-        )
-        self.oauth_session.delete(
-            f'{self.AUTHENTICATION_HOST}/v1/token/{self.token["access_token"]}',
-            headers={"X-Api-Key": self.client_id},
-        )
+    def quit(self):
+        if self.client:
+            self.client.should_stop = True
+        if self.ws:
+            self.ws.close()
+        if self.oauth_session:
+            self.oauth_session.delete(
+                f'{self.AUTHENTICATION_HOST}/v1/token/{self.token["refresh_token"]}',
+                headers={"X-Api-Key": self.client_id},
+            )
+            self.oauth_session.delete(
+                f'{self.AUTHENTICATION_HOST}/v1/token/{self.token["access_token"]}',
+                headers={"X-Api-Key": self.client_id},
+            )
+
+    def token_saver(self, token):
+        self.token = token
 
     def call_smart_system_service(self, service_id, data):
         args = {"data": data}
@@ -119,9 +135,7 @@ class SmartSystem:
         if r.status_code != 202:
             response = r.json()
 
-            raise Exception(
-                f"{r.status_code} : {response['errors'][0]['title']} - {response['errors'][0]['detail']}"
-            )
+            raise Exception(f"{r.status_code} : {response['errors'][0]['title']}")
 
     def __response_has_errors(self, response):
         if response.status_code not in (200, 202):
@@ -142,10 +156,12 @@ class SmartSystem:
         response_data = self.__call_smart_system_get(f"{self.SMART_HOST}/v1/locations")
         if len(response_data["data"]) < 1:
             self.logger.error("No location found....")
-        for location in response_data["data"]:
-            new_location = Location(self, location)
-            new_location.update_location_data(location)
-            self.locations[new_location.id] = new_location
+        else:
+            self.locations = {}
+            for location in response_data["data"]:
+                new_location = Location(self, location)
+                new_location.update_location_data(location)
+                self.locations[new_location.id] = new_location
 
     def update_devices(self, location):
         response_data = self.__call_smart_system_get(
@@ -184,8 +200,9 @@ class SmartSystem:
         r.raise_for_status()
         response = r.json()
         ws_url = response["data"]["attributes"]["url"]
-        self.client = Client(self, level=self.level)
-        ws = websocket.WebSocketApp(
+        if self.client is None:
+            self.client = Client(self, level=self.level, location=location)
+        self.ws = websocket.WebSocketApp(
             ws_url,
             on_message=self.client.on_message,
             on_error=self.client.on_error,
@@ -193,7 +210,7 @@ class SmartSystem:
             on_open=self.client.on_open,
         )
         wst = Thread(
-            target=ws.run_forever, kwargs={"ping_interval": 150, "ping_timeout": 1}
+            target=self.ws.run_forever, kwargs={"ping_interval": 60, "ping_timeout": 5}
         )
         wst.daemon = True
         wst.start()
@@ -206,9 +223,6 @@ class SmartSystem:
         if data["type"] == "LOCATION":
             self.logger.debug(">>>>>>>>>>>>> Found LOCATION")
             self.parse_location(data)
-        # elif data["type"] == "DEVICE":
-        #     self.logger.debug(">>>>>>>>>>>>> Found DEVICE")
-        #     self.parse_device(data)
         elif data["type"] in self.supported_services:
             self.parse_device(data)
         else:
@@ -226,10 +240,3 @@ class SmartSystem:
             if device_id in location.devices:
                 location.devices[device_id].update_data(device)
                 break
-
-    # def parse_service(self, service):
-    #     for location in self.locations.values():
-    #         device_id = device['id'].split(":")[0]
-    #         if device_id in location.devices:
-    #             location.devices[device_id].update_data(device)
-    #             break
