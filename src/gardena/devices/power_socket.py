@@ -5,12 +5,17 @@ import uuid
 class PowerSocket(BaseDevice):
 
     activity = "N/A"
-    operating_hours = "N/A"
     state = "N/A"
 
     def __init__(self, smart_system, device_map):
         BaseDevice.__init__(self, smart_system, device_map)
         self.type = "POWER_SOCKET"
+
+    def update_device_specific_data(self, device_map):
+        if device_map["type"] == "POWER_SOCKET":
+            # Sensor has only one item
+            self.set_attribute_value("activity", device_map, "activity")
+            self.set_attribute_value("state", device_map, "state")
 
     def start_seconds_to_override(self, duration):
         data = {

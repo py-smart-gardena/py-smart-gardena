@@ -549,3 +549,63 @@ water_control_fixture = {
         }
     ],
 }
+
+power_socket_fixture = {
+    "COMMON": [
+        {
+            "id": "58807078-f5d5-4a1a-814d-d632fbe9ae6b",
+            "type": "COMMON",
+            "attributes": {
+                "name": {"value": "Prise jardin 3"},
+                "batteryState": {"value": "NO_BATTERY"},
+                "rfLinkLevel": {
+                    "value": 60,
+                    "timestamp": "2019-10-10T23:52:02.797+0000",
+                },
+                "serial": {"value": "00017114"},
+                "modelType": {"value": "GARDENA smart Power"},
+                "rfLinkState": {"value": "ONLINE"},
+            },
+        }
+    ],
+    "DEVICE": [
+        {
+            "id": "d6459769-8171-488c-ab8e-bbf3a06a58bf",
+            "relationships": {
+                "location": {
+                    "data": {
+                        "id": "753aecac-4c46-470e-aa96-d92436f11e77",
+                        "type": "LOCATION",
+                    }
+                },
+                "services": {
+                    "data": [
+                        {
+                            "id": "d6459669-8171-488c-ab8e-bcf3a06a58bf:wc",
+                            "type": "VALVE_SET",
+                        },
+                        {"id": "d6459669-8171-488c-ab8e-bcf3a06a58bf", "type": "VALVE"},
+                        {
+                            "id": "d6459669-8171-488c-ab8e-bcf3a06a58bf",
+                            "type": "COMMON",
+                        },
+                    ]
+                },
+            },
+            "type": "DEVICE",
+        }
+    ],
+    "POWER_SOCKET": [
+        {
+            "id": "58807078-f5d5-4a1a-814d-d632fbe9ae6b",
+            "type": "POWER_SOCKET",
+            "attributes": {
+                "activity": {
+                    "value": "OFF",
+                    "timestamp": "2019-10-10T23:51:54.667+0000",
+                },
+                "state": {"value": "OK", "timestamp": "2019-10-10T23:51:54.643+0000"},
+            },
+        }
+    ],
+}
