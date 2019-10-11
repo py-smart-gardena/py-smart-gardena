@@ -6,8 +6,6 @@
 [![Python 3](https://pyup.io/repos/github/grm/py-smart-gardena/python-3-shield.svg)](https://pyup.io/repos/github/grm/py-smart-gardena/)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/057e00063e8848e9b8a17ba892552e9f)](https://www.codacy.com/app/grm/py-smart-gardena?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=grm/py-smart-gardena&amp;utm_campaign=Badge_Grade)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/057e00063e8848e9b8a17ba892552e9f)](https://www.codacy.com/app/grm/py-smart-gardena?utm_source=github.com&utm_medium=referral&utm_content=grm/py-smart-gardena&utm_campaign=Badge_Coverage)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/e1931021997308c01056/test_coverage)](https://codeclimate.com/github/grm/py-smart-gardena/test_coverage)
-[![codecov](https://codecov.io/gh/grm/py-smart-gardena/branch/master/graph/badge.svg)](https://codecov.io/gh/grm/py-smart-gardena)
 [![Updates](https://pyup.io/repos/github/grm/py-smart-gardena/shield.svg)](https://pyup.io/repos/github/grm/py-smart-gardena/)
 [![Known Vulnerabilities](https://snyk.io/test/github/grm/py-smart-gardena/badge.svg?targetFile=requirements.txt)](https://snyk.io/test/github/grm/py-smart-gardena?targetFile=requirements.txt)
 [![Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
@@ -18,9 +16,7 @@
 
 This library aims to provide python way to communicate with gardena smart systems and
 all gardena smart equipments. Configuration of the equipement and inclusion has still
- to be done using the Gardena application or web site.
-For now, this library only supports retrieving information, it should soon be able ot
- interact with devices to integrate in your automation system.
+ to be done using the Gardena application or website.
 
 ## Support
 
@@ -33,6 +29,16 @@ Your help is very much appreciated.
 Here are the links if you want to show your support :  
 <span class="badge-paypal"><a href="https://paypal.me/grmklein" title="Donate to this project using Paypal"><img src="https://img.shields.io/badge/paypal-donate-yellow.svg" alt="PayPal donate button" /></a></span>
 
+You can also send me crypto using one of the following addresses :
+
+Bitcoin (BTC) : 15k9HW17MU6JSTZZkbQ3YNxEtYF5yhBgNR
+
+Ethereum (ETH) : 0x67afa7dc3882821e21f68e5ccd98f5c74b24295f
+
+MONERO (XMR) : 4AyVQ9HEuphJiHHgnA7BwiPSAwgodzGtqGnyD7qbxqGta3UZJk7JNcx4VMaSmL6Sn5W8b14tyPzXmQAjZGK9jc89PWpYWxy
+
+Thx for your support !
+
 ## Requirements
 
 *   **Python 3.6+**
@@ -41,10 +47,15 @@ Here are the links if you want to show your support :
 
 For now, only few devices are supported. I may add new ones in the future :  
 *   Gateway
-*   Smart Mower (not tested yet)
+*   Smart Mower
 *   Smart water control
 *   Smart sensor
 *   Power plugs
+
+## Account creation in order to have access to Gardena API
+
+Gardena requires the creation of an account and an application in order to use their API.
+You can find how to create such an account and application here : <a href="https://developer.1689.cloud/docs/getting-started#/docs/getting-started/#3connect-api-to-application">Account and application creation</a>
 
 ## Installation
 
@@ -74,36 +85,133 @@ An exception is raised if authentication fails.
 
 ```python
 from gardena.smart_system import SmartSystem
+import pprint
 
 smart_system = SmartSystem(email="email@gmail.com", password="my_password", client_id="client_id")
 smart_system.authenticate()
+smart_system.update_locations()
+for location in smart_system.locations.values():
+    smart_system.update_devices(location)
+    pprint.pprint(location)
+    for device in location.devices.values():
+        pprint.pprint(device)
+
+smart_system.start_ws(smart_system.locations['LOCATION_ID'])
+
 
 ```
-Once authentication is successful, infromations are sent asynchronously
-from Gardena system to this library.
+Once authentication is successful, you need to gather locations and devices for the first time and then, you can create start the websocket in order to get updates automatically.
 
 ### Locations
 
-Locations are the places where the devices are connected. It can be used to manage
- different gardens or different places from one garden, or both.
- Locations are
+Locations are automatically retrieved the first time from the API, and then the websocket is used to get updates.
 
 Here is the list of the current available fields and methods :
 
 ```python
 
 for location in smart_system.locations.values():
-    print("location : " + location.data["name"] + "(" + location.data["id"] + ")")
+    print("location : " + location.name + "(" + location.id + ")")
 
 ```
 
 ### Devices
 
-Devices are automatically retrieved from the Websocket.
+Devices are automatically retrieved the first time from the API, and then the websocket is used to get updates. They are stored in each locations. Depending on the function type, you can have diffrents fields.
+
+#### Mowers
 
 ```python
-    for location in smart_system.locations["location_id"].devices.values():
-        locations.update_devices()
+    for device in smart_system.locations["LOCATION_ID"].find_device_by_type("MOWER"):
+          print(f"name : {device.name}")
+          print(f"id : {device.id}")
+          print(f"type : {device.type}")
+          print(f"battery_level : {device.battery_level}")
+          print(f"battery_state : {device.battery_state}")
+          print(f"rf_link_level : {device.rf_link_level}")
+          print(f"rf_link_state : {device.rf_link_state}")
+          print(f"serial : {device.serial}")
+          print(f"activity : {device.activity}")
+          print(f"operating_hours : {device.operating_hours}")
+          print(f"state : {device.state}")
+          print(f"last_error_code : {device.last_error_code}")
+```
+
+#### Power Socket
+
+```python
+    for device in smart_system.locations["LOCATION_ID"].find_device_by_type("MOWER"):
+          print(f"name : {device.name}")
+          print(f"id : {device.id}")
+          print(f"type : {device.type}")
+          print(f"battery_level : {device.battery_level}")
+          print(f"battery_state : {device.battery_state}")
+          print(f"rf_link_level : {device.rf_link_level}")
+          print(f"rf_link_state : {device.rf_link_state}")
+          print(f"serial : {device.serial}")
+          print(f"activity : {device.activity}")
+          print(f"state : {device.state}")
+```
+
+#### Sensor
+
+```python
+    for device in smart_system.locations["LOCATION_ID"].find_device_by_type("MOWER"):
+          print(f"name : {device.name}")
+          print(f"id : {device.id}")
+          print(f"type : {device.type}")
+          print(f"battery_level : {device.battery_level}")
+          print(f"battery_state : {device.battery_state}")
+          print(f"rf_link_level : {device.rf_link_level}")
+          print(f"rf_link_state : {device.rf_link_state}")
+          print(f"serial : {device.serial}")
+          print(f"ambient_temperature : {device.ambient_temperature}")
+          print(f"light_intensity : {device.light_intensity}")
+          print(f"soil_humidity : {device.soil_humidity}")
+          print(f"soil_temperature : {device.soil_temperature}")
+
+```
+
+#### Smart irrigation control
+
+```python
+    for device in smart_system.locations["LOCATION_ID"].find_device_by_type("MOWER"):
+          print(f"name : {device.name}")
+          print(f"id : {device.id}")
+          print(f"type : {device.type}")
+          print(f"battery_level : {device.battery_level}")
+          print(f"battery_state : {device.battery_state}")
+          print(f"rf_link_level : {device.rf_link_level}")
+          print(f"rf_link_state : {device.rf_link_state}")
+          print(f"serial : {device.serial}")
+          print(f"valve_set_id : {device.valve_set_id}")
+          print(f"valve_set_state : {device.valve_set_state}")
+          print(f"valve_set_last_error_code : {device.valve_set_last_error_code}")
+          for valve in device.valves.values():
+            print(f"name : {valve['name']}")
+            print(f"{valve['name']} - id : {valve['id']}")
+            print(f"{valve['name']} - activity : {valve['activity']}")
+            print(f"{valve['name']} - state : {valve['state']}")
+            print(f"{valve['name']} - last_error_code : {valve['last_error_code']}")
+```
+
+#### Smart water control
+
+```python
+    for device in smart_system.locations["LOCATION_ID"].find_device_by_type("MOWER"):
+          print(f"name : {device.name}")
+          print(f"id : {device.id}")
+          print(f"type : {device.type}")
+          print(f"battery_level : {device.battery_level}")
+          print(f"battery_state : {device.battery_state}")
+          print(f"rf_link_level : {device.rf_link_level}")
+          print(f"rf_link_state : {device.rf_link_state}")
+          print(f"serial : {device.serial}")
+          print(f"valve_set_id : {device.valve_set_id}")
+          print(f"valve_name : {device.valve_name}")
+          print(f"valve_id : {device.valve_id}")
+          print(f"valve_activity : {device.valve_activity}")
+          print(f"valve_state : {device.valve_state}")
 ```
 
 ## Development environment
