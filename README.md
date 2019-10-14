@@ -51,6 +51,7 @@ For now, only few devices are supported. I may add new ones in the future :
 *   Smart water control
 *   Smart sensor
 *   Power plugs
+*   Smart Irrigation control
 
 ## Account creation in order to have access to Gardena API
 
@@ -78,8 +79,12 @@ and two connections to revoke tokens, everything else is done through websockets
 
 ### Authentication
 
-You need to authenticate with your email and passwords created on this [site]
-(https://developer.1689.cloud/apis) or the IOS/Android application.
+You first need to get a client id for your personnal installation of gardena. 
+To do so, create an account here : https://developer.1689.cloud/apis
+
+Then you need to create an application and get the client_id as explained here : 
+https://developer.1689.cloud/docs/getting-started
+
 The library manages the token for you then.
 An exception is raised if authentication fails.
 
