@@ -30,7 +30,7 @@ class BaseDevice(BaseGardenaClass):
             self.update_common_data(device_map)
         self.update_device_specific_data(device_map)
         for callback in self.callbacks:
-            callback()
+            callback(self)
 
     def update_common_data(self, common_map):
         self.set_attribute_value("battery_level", common_map, "batteryLevel")

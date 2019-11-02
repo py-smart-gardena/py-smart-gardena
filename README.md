@@ -219,6 +219,22 @@ Devices are automatically retrieved the first time from the API, and then the we
           print(f"valve_state : {device.valve_state}")
 ```
 
+### Using websocket
+
+Once the websocket has been started, everything is managed and the devices are 
+automatically updated once their state change.
+In order for your to be alerted of such a change, you need to add a callback to the 
+device.
+This callback will be called each time the device state changed :
+
+```python
+def my_callback(device):
+    print(f"The device {device.name} has been updated !")
+
+device.add_callback(my_callback)
+
+```
+
 ## Development environment
 
 To install the dev environment, you just have to do, in the source code directory :
