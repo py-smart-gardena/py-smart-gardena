@@ -145,7 +145,7 @@ Devices are automatically retrieved the first time from the API, and then the we
 #### Power Socket
 
 ```python
-    for device in smart_system.locations["LOCATION_ID"].find_device_by_type("MOWER"):
+    for device in smart_system.locations["LOCATION_ID"].find_device_by_type("POWER_SOCKET"):
           print(f"name : {device.name}")
           print(f"id : {device.id}")
           print(f"type : {device.type}")
@@ -161,7 +161,7 @@ Devices are automatically retrieved the first time from the API, and then the we
 #### Sensor
 
 ```python
-    for device in smart_system.locations["LOCATION_ID"].find_device_by_type("MOWER"):
+    for device in smart_system.locations["LOCATION_ID"].find_device_by_type("SENSOR"):
           print(f"name : {device.name}")
           print(f"id : {device.id}")
           print(f"type : {device.type}")
@@ -180,7 +180,7 @@ Devices are automatically retrieved the first time from the API, and then the we
 #### Smart irrigation control
 
 ```python
-    for device in smart_system.locations["LOCATION_ID"].find_device_by_type("MOWER"):
+    for device in smart_system.locations["LOCATION_ID"].find_device_by_type("VALVE_SET"):
           print(f"name : {device.name}")
           print(f"id : {device.id}")
           print(f"type : {device.type}")
@@ -203,7 +203,7 @@ Devices are automatically retrieved the first time from the API, and then the we
 #### Smart water control
 
 ```python
-    for device in smart_system.locations["LOCATION_ID"].find_device_by_type("MOWER"):
+    for device in smart_system.locations["LOCATION_ID"].find_device_by_type("VALVE"):
           print(f"name : {device.name}")
           print(f"id : {device.id}")
           print(f"type : {device.type}")
