@@ -140,9 +140,21 @@ class SmartSystem:
     def __response_has_errors(self, response):
         if response.status_code not in (200, 202):
             r = response.json()
-            self.logger.error(
-                f"{response.status_code} : {r['errors'][0]['title']} - {r['errors'][0]['detail']}"
-            )
+            if 'errors' in r:
+                msg = "{r['errors'][0]['title']} - {r['errors'][0]['detail']}"
+            elif 'message' in r:
+                msg = f"{r['message']}"
+
+                if response.status_code == 403:
+                    msg = f"{msg} (hint: did you 'Connect an API' in your Application?)"
+            else:
+                msg = f"{r}"
+
+            self.logger.error(f"{response.status_code} : {msg}")
+
+            if response.status_code in (401,403):
+                raise Exception(msg)
+
             return True
         return False
 
