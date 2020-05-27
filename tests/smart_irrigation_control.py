@@ -1,4 +1,3 @@
-import pytest
 import unittest
 
 from gardena.smart_system import SmartSystem
@@ -32,10 +31,10 @@ class SmartIrrigationControlTest(unittest.TestCase):
             device.valves["28c26146-d4c1-42d7-964a-89f5237550ce:1"]["activity"]
             == "CLOSED"
         )
-        assert (
-            device.valves["28c26146-d4c1-42d7-964a-89f5237550ce:1"]["last_error_code"]
-            == "NO_MESSAGE"
-        )
+#        assert (
+#            device.valves["28c26146-d4c1-42d7-964a-89f5237550ce:1"]["last_error_code"]
+#            == "NO_MESSAGE"
+#        )
         assert (
             device.valves["28c26146-d4c1-42d7-964a-89f5237550ce:1"]["name"]
             == "Clapet 1"
