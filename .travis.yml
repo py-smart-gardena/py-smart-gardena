@@ -5,19 +5,13 @@ python:
 - '3.8'
 install:
 - pip install -r requirements.txt
+- pip install -r test-requirements.txt
 - pip install codecov wheel cmarkgfm
 - pip install --upgrade pytest
-- pip install codacy-coverage
-before_script:
-- curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
-  > ./cc-test-reporter
-- chmod +x ./cc-test-reporter
-- "./cc-test-reporter before-build"
 script:
 - python setup.py test
 after_script:
-- "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
-- python-codacy-coverage -r reports/coverage.xml
+- bash <(curl -Ls https://coverage.codacy.com/get.sh)
 - codecov
 deploy:
   provider: pypi
@@ -27,5 +21,5 @@ deploy:
   on:
     tags: true
     branch: master
-    python: '3.7-dev'
+    python: '3.8'
   distributions: "register sdist bdist_wheel"
