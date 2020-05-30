@@ -11,7 +11,7 @@ install:
 script:
 - python setup.py test
 after_script:
-- bash <(curl -Ls https://coverage.codacy.com/get.sh)
+- bash <(curl -Ls https://coverage.codacy.com/get.sh) -r reports/coverage.xml -l Python
 - codecov
 deploy:
   provider: pypi
