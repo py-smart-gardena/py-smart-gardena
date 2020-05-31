@@ -5,8 +5,6 @@ from requests_oauthlib import OAuth2Session
 
 import websocket
 from threading import Thread
-import time
-import sys
 
 from gardena.location import Location
 from gardena.devices.device_factory import DeviceFactory
@@ -166,9 +164,9 @@ class SmartSystem:
 
     def update_locations(self):
         response_data = self.__call_smart_system_get(f"{self.SMART_HOST}/v1/locations")
-        if response_data is not None:
-            if len(response_data["data"]) < 1:
-                _LOGGER.error("No locations found....")
+        if response_data is not None or 'data' not in response_data:
+            if 'data' not in response_data or len(response_data["data"]) < 1:
+                self.logger.error("No locations found....")
             else:
                 self.locations = {}
                 for location in response_data["data"]:
@@ -181,8 +179,9 @@ class SmartSystem:
             f"{self.SMART_HOST}/v1/locations/{location.id}"
         )
         if response_data is not None:
+            #  TODO : test if key exists
             if len(response_data["data"]["relationships"]["devices"]["data"]) < 1:
-                _LOGGER.error("No device found....")
+                self.logger.error("No device found....")
             else:
                 devices_smart_system = {}
                 for device in response_data["included"]:
