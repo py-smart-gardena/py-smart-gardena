@@ -57,7 +57,7 @@ For now, only few devices are supported. I may add new ones in the future :
 ## Account creation in order to have access to Gardena API
 
 Gardena requires the creation of an account and an application in order to use their API.
-You can find how to create such an account and application here : <a href="https://developer.1689.cloud/docs/getting-started#/docs/getting-started/#3connect-api-to-application">Account and application creation</a>
+You can find how to create such an account and application here : <a href="https://developer.husqvarnagroup.cloud/docs/getting-started#/docs/getting-started/#3connect-api-to-application">Account and application creation</a>
 
 ## Installation
 
@@ -80,11 +80,13 @@ and two connections to revoke tokens, everything else is done through websockets
 
 ### Authentication
 
-You first need to get a client id for your personnal installation of gardena. 
-To do so, create an account here : https://developer.1689.cloud/apis
+You first need to get a client id (also called application key in the
+API documentation) for your personal installation of gardena.  To do
+so, create an account here : https://developer.husqvarnagroup.cloud/
 
-Then you need to create an application and get the client_id as explained here : 
-https://developer.1689.cloud/docs/getting-started
+Then you need to create an application, add APIs (Authentication API
+and GARDENA smart system API), and copy the application key as
+explained here: https://developer.husqvarnagroup.cloud/docs/getting-started
 
 The library manages the token for you then.
 An exception is raised if authentication fails.
