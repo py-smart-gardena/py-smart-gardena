@@ -161,40 +161,42 @@ class SmartSystem:
     def __call_smart_system_get(self, url):
         response = self.oauth_session.get(url, headers=self.create_header())
         if self.__response_has_errors(response):
-            return {}
+            return None
         return json.loads(response.content.decode("utf-8"))
 
     def update_locations(self):
         response_data = self.__call_smart_system_get(f"{self.SMART_HOST}/v1/locations")
-        if len(response_data["data"]) < 1:
-            self.logger.error("No location found....")
-        else:
-            self.locations = {}
-            for location in response_data["data"]:
-                new_location = Location(self, location)
-                new_location.update_location_data(location)
-                self.locations[new_location.id] = new_location
+        if response_data is not None:
+            if len(response_data["data"]) < 1:
+                _LOGGER.error("No locations found....")
+            else:
+                self.locations = {}
+                for location in response_data["data"]:
+                    new_location = Location(self, location)
+                    new_location.update_location_data(location)
+                    self.locations[new_location.id] = new_location
 
     def update_devices(self, location):
         response_data = self.__call_smart_system_get(
             f"{self.SMART_HOST}/v1/locations/{location.id}"
         )
-        if len(response_data["data"]["relationships"]["devices"]["data"]) < 1:
-            self.logger.error("No device found....")
-        else:
-            devices_smart_system = {}
-            for device in response_data["included"]:
-                real_id = device["id"].split(":")[0]
-                if real_id not in devices_smart_system:
-                    devices_smart_system[real_id] = {}
-                if device["type"] in self.supported_services:
-                    if device["type"] not in devices_smart_system[real_id]:
-                        devices_smart_system[real_id][device["type"]] = []
-                    devices_smart_system[real_id][device["type"]].append(device)
-            for parsed_device in devices_smart_system.values():
-                device_obj = DeviceFactory.build(self, parsed_device)
-                if device_obj is not None:
-                    location.add_device(device_obj)
+        if response_data is not None:
+            if len(response_data["data"]["relationships"]["devices"]["data"]) < 1:
+                _LOGGER.error("No device found....")
+            else:
+                devices_smart_system = {}
+                for device in response_data["included"]:
+                    real_id = device["id"].split(":")[0]
+                    if real_id not in devices_smart_system:
+                        devices_smart_system[real_id] = {}
+                    if device["type"] in self.supported_services:
+                        if device["type"] not in devices_smart_system[real_id]:
+                            devices_smart_system[real_id][device["type"]] = []
+                        devices_smart_system[real_id][device["type"]].append(device)
+                for parsed_device in devices_smart_system.values():
+                    device_obj = DeviceFactory.build(self, parsed_device)
+                    if device_obj is not None:
+                        location.add_device(device_obj)
 
     def start_ws(self, location):
         args = {
