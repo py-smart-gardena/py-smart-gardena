@@ -18,6 +18,8 @@ class SmartIrrigationControl(BaseDevice):
             value_name_in_target = value_name_in_source
         if value_name_in_source in source_map:
             target_map[value_name_in_target] = source_map[value_name_in_source]["value"]
+        else:
+            target_map[value_name_in_target] = 'N/A'
 
     def update_device_specific_data(self, device_map):
         if device_map["type"] == "VALVE_SET":
