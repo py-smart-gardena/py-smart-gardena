@@ -181,7 +181,7 @@ Devices are automatically retrieved the first time from the API, and then the we
 #### Smart irrigation control
 
 ```python
-    for device in smart_system.locations["LOCATION_ID"].find_device_by_type("VALVE_SET"):
+    for device in smart_system.locations["LOCATION_ID"].find_device_by_type("SMART_IRRIGATION_CONTROL"):
           print(f"name : {device.name}")
           print(f"id : {device.id}")
           print(f"type : {device.type}")
