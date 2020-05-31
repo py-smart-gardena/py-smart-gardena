@@ -12,6 +12,7 @@ class BaseDevice(BaseGardenaClass):
     rf_link_level = "N/A"
     rf_link_state = "N/A"
     serial = "N/A"
+    model_type = "N/A"
     callbacks = []
 
     def __init__(self, smart_system, device_map):
@@ -39,6 +40,7 @@ class BaseDevice(BaseGardenaClass):
         self.set_attribute_value("rf_link_level", common_map, "rfLinkLevel")
         self.set_attribute_value("rf_link_state", common_map, "rfLinkState")
         self.set_attribute_value("serial", common_map, "serial")
+        self.set_attribute_value("model_type", common_map, "modelType")
 
     def set_attribute_value(self, field_name, attributes_map, attribute_name):
         if attribute_name in attributes_map["attributes"]:
