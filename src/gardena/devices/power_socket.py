@@ -5,6 +5,7 @@ import uuid
 class PowerSocket(BaseDevice):
 
     def __init__(self, smart_system, device_map):
+        """Constructor for the Power socket device."""
         BaseDevice.__init__(self, smart_system, device_map["COMMON"][0]["id"])
         self.type = "POWER_SOCKET"
         self.activity = "N/A"

@@ -5,6 +5,7 @@ import uuid
 class SmartIrrigationControl(BaseDevice):
 
     def __init__(self, smart_system, device_map):
+        """Constructor for the smart irrigation control device."""
         BaseDevice.__init__(self, smart_system, device_map["COMMON"][0]["id"])
         self.type = "SMART_IRRIGATION_CONTROL"
         self.valve_set_id = "N/A"

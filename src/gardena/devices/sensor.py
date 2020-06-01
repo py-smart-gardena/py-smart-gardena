@@ -4,6 +4,7 @@ from .base_device import BaseDevice
 class Sensor(BaseDevice):
 
     def __init__(self, smart_system, device_map):
+        """Constructor for the sensor device."""
         BaseDevice.__init__(self, smart_system, device_map["COMMON"][0]["id"])
         self.type = "SENSOR"
         self.ambient_temperature = "N/A"

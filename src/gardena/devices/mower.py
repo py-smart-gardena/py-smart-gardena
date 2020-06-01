@@ -5,6 +5,7 @@ import uuid
 class Mower(BaseDevice):
 
     def __init__(self, smart_system, device_map):
+        """Constructor for the mower device."""
         BaseDevice.__init__(self, smart_system, device_map["COMMON"][0]["id"])
         self.type = "MOWER"
         self.activity = "N/A"

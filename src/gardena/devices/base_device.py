@@ -2,11 +2,12 @@ from gardena.base_gardena_class import BaseGardenaClass
 
 
 class BaseDevice(BaseGardenaClass):
-    """Base class informations about gardena devices"""
+    """Base class informations about gardena devices."""
 
-    def __init__(self, smart_system, id):
+    def __init__(self, smart_system, device_id):
+        """Constructor for the BaseDevice."""
         self.smart_system = smart_system
-        self.id = id
+        self.id = device_id
         self.type = "N/A"
         self.battery_level = "N/A"
         self.battery_state = "N/A"
