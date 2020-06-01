@@ -164,7 +164,7 @@ class SmartSystem:
 
     def update_locations(self):
         response_data = self.__call_smart_system_get(f"{self.SMART_HOST}/v1/locations")
-        if response_data is not None or 'data' not in response_data:
+        if response_data is not None:
             if 'data' not in response_data or len(response_data["data"]) < 1:
                 self.logger.error("No locations found....")
             else:
