@@ -4,12 +4,12 @@ import uuid
 
 class PowerSocket(BaseDevice):
 
-    activity = "N/A"
-    state = "N/A"
-
     def __init__(self, smart_system, device_map):
-        BaseDevice.__init__(self, smart_system, device_map)
+        BaseDevice.__init__(self, smart_system, device_map["COMMON"][0]["id"])
         self.type = "POWER_SOCKET"
+        self.activity = "N/A"
+        self.state = "N/A"
+        self.setup_values_from_device_map(device_map)
 
     def update_device_specific_data(self, device_map):
         if device_map["type"] == "POWER_SOCKET":

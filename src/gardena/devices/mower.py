@@ -4,14 +4,14 @@ import uuid
 
 class Mower(BaseDevice):
 
-    activity = "N/A"
-    operating_hours = "N/A"
-    state = "N/A"
-    last_error_code = "N/A"
-
     def __init__(self, smart_system, device_map):
-        BaseDevice.__init__(self, smart_system, device_map)
+        BaseDevice.__init__(self, smart_system, device_map["COMMON"][0]["id"])
         self.type = "MOWER"
+        self.activity = "N/A"
+        self.operating_hours = "N/A"
+        self.state = "N/A"
+        self.last_error_code = "N/A"
+        self.setup_values_from_device_map(device_map)
 
     def update_device_specific_data(self, device_map):
         # Mower has only one item

@@ -4,14 +4,14 @@ import uuid
 
 class SmartIrrigationControl(BaseDevice):
 
-    valve_set_id = "N/A"
-    valve_set_state = "N/A"
-    valve_set_last_error_code = "N/A"
-    valves = {}
-
     def __init__(self, smart_system, device_map):
-        BaseDevice.__init__(self, smart_system, device_map)
+        BaseDevice.__init__(self, smart_system, device_map["COMMON"][0]["id"])
         self.type = "SMART_IRRIGATION_CONTROL"
+        self.valve_set_id = "N/A"
+        self.valve_set_state = "N/A"
+        self.valve_set_last_error_code = "N/A"
+        self.valves = {}
+        self.setup_values_from_device_map(device_map)
 
     def _set_valves_map_value(self, target_map, source_map, value_name_in_source, value_name_in_target=None):
         if not value_name_in_target:

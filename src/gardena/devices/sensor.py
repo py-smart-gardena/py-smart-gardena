@@ -3,14 +3,14 @@ from .base_device import BaseDevice
 
 class Sensor(BaseDevice):
 
-    ambient_temperature = "N/A"
-    light_intensity = "N/A"
-    soil_humidity = "N/A"
-    soil_temperature = "N/A"
-
     def __init__(self, smart_system, device_map):
-        BaseDevice.__init__(self, smart_system, device_map)
+        BaseDevice.__init__(self, smart_system, device_map["COMMON"][0]["id"])
         self.type = "SENSOR"
+        self.ambient_temperature = "N/A"
+        self.light_intensity = "N/A"
+        self.soil_humidity = "N/A"
+        self.soil_temperature = "N/A"
+        self.setup_values_from_device_map(device_map)
 
     def update_device_specific_data(self, device_map):
         if device_map["type"] == "SENSOR":
