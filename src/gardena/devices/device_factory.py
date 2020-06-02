@@ -8,7 +8,6 @@ from .power_socket import PowerSocket
 class DeviceFactory:
     @staticmethod
     def build(smart_system, device_map):
-        print(f'{device_map}')
         if "MOWER" in device_map:
             return Mower(smart_system, device_map)
         elif "SENSOR" in device_map:
