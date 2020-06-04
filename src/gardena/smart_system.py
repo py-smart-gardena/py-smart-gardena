@@ -1,10 +1,13 @@
 import json
 import logging
+from datetime import time
+
 from oauthlib.oauth2 import LegacyApplicationClient
 from requests_oauthlib import OAuth2Session
 
 import websocket
 from threading import Thread
+from time import time
 
 from gardena.location import Location
 from gardena.devices.device_factory import DeviceFactory
@@ -24,6 +27,7 @@ class Client:
 
     def on_error(self, error):
         self.logger.error(f"error : {error}")
+        self.smart_system.ws_status = "OFFLINE"
 
     def is_connected(self):
         return self.live
@@ -31,6 +35,7 @@ class Client:
     def on_close(self):
         self.live = False
         self.logger.info("Connection close to gardena API")
+        self.smart_system.ws_status = "OFFLINE"
         if not self.should_stop:
             self.logger.info("Restarting websocket")
             self.smart_system.start_ws(self.location)
@@ -38,6 +43,7 @@ class Client:
     def on_open(self):
         self.logger.info("Connected to Gardena API")
         self.live = True
+        self.smart_system.ws_status = "ONLINE"
 
         # def run(*args):
         #     while self.live:
@@ -55,7 +61,11 @@ class SmartSystem:
             raise ValueError(
                 "Arguments 'email', 'passwords' and 'client_id' are required"
             )
-        logging.basicConfig(level=level)
+        logging.basicConfig(
+            level=level,
+            format='%(asctime)s %(levelname)-8s %(message)s',
+            datefmt='%Y-%m-%d %H:%M:%S'
+        )
         self.AUTHENTICATION_HOST = "https://api.authentication.husqvarnagroup.dev"
         self.SMART_HOST = "https://api.smart.gardena.dev"
         self.email = email
@@ -76,6 +86,7 @@ class SmartSystem:
         ]
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(level)
+        self.ws_status = "OFFLINE"
 
     def create_header(self, include_json=False):
         headers = {"Authorization-Provider": "husqvarna", "X-Api-Key": self.client_id}
