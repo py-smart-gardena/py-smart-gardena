@@ -1,13 +1,14 @@
 import json
 import logging
-from datetime import time
+from contextlib import contextmanager
 
 from oauthlib.oauth2 import LegacyApplicationClient
 from requests_oauthlib import OAuth2Session
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 import websocket
 from threading import Thread
-from time import time
 
 from gardena.location import Location
 from gardena.devices.device_factory import DeviceFactory
@@ -28,6 +29,9 @@ class Client:
     def on_error(self, error):
         self.logger.error(f"error : {error}")
         self.smart_system.ws_status = "OFFLINE"
+        if not self.should_stop:
+            self.logger.info("Restarting websocket")
+            self.smart_system.start_ws(self.location)
 
     def is_connected(self):
         return self.live
@@ -75,6 +79,8 @@ class SmartSystem:
         self.level = level
         self.client = None
         self.oauth_session = None
+        self.ws = None
+        self.ws_status = "OFFLINE"
         self.supported_services = [
             "COMMON",
             "VALVE",
@@ -86,7 +92,6 @@ class SmartSystem:
         ]
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(level)
-        self.ws_status = "OFFLINE"
 
     def create_header(self, include_json=False):
         headers = {"Authorization-Provider": "husqvarna", "X-Api-Key": self.client_id}
@@ -173,6 +178,30 @@ class SmartSystem:
             return None
         return json.loads(response.content.decode("utf-8"))
 
+    @contextmanager
+    def __set_retry_on_session(
+            self,
+            backoff_factor=0.3,
+            status_forcelist=(500, 502, 504),
+    ):
+        try:
+            retry = Retry(
+                total=None,
+                read=None,
+                connect=None,
+                status=None,
+                method_whitelist=False,
+                backoff_factor=backoff_factor,
+                status_forcelist=status_forcelist,
+            )
+            adapter = HTTPAdapter(max_retries=retry)
+            self.oauth_session.mount('http://', adapter)
+            self.oauth_session.mount('https://', adapter)
+            yield self.oauth_session
+        finally:
+            self.oauth_session.mount('http://', HTTPAdapter())
+            self.oauth_session.mount('https://', HTTPAdapter())
+
     def update_locations(self):
         response_data = self.__call_smart_system_get(f"{self.SMART_HOST}/v1/locations")
         if response_data is not None:
@@ -216,30 +245,31 @@ class SmartSystem:
                 "id": "does-not-matter",
             }
         }
-        r = self.oauth_session.post(
-            f"{self.SMART_HOST}/v1/websocket",
-            headers=self.create_header(True),
-            data=json.dumps(args, ensure_ascii=False),
-        )
-        r.raise_for_status()
-        response = r.json()
-        ws_url = response["data"]["attributes"]["url"]
-        if self.client is None:
-            self.client = Client(self, level=self.level, location=location)
-        if self.level == logging.DEBUG:
-            websocket.enableTrace(True)
-        self.ws = websocket.WebSocketApp(
-            ws_url,
-            on_message=self.client.on_message,
-            on_error=self.client.on_error,
-            on_close=self.client.on_close,
-            on_open=self.client.on_open,
-        )
-        wst = Thread(
-            target=self.ws.run_forever, kwargs={"ping_interval": 60, "ping_timeout": 5}
-        )
-        wst.daemon = True
-        wst.start()
+        with self.__set_retry_on_session() as session:
+            r = session.post(
+                f"{self.SMART_HOST}/v1/websocket",
+                headers=self.create_header(True),
+                data=json.dumps(args, ensure_ascii=False),
+            )
+            r.raise_for_status()
+            response = r.json()
+            ws_url = response["data"]["attributes"]["url"]
+            if self.client is None:
+                self.client = Client(self, level=self.level, location=location)
+            if self.level == logging.DEBUG:
+                websocket.enableTrace(True)
+            self.ws = websocket.WebSocketApp(
+                ws_url,
+                on_message=self.client.on_message,
+                on_error=self.client.on_error,
+                on_close=self.client.on_close,
+                on_open=self.client.on_open,
+            )
+            wst = Thread(
+                target=self.ws.run_forever, kwargs={"ping_interval": 60, "ping_timeout": 5}
+            )
+            wst.daemon = True
+            wst.start()
 
     def on_message(self, message):
         self.logger.debug("------- Beginning of message ---------")
