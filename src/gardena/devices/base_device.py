@@ -2,23 +2,23 @@ from gardena.base_gardena_class import BaseGardenaClass
 
 
 class BaseDevice(BaseGardenaClass):
-    """Base class informations about gardena devices"""
+    """Base class informations about gardena devices."""
 
-    id = "N/A"
-    type = "N/A"
-    battery_level = "N/A"
-    battery_state = "N/A"
-    name = "N/A"
-    rf_link_level = "N/A"
-    rf_link_state = "N/A"
-    serial = "N/A"
-    model_type = "N/A"
-    callbacks = []
-
-    def __init__(self, smart_system, device_map):
+    def __init__(self, smart_system, device_id):
+        """Constructor for the BaseDevice."""
         self.smart_system = smart_system
-        # Only one common field
-        self.id = device_map["COMMON"][0]["id"]
+        self.id = device_id
+        self.type = "N/A"
+        self.battery_level = "N/A"
+        self.battery_state = "N/A"
+        self.name = "N/A"
+        self.rf_link_level = "N/A"
+        self.rf_link_state = "N/A"
+        self.serial = "N/A"
+        self.model_type = "N/A"
+        self.callbacks = []
+
+    def setup_values_from_device_map(self, device_map):
         for messages_list in device_map.values():
             for message in messages_list:
                 self.update_data(message)

@@ -215,6 +215,8 @@ class SmartSystem:
         ws_url = response["data"]["attributes"]["url"]
         if self.client is None:
             self.client = Client(self, level=self.level, location=location)
+        if self.level == logging.DEBUG:
+            websocket.enableTrace(True)
         self.ws = websocket.WebSocketApp(
             ws_url,
             on_message=self.client.on_message,

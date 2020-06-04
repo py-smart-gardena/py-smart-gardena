@@ -4,15 +4,16 @@ import uuid
 
 class WaterControl(BaseDevice):
 
-    valve_set_id = "N/A"
-    valve_id = "N/A"
-    valve_activity = "N/A"
-    valve_name = "N/A"
-    valve_state = "N/A"
-
     def __init__(self, smart_system, device_map):
-        BaseDevice.__init__(self, smart_system, device_map)
+        """Constructor for the water control device."""
+        BaseDevice.__init__(self, smart_system, device_map["COMMON"][0]["id"])
         self.type = "WATER_CONTROL"
+        self.valve_set_id = "N/A"
+        self.valve_id = "N/A"
+        self.valve_activity = "N/A"
+        self.valve_name = "N/A"
+        self.valve_state = "N/A"
+        self.setup_values_from_device_map(device_map)
 
     def update_device_specific_data(self, device_map):
         if device_map["type"] == "VALVE_SET":
