@@ -28,7 +28,7 @@ class Client:
 
     def on_error(self, error):
         self.logger.error(f"error : {error}")
-        self.smart_system.ws_status = "OFFLINE"
+        self.smart_system.set_ws_status(False)
 
     def is_connected(self):
         return self.live
@@ -36,7 +36,7 @@ class Client:
     def on_close(self):
         self.live = False
         self.logger.info("Connection close to gardena API")
-        self.smart_system.ws_status = "OFFLINE"
+        self.smart_system.set_ws_status(False)
         if not self.should_stop:
             self.logger.info("Restarting websocket")
             self.smart_system.start_ws(self.location)
@@ -44,7 +44,7 @@ class Client:
     def on_open(self):
         self.logger.info("Connected to Gardena API")
         self.live = True
-        self.smart_system.ws_status = "ONLINE"
+        self.smart_system.set_ws_status(True)
 
         # def run(*args):
         #     while self.live:
@@ -77,7 +77,8 @@ class SmartSystem:
         self.client = None
         self.oauth_session = None
         self.ws = None
-        self.ws_status = "OFFLINE"
+        self.is_ws_connected = False
+        self.ws_status_callback = None
         self.supported_services = [
             "COMMON",
             "VALVE",
@@ -130,6 +131,11 @@ class SmartSystem:
                 f'{self.AUTHENTICATION_HOST}/v1/token/{self.token["access_token"]}',
                 headers={"X-Api-Key": self.client_id},
             )
+
+    def set_ws_status(self, status):
+        self.is_ws_connected = status
+        if self.ws_status_callback:
+            self.ws_status_callback(self)
 
     def token_saver(self, token):
         self.token = token
@@ -293,3 +299,6 @@ class SmartSystem:
             if device_id in location.devices:
                 location.devices[device_id].update_data(device)
                 break
+
+    def add_ws_status_callback(self, callback):
+        self.ws_status_callback = callback
