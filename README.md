@@ -6,7 +6,6 @@
 [![Python 3](https://pyup.io/repos/github/py-smart-gardena/py-smart-gardena/python-3-shield.svg)](https://pyup.io/repos/github/py-smart-gardena/py-smart-gardena/)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/b782f7b0573e4623b5a0fb3fa607a734)](https://www.codacy.com/gh/py-smart-gardena/py-smart-gardena?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=py-smart-gardena/py-smart-gardena&amp;utm_campaign=Badge_Grade)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/057e00063e8848e9b8a17ba892552e9f)](https://www.codacy.com/app/grm/py-smart-gardena?utm_source=github.com&utm_medium=referral&utm_content=grm/py-smart-gardena&utm_campaign=Badge_Coverage)
-[![codecov](https://codecov.io/gh/py-smart-gardena/py-smart-gardena/branch/master/graph/badge.svg)](https://codecov.io/gh/py-smart-gardena/py-smart-gardena)
 [![Updates](https://pyup.io/repos/github/py-smart-gardena/py-smart-gardena/shield.svg)](https://pyup.io/repos/github/py-smart-gardena/py-smart-gardena/)
 [![Known Vulnerabilities](https://snyk.io/test/github/py-smart-gardena/py-smart-gardena/badge.svg?targetFile=requirements.txt)](https://snyk.io/test/github/py-smart-gardena/py-smart-gardena?targetFile=requirements.txt)
 [![Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
