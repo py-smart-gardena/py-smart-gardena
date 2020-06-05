@@ -29,9 +29,6 @@ class Client:
     def on_error(self, error):
         self.logger.error(f"error : {error}")
         self.smart_system.ws_status = "OFFLINE"
-        if not self.should_stop:
-            self.logger.info("Restarting websocket")
-            self.smart_system.start_ws(self.location)
 
     def is_connected(self):
         return self.live
