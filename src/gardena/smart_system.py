@@ -135,7 +135,7 @@ class SmartSystem:
     def set_ws_status(self, status):
         self.is_ws_connected = status
         if self.ws_status_callback:
-            self.ws_status_callback(self)
+            self.ws_status_callback()
 
     def token_saver(self, token):
         self.token = token
