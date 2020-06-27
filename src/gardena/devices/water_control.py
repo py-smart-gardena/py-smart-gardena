@@ -30,7 +30,7 @@ class WaterControl(BaseDevice):
             "type": "VALVE_CONTROL",
             "attributes": {"command": "START_SECONDS_TO_OVERRIDE", "seconds": duration},
         }
-        self.smart_system.call_smart_system_service(self.id, data)
+        self.smart_system.call_smart_system_service(self.valve_id, data)
 
     def stop_until_next_task(self):
         data = {
@@ -38,7 +38,7 @@ class WaterControl(BaseDevice):
             "type": "VALVE_CONTROL",
             "attributes": {"command": "STOP_UNTIL_NEXT_TASK"},
         }
-        self.smart_system.call_smart_system_service(self.id, data)
+        self.smart_system.call_smart_system_service(self.valve_id, data)
 
     def pause(self):
         data = {
@@ -46,7 +46,7 @@ class WaterControl(BaseDevice):
             "type": "VALVE_CONTROL",
             "attributes": {"command": "PAUSE"},
         }
-        self.smart_system.call_smart_system_service(self.id, data)
+        self.smart_system.call_smart_system_service(self.valve_id, data)
 
     def unpause(self):
         data = {
@@ -54,4 +54,4 @@ class WaterControl(BaseDevice):
             "type": "VALVE_CONTROL",
             "attributes": {"command": "UNPAUSE"},
         }
-        self.smart_system.call_smart_system_service(self.id, data)
+        self.smart_system.call_smart_system_service(self.valve_id, data)
