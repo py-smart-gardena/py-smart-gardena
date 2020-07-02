@@ -135,7 +135,7 @@ class SmartSystem:
     def set_ws_status(self, status):
         self.is_ws_connected = status
         if self.ws_status_callback:
-            self.ws_status_callback()
+            self.ws_status_callback(status)
 
     def token_saver(self, token):
         self.token = token
@@ -275,10 +275,10 @@ class SmartSystem:
             wst.start()
 
     def on_message(self, message):
+        data = json.loads(message)
+        self.logger.debug(f'Received {data["type"]} message')
         self.logger.debug("------- Beginning of message ---------")
         self.logger.debug(message)
-        data = json.loads(message)
-        self.logger.info(f'Received {data["type"]} message')
         if data["type"] == "LOCATION":
             self.logger.debug(">>>>>>>>>>>>> Found LOCATION")
             self.parse_location(data)
