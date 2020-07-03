@@ -31,7 +31,7 @@ class Mower(BaseDevice):
                 "type": "MOWER_CONTROL",
                 "attributes": {"command": "START_SECONDS_TO_OVERRIDE", "seconds": duration},
             }
-            self.smart_system.call_smart_system_service(self.id, data)
+            self.smart_system.call_smart_system_service(self.mower_id, data)
         else:
             self.smart_system.logger.error("The mower id is not defined")
 
@@ -42,7 +42,7 @@ class Mower(BaseDevice):
                 "type": "MOWER_CONTROL",
                 "attributes": {"command": "START_DONT_OVERRIDE", "seconds": duration},
             }
-            self.smart_system.call_smart_system_service(self.id, data)
+            self.smart_system.call_smart_system_service(self.mower_id, data)
         else:
             self.smart_system.logger.error("The mower id is not defined")
 
@@ -53,7 +53,7 @@ class Mower(BaseDevice):
                 "type": "MOWER_CONTROL",
                 "attributes": {"command": "PARK_UNTIL_NEXT_TASK"},
             }
-            self.smart_system.call_smart_system_service(self.id, data)
+            self.smart_system.call_smart_system_service(self.mower_id, data)
         else:
             self.smart_system.logger.error("The mower id is not defined")
 
@@ -64,6 +64,6 @@ class Mower(BaseDevice):
                 "type": "MOWER_CONTROL",
                 "attributes": {"command": "PARK_UNTIL_FURTHER_NOTICE"},
             }
-            self.smart_system.call_smart_system_service(self.id, data)
+            self.smart_system.call_smart_system_service(self.mower_id, data)
         else:
             self.smart_system.logger.error("The mower id is not defined")
