@@ -605,6 +605,10 @@ power_socket_fixture = {
                     "timestamp": "2019-10-10T23:51:54.667+0000",
                 },
                 "state": {"value": "OK", "timestamp": "2019-10-10T23:51:54.643+0000"},
+                "lastErrorCode": {
+                    "value": "No error",
+                    "timestamp": "2019-10-10T23:51:54.667+0000",
+                },
             },
         }
     ],

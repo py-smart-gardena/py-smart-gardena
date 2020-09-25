@@ -10,6 +10,7 @@ class PowerSocket(BaseDevice):
         self.type = "POWER_SOCKET"
         self.activity = "N/A"
         self.state = "N/A"
+        self.last_error_code = "N/A"
         self.setup_values_from_device_map(device_map)
 
     def update_device_specific_data(self, device_map):
@@ -17,6 +18,7 @@ class PowerSocket(BaseDevice):
             # Sensor has only one item
             self.set_attribute_value("activity", device_map, "activity")
             self.set_attribute_value("state", device_map, "state")
+            self.set_attribute_value("last_error_code", device_map, "lastErrorCode")
 
     def start_seconds_to_override(self, duration):
         data = {

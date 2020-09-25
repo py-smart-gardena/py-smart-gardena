@@ -22,3 +22,4 @@ class PowerSocketTest(unittest.TestCase):
         assert device.serial == "00017114"
         assert device.activity == "OFF"
         assert device.state == "OK"
+        assert device.last_error_code == "No error"
