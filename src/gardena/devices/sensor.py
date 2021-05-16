@@ -3,9 +3,9 @@ from .base_device import BaseDevice
 
 class Sensor(BaseDevice):
 
-    def __init__(self, smart_system, device_map):
+    def __init__(self, location, device_map):
         """Constructor for the sensor device."""
-        BaseDevice.__init__(self, smart_system, device_map["COMMON"][0]["id"])
+        BaseDevice.__init__(self, location, device_map["COMMON"][0]["id"])
         self.type = "SENSOR"
         self.ambient_temperature = "N/A"
         self.light_intensity = "N/A"

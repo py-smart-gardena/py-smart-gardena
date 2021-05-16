@@ -4,9 +4,9 @@ import uuid
 
 class PowerSocket(BaseDevice):
 
-    def __init__(self, smart_system, device_map):
+    def __init__(self, location, device_map):
         """Constructor for the Power socket device."""
-        BaseDevice.__init__(self, smart_system, device_map["COMMON"][0]["id"])
+        BaseDevice.__init__(self, location, device_map["COMMON"][0]["id"])
         self.type = "POWER_SOCKET"
         self.activity = "N/A"
         self.state = "N/A"
@@ -26,7 +26,7 @@ class PowerSocket(BaseDevice):
             "type": "POWER_SOCKET_CONTROL",
             "attributes": {"command": "START_SECONDS_TO_OVERRIDE", "seconds": duration},
         }
-        self.smart_system.call_smart_system_service(self.id, data)
+        self.location.smart_system.call_smart_system_service(self.id, data)
 
     def start_override(self):
         data = {
@@ -34,7 +34,7 @@ class PowerSocket(BaseDevice):
             "type": "POWER_SOCKET_CONTROL",
             "attributes": {"command": "START_OVERRIDE"},
         }
-        self.smart_system.call_smart_system_service(self.id, data)
+        self.location.smart_system.call_smart_system_service(self.id, data)
 
     def stop_until_next_task(self):
         data = {
@@ -42,7 +42,7 @@ class PowerSocket(BaseDevice):
             "type": "POWER_SOCKET_CONTROL",
             "attributes": {"command": "STOP_UNTIL_NEXT_TASK"},
         }
-        self.smart_system.call_smart_system_service(self.id, data)
+        self.location.smart_system.call_smart_system_service(self.id, data)
 
     def pause(self):
         data = {
@@ -50,7 +50,7 @@ class PowerSocket(BaseDevice):
             "type": "POWER_SOCKET_CONTROL",
             "attributes": {"command": "PAUSE"},
         }
-        self.smart_system.call_smart_system_service(self.id, data)
+        self.location.smart_system.call_smart_system_service(self.id, data)
 
     def unpause(self):
         data = {
@@ -58,4 +58,4 @@ class PowerSocket(BaseDevice):
             "type": "POWER_SOCKET_CONTROL",
             "attributes": {"command": "UNPAUSE"},
         }
-        self.smart_system.call_smart_system_service(self.id, data)
+        self.location.smart_system.call_smart_system_service(self.id, data)
