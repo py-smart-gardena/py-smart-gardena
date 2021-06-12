@@ -4,9 +4,9 @@ import uuid
 
 class SmartIrrigationControl(BaseDevice):
 
-    def __init__(self, smart_system, device_map):
+    def __init__(self, location, device_map):
         """Constructor for the smart irrigation control device."""
-        BaseDevice.__init__(self, smart_system, device_map["COMMON"][0]["id"])
+        BaseDevice.__init__(self, location, device_map["COMMON"][0]["id"])
         self.type = "SMART_IRRIGATION_CONTROL"
         self.valve_set_id = "N/A"
         self.valve_set_state = "N/A"
@@ -45,7 +45,7 @@ class SmartIrrigationControl(BaseDevice):
             "type": "VALVE_CONTROL",
             "attributes": {"command": "START_SECONDS_TO_OVERRIDE", "seconds": duration},
         }
-        self.smart_system.call_smart_system_service(valve_id, data)
+        self.location.smart_system.call_smart_system_service(valve_id, data)
 
     def stop_until_next_task(self, valve_id):
         data = {
@@ -53,7 +53,7 @@ class SmartIrrigationControl(BaseDevice):
             "type": "VALVE_CONTROL",
             "attributes": {"command": "STOP_UNTIL_NEXT_TASK"},
         }
-        self.smart_system.call_smart_system_service(valve_id, data)
+        self.location.smart_system.call_smart_system_service(valve_id, data)
 
     def pause(self, valve_id):
         data = {
@@ -61,7 +61,7 @@ class SmartIrrigationControl(BaseDevice):
             "type": "VALVE_CONTROL",
             "attributes": {"command": "PAUSE"},
         }
-        self.smart_system.call_smart_system_service(valve_id, data)
+        self.location.smart_system.call_smart_system_service(valve_id, data)
 
     def unpause(self, valve_id):
         data = {
@@ -69,4 +69,4 @@ class SmartIrrigationControl(BaseDevice):
             "type": "VALVE_CONTROL",
             "attributes": {"command": "UNPAUSE"},
         }
-        self.smart_system.call_smart_system_service(valve_id, data)
+        self.location.smart_system.call_smart_system_service(valve_id, data)

@@ -236,7 +236,7 @@ class SmartSystem:
                             devices_smart_system[real_id][device["type"]] = []
                         devices_smart_system[real_id][device["type"]].append(device)
                 for parsed_device in devices_smart_system.values():
-                    device_obj = DeviceFactory.build(self, parsed_device)
+                    device_obj = DeviceFactory.build(location, parsed_device)
                     if device_obj is not None:
                         location.add_device(device_obj)
 

@@ -4,9 +4,9 @@ import uuid
 
 class Mower(BaseDevice):
 
-    def __init__(self, smart_system, device_map):
+    def __init__(self, location, device_map):
         """Constructor for the mower device."""
-        BaseDevice.__init__(self, smart_system, device_map["COMMON"][0]["id"])
+        BaseDevice.__init__(self, location, device_map["COMMON"][0]["id"])
         self.type = "MOWER"
         self.activity = "N/A"
         self.operating_hours = "N/A"
@@ -31,9 +31,9 @@ class Mower(BaseDevice):
                 "type": "MOWER_CONTROL",
                 "attributes": {"command": "START_SECONDS_TO_OVERRIDE", "seconds": duration},
             }
-            self.smart_system.call_smart_system_service(self.mower_id, data)
+            self.location.smart_system.call_smart_system_service(self.mower_id, data)
         else:
-            self.smart_system.logger.error("The mower id is not defined")
+            self.location.smart_system.logger.error("The mower id is not defined")
 
     def start_dont_override(self, duration):
         if self.mower_id is not None:
@@ -42,9 +42,9 @@ class Mower(BaseDevice):
                 "type": "MOWER_CONTROL",
                 "attributes": {"command": "START_DONT_OVERRIDE", "seconds": duration},
             }
-            self.smart_system.call_smart_system_service(self.mower_id, data)
+            self.location.smart_system.call_smart_system_service(self.mower_id, data)
         else:
-            self.smart_system.logger.error("The mower id is not defined")
+            self.location.smart_system.logger.error("The mower id is not defined")
 
     def park_until_next_task(self):
         if self.mower_id is not None:
@@ -53,9 +53,9 @@ class Mower(BaseDevice):
                 "type": "MOWER_CONTROL",
                 "attributes": {"command": "PARK_UNTIL_NEXT_TASK"},
             }
-            self.smart_system.call_smart_system_service(self.mower_id, data)
+            self.location.smart_system.call_smart_system_service(self.mower_id, data)
         else:
-            self.smart_system.logger.error("The mower id is not defined")
+            self.location.smart_system.logger.error("The mower id is not defined")
 
     def park_until_further_notice(self):
         if self.mower_id is not None:
@@ -64,6 +64,6 @@ class Mower(BaseDevice):
                 "type": "MOWER_CONTROL",
                 "attributes": {"command": "PARK_UNTIL_FURTHER_NOTICE"},
             }
-            self.smart_system.call_smart_system_service(self.mower_id, data)
+            self.location.smart_system.call_smart_system_service(self.mower_id, data)
         else:
-            self.smart_system.logger.error("The mower id is not defined")
+            self.location.smart_system.logger.error("The mower id is not defined")
