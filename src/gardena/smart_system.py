@@ -227,6 +227,9 @@ class SmartSystem:
                 self.logger.error("No device found....")
             else:
                 devices_smart_system = {}
+                self.logger.debug(f'Received devices in  message')
+                self.logger.debug("------- Beginning of message ---------")
+                self.logger.debug(response_data["included"])
                 for device in response_data["included"]:
                     real_id = device["id"].split(":")[0]
                     if real_id not in devices_smart_system:
