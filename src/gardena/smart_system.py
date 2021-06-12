@@ -23,17 +23,17 @@ class Client:
         self.location = location
         self.should_stop = False
 
-    def on_message(self, message):
+    def on_message(self, ws, message):
         self.smart_system.on_message(message)
 
-    def on_error(self, error):
+    def on_error(self, ws, error):
         self.logger.error(f"error : {error}")
         self.smart_system.set_ws_status(False)
 
     def is_connected(self):
         return self.live
 
-    def on_close(self):
+    def on_close(self, ws):
         self.live = False
         self.logger.info("Connection close to gardena API")
         self.smart_system.set_ws_status(False)
@@ -41,7 +41,7 @@ class Client:
             self.logger.info("Restarting websocket")
             self.smart_system.start_ws(self.location)
 
-    def on_open(self):
+    def on_open(self, ws):
         self.logger.info("Connected to Gardena API")
         self.live = True
         self.smart_system.set_ws_status(True)
