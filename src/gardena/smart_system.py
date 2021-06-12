@@ -169,7 +169,7 @@ class SmartSystem:
 
             self.logger.error(f"{response.status_code} : {msg}")
 
-            if response.status_code in (401,403):
+            if response.status_code in (401,403, 429):
                 raise Exception(msg)
 
             return True
