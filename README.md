@@ -12,6 +12,8 @@
 [![PEP8](https://img.shields.io/badge/code%20style-pep8-orange.svg)](https://www.python.org/dev/peps/pep-0008/)
 [![Downloads](https://pepy.tech/badge/py-smart-gardena)](https://pepy.tech/project/py-smart-gardena)
 
+Feel free to join the discord server ! : [![Discord](https://img.shields.io/discord/591914197219016707.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/59sFjykS)
+
 ## Description
 
 The **py-smart-gardena** library aims to provide python way to communicate with gardena smart systems and
