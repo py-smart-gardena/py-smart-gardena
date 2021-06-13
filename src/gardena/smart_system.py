@@ -231,7 +231,7 @@ class SmartSystem:
                 elif msg.type == aiohttp.WSMsgType.ERROR:
                     self.set_ws_status(False)
                     if not self.should_stop:
-                        self.start_ws()
+                        self.start_ws(location)
                     break
 
     def on_message(self, message):
