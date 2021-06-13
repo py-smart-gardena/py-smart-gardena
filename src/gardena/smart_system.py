@@ -2,55 +2,14 @@ import json
 import logging
 from contextlib import contextmanager
 
+import aiohttp
 from oauthlib.oauth2 import LegacyApplicationClient
 from requests_oauthlib import OAuth2Session
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
-import websocket
-from threading import Thread
-
 from gardena.location import Location
 from gardena.devices.device_factory import DeviceFactory
-
-
-class Client:
-    def __init__(self, smart_system=None, level=logging.WARN, location=None):
-        self.smart_system = smart_system
-        self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(level)
-        self.live = False
-        self.location = location
-        self.should_stop = False
-
-    def on_message(self, ws, message):
-        self.smart_system.on_message(message)
-
-    def on_error(self, ws, error):
-        self.logger.error(f"error : {error}")
-        self.smart_system.set_ws_status(False)
-
-    def is_connected(self):
-        return self.live
-
-    def on_close(self, ws):
-        self.live = False
-        self.logger.info("Connection close to gardena API")
-        self.smart_system.set_ws_status(False)
-        if not self.should_stop:
-            self.logger.info("Restarting websocket")
-            self.smart_system.start_ws(self.location)
-
-    def on_open(self, ws):
-        self.logger.info("Connected to Gardena API")
-        self.live = True
-        self.smart_system.set_ws_status(True)
-
-        # def run(*args):
-        #     while self.live:
-        #         time.sleep(1)
-        #
-        # Thread(target=run).start()
 
 
 class SmartSystem:
@@ -74,7 +33,6 @@ class SmartSystem:
         self.client_id = client_id
         self.locations = {}
         self.level = level
-        self.client = None
         self.oauth_session = None
         self.ws = None
         self.is_ws_connected = False
@@ -90,6 +48,7 @@ class SmartSystem:
         ]
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(level)
+        self.should_stop = False
 
     def create_header(self, include_json=False):
         headers = {"Authorization-Provider": "husqvarna", "X-Api-Key": self.client_id}
@@ -118,8 +77,7 @@ class SmartSystem:
         )
 
     def quit(self):
-        if self.client:
-            self.client.should_stop = True
+        self.should_stop = True
         if self.ws:
             self.ws.close()
         if self.oauth_session:
@@ -243,7 +201,7 @@ class SmartSystem:
                     if device_obj is not None:
                         location.add_device(device_obj)
 
-    def start_ws(self, location):
+    async def start_ws(self, location):
         args = {
             "data": {
                 "type": "WEBSOCKET",
@@ -260,22 +218,21 @@ class SmartSystem:
             r.raise_for_status()
             response = r.json()
             ws_url = response["data"]["attributes"]["url"]
-            if self.client is None:
-                self.client = Client(self, level=self.level, location=location)
-            if self.level == logging.DEBUG:
-                websocket.enableTrace(True)
-            self.ws = websocket.WebSocketApp(
-                ws_url,
-                on_message=self.client.on_message,
-                on_error=self.client.on_error,
-                on_close=self.client.on_close,
-                on_open=self.client.on_open,
-            )
-            wst = Thread(
-                target=self.ws.run_forever, kwargs={"ping_interval": 60, "ping_timeout": 5}
-            )
-            wst.daemon = True
-            wst.start()
+            session = aiohttp.ClientSession()
+            self.ws = await session.ws_connect(ws_url)
+            async for msg in self.ws:
+                if msg.type == aiohttp.WSMsgType.TEXT:
+                    if msg.data == 'close':
+                        self.set_ws_status(False)
+                        await self.ws.close()
+                        break
+                    else:
+                        self.on_message(msg.data)
+                elif msg.type == aiohttp.WSMsgType.ERROR:
+                    self.set_ws_status(False)
+                    if not self.should_stop:
+                        self.start_ws(location)
+                    break
 
     def on_message(self, message):
         data = json.loads(message)
