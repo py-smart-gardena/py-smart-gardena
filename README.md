@@ -16,7 +16,7 @@ Feel free to join the discord server : [![Support Server](https://img.shields.io
 
 ## Description
 
-The **py-smart-gardena** library aims to provide python way to communicate with gardena smart systems and
+The **py-smart-gardena** library aims to provide python way to integrate gardena smart systems and
 all gardena smart equipment. Configuration of the equipement and inclusion has still
  to be done using the Gardena application or website.
 
