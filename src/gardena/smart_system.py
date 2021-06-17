@@ -201,7 +201,7 @@ class SmartSystem:
                     if device_obj is not None:
                         location.add_device(device_obj)
 
-    async def start_ws(self, location):
+    async def get_ws_url(self, location):
         args = {
             "data": {
                 "type": "WEBSOCKET",
@@ -218,21 +218,25 @@ class SmartSystem:
             r.raise_for_status()
             response = r.json()
             ws_url = response["data"]["attributes"]["url"]
-            session = aiohttp.ClientSession()
-            self.ws = await session.ws_connect(ws_url)
-            async for msg in self.ws:
-                if msg.type == aiohttp.WSMsgType.TEXT:
-                    if msg.data == 'close':
-                        self.set_ws_status(False)
-                        await self.ws.close()
-                        break
-                    else:
-                        self.on_message(msg.data)
-                elif msg.type == aiohttp.WSMsgType.ERROR:
+            return ws_url
+
+    async def start_ws(self, location):
+        ws_url = await self.get_ws_url(location)
+        session = aiohttp.ClientSession()
+        self.ws = await session.ws_connect(ws_url)
+        async for msg in self.ws:
+            if msg.type == aiohttp.WSMsgType.TEXT:
+                if msg.data == 'close':
                     self.set_ws_status(False)
-                    if not self.should_stop:
-                        self.start_ws(location)
+                    await self.ws.close()
                     break
+                else:
+                    self.on_message(msg.data)
+            elif msg.type == aiohttp.WSMsgType.ERROR:
+                self.set_ws_status(False)
+                if not self.should_stop:
+                    self.start_ws(location)
+                break
 
     def on_message(self, message):
         data = json.loads(message)
