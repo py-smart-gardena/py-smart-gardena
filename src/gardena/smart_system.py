@@ -1,6 +1,7 @@
 import json
 import logging
 from contextlib import contextmanager
+from json.decoder import JSONDecodeError
 
 from oauthlib.oauth2 import LegacyApplicationClient
 from requests_oauthlib import OAuth2Session
@@ -10,6 +11,7 @@ from requests.packages.urllib3.util.retry import Retry
 import websocket
 from threading import Thread
 
+from gardena.exceptions.authentication_exception import AuthenticationException
 from gardena.location import Location
 from gardena.devices.device_factory import DeviceFactory
 
@@ -156,21 +158,27 @@ class SmartSystem:
 
     def __response_has_errors(self, response):
         if response.status_code not in (200, 202):
-            r = response.json()
-            if 'errors' in r:
-                msg = "{r['errors'][0]['title']} - {r['errors'][0]['detail']}"
-            elif 'message' in r:
-                msg = f"{r['message']}"
+            try:
+                r = response.json()
+                if 'errors' in r:
+                    msg = "{r['errors'][0]['title']} - {r['errors'][0]['detail']}"
+                elif 'message' in r:
+                    msg = f"{r['message']}"
 
-                if response.status_code == 403:
-                    msg = f"{msg} (hint: did you 'Connect an API' in your Application?)"
-            else:
-                msg = f"{r}"
+                    if response.status_code == 403:
+                        msg = f"{msg} (hint: did you 'Connect an API' in your Application?)"
+                else:
+                    msg = f"{r}"
+
+            except JSONDecodeError:
+                msg = response.content
 
             self.logger.error(f"{response.status_code} : {msg}")
 
-            if response.status_code in (401,403, 429):
+            if response.status_code in (403, 429):
                 raise Exception(msg)
+            elif response.status_code == 401:
+                raise AuthenticationException(msg)
 
             return True
         return False
