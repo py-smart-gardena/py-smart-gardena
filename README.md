@@ -33,11 +33,9 @@ Here are the links if you want to show your support :
 
 You can also send me crypto using one of the following addresses :
 
-Bitcoin (BTC) : 15k9HW17MU6JSTZZkbQ3YNxEtYF5yhBgNR
+Bitcoin (BTC) : bc1qyr4f9f8xuq4uvk5c8qdq9zxanz99xpl5asja8m
 
-Ethereum (ETH) : 0x67afa7dc3882821e21f68e5ccd98f5c74b24295f
-
-MONERO (XMR) : 4AyVQ9HEuphJiHHgnA7BwiPSAwgodzGtqGnyD7qbxqGta3UZJk7JNcx4VMaSmL6Sn5W8b14tyPzXmQAjZGK9jc89PWpYWxy
+Ethereum (ETH) : 0xE363E94F6a42881580A9Df9E52Ab86c987dCFDc7
 
 Thx for your support !
 
