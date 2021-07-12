@@ -35,7 +35,7 @@ class Client:
     def is_connected(self):
         return self.live
 
-    def on_close(self, ws):
+    def on_close(self, ws, close_status_code, close_msg):
         self.live = False
         self.logger.info("Connection close to gardena API")
         self.smart_system.set_ws_status(False)
