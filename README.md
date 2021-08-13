@@ -126,6 +126,16 @@ for location in smart_system.locations.values():
 
 Devices are automatically retrieved the first time from the API, and then the websocket is used to get updates. They are stored in each locations. Depending on the function type, you can have diffrents fields.
 
+#### List all devices
+```python
+    for device in smart_system.locations[location.id].find_all_device():
+        #print(dir(device))
+        print('')
+        print(f"name : {device.name}")
+        print(f"id :   {device.id}")
+        print(f"type : {device.type}")
+```
+
 #### Mowers
 
 ```python

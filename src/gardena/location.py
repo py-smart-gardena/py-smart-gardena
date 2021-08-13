@@ -22,6 +22,9 @@ class Location(BaseGardenaClass):
     def find_device_by_type(self, device_type):
         devices = []
         for device in self.devices.values():
-            if device.type == device_type:
+            if device_type.upper() == 'ANY' or device.type == device_type:
                 devices.append(device)
         return devices
+
+    def find_all_device(self):
+        return self.find_device_by_type('ANY')
