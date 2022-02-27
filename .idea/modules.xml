@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../hass-gardena-smart-system/.idea/hass-gardena-smart-system.iml" filepath="$PROJECT_DIR$/../hass-gardena-smart-system/.idea/hass-gardena-smart-system.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/py-smart-gardena.iml" filepath="$PROJECT_DIR$/.idea/py-smart-gardena.iml" />
+    </modules>
+  </component>
+</project>

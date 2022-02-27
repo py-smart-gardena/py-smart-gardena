@@ -1,0 +1,38 @@
+[project]
+name = "py-smart-gardena"
+version = "1.0.0"
+description = ""
+authors = [
+    {name = "grm", email = "grm.klein@gmail.com"},
+]
+dependencies = [
+    "pytest-cov>=3.0.0",
+]
+requires-python = ">=3.10"
+license = {text = "MIT"}
+
+[project.urls]
+homepage = ""
+
+[tool]
+[tool.pdm]
+package-dir = "src"
+
+[tool.pdm.dev-dependencies]
+lint = [
+    "flake8",
+    "black"
+]
+test = ["pytest", "pytest-cov", "pytest-mock"]
+doc = ["mkdocs"]
+
+[tool.pytest.ini_options]
+addopts = "--cov=src/gardena -ra -v"
+#addopts = "--import-mode=append -v"
+testpaths = [
+    "tests",
+]
+
+[build-system]
+requires = ["pdm-pep517"]
+build-backend = "pdm.pep517.api"
