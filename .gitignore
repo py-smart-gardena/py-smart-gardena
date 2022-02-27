@@ -116,13 +116,14 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+.envrc
 .venv
 env/
 venv/
 ENV/
 env.bak/
 venv.bak/
+.env
 
 # Spyder project settings
 .spyderproject
@@ -230,3 +231,10 @@ fabric.properties
 
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
+.idea/dataSources.xml
+.mutmut-cache
+/Pipfile
+src/gardena/main.py
+
+
+.env

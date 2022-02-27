@@ -1,0 +1,1425 @@
+{
+  "data": {
+    "id": "2188c99e-df0d-4bb9-8273-71415fa70569",
+    "type": "LOCATION",
+    "relationships": {
+      "devices": {
+        "data": [
+          {
+            "id": "06a96a33-e3a3-4094-9405-80b00b17cacb",
+            "type": "DEVICE"
+          },
+          {
+            "id": "14ff41a6-21eb-454f-b3ad-51f0958c0365",
+            "type": "DEVICE"
+          },
+          {
+            "id": "31c6c096-bf0e-4c1b-a8b6-69b21c79828a",
+            "type": "DEVICE"
+          },
+          {
+            "id": "3722586d-5c48-4473-a968-472419f67a81",
+            "type": "DEVICE"
+          },
+          {
+            "id": "4ad7d828-b19f-47d5-b7d2-15eea0fb8516",
+            "type": "DEVICE"
+          },
+          {
+            "id": "52397b9f-102d-4fd6-9434-f794c768fbcf",
+            "type": "DEVICE"
+          },
+          {
+            "id": "5e0e485f-43e0-4bd1-b857-50251278ff72",
+            "type": "DEVICE"
+          },
+          {
+            "id": "7943293a-f1c3-4b0b-bbc1-9e95cb108724",
+            "type": "DEVICE"
+          },
+          {
+            "id": "9ed4ebd1-b307-46e5-b345-425dbfb71c6d",
+            "type": "DEVICE"
+          },
+          {
+            "id": "cdba94f6-0a52-40c9-a896-7add04c11228",
+            "type": "DEVICE"
+          },
+          {
+            "id": "d7f14b8b-7dcd-4e66-a070-77753adfffae",
+            "type": "DEVICE"
+          },
+          {
+            "id": "f11fd50a-de1c-4ad0-bae3-7aec8eb782cc",
+            "type": "DEVICE"
+          },
+          {
+            "id": "f4639c75-a4ed-4423-bb81-f6c27521bfd8",
+            "type": "DEVICE"
+          },
+          {
+            "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd",
+            "type": "DEVICE"
+          }
+        ]
+      }
+    },
+    "attributes": {
+      "name": "GARDENA smart Garden"
+    }
+  },
+  "included": [
+    {
+      "id": "06a96a33-e3a3-4094-9405-80b00b17cacb",
+      "type": "DEVICE",
+      "relationships": {
+        "location": {
+          "data": {
+            "id": "2188c99e-df0d-4bb9-8273-71415fa70569",
+            "type": "LOCATION"
+          }
+        },
+        "services": {
+          "data": [
+            {
+              "id": "06a96a33-e3a3-4094-9405-80b00b17cacb",
+              "type": "POWER_SOCKET"
+            },
+            {
+              "id": "06a96a33-e3a3-4094-9405-80b00b17cacb",
+              "type": "COMMON"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "14ff41a6-21eb-454f-b3ad-51f0958c0365",
+      "type": "DEVICE",
+      "relationships": {
+        "location": {
+          "data": {
+            "id": "2188c99e-df0d-4bb9-8273-71415fa70569",
+            "type": "LOCATION"
+          }
+        },
+        "services": {
+          "data": [
+            {
+              "id": "14ff41a6-21eb-454f-b3ad-51f0958c0365:wc",
+              "type": "VALVE_SET"
+            },
+            {
+              "id": "14ff41a6-21eb-454f-b3ad-51f0958c0365",
+              "type": "VALVE"
+            },
+            {
+              "id": "14ff41a6-21eb-454f-b3ad-51f0958c0365",
+              "type": "COMMON"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "31c6c096-bf0e-4c1b-a8b6-69b21c79828a",
+      "type": "DEVICE",
+      "relationships": {
+        "location": {
+          "data": {
+            "id": "2188c99e-df0d-4bb9-8273-71415fa70569",
+            "type": "LOCATION"
+          }
+        },
+        "services": {
+          "data": [
+            {
+              "id": "31c6c096-bf0e-4c1b-a8b6-69b21c79828a",
+              "type": "POWER_SOCKET"
+            },
+            {
+              "id": "31c6c096-bf0e-4c1b-a8b6-69b21c79828a",
+              "type": "COMMON"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "3722586d-5c48-4473-a968-472419f67a81",
+      "type": "DEVICE",
+      "relationships": {
+        "location": {
+          "data": {
+            "id": "2188c99e-df0d-4bb9-8273-71415fa70569",
+            "type": "LOCATION"
+          }
+        },
+        "services": {
+          "data": [
+            {
+              "id": "3722586d-5c48-4473-a968-472419f67a81",
+              "type": "SENSOR"
+            },
+            {
+              "id": "3722586d-5c48-4473-a968-472419f67a81",
+              "type": "COMMON"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "4ad7d828-b19f-47d5-b7d2-15eea0fb8516",
+      "type": "DEVICE",
+      "relationships": {
+        "location": {
+          "data": {
+            "id": "2188c99e-df0d-4bb9-8273-71415fa70569",
+            "type": "LOCATION"
+          }
+        },
+        "services": {
+          "data": [
+            {
+              "id": "4ad7d828-b19f-47d5-b7d2-15eea0fb8516",
+              "type": "MOWER"
+            },
+            {
+              "id": "4ad7d828-b19f-47d5-b7d2-15eea0fb8516",
+              "type": "COMMON"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "52397b9f-102d-4fd6-9434-f794c768fbcf",
+      "type": "DEVICE",
+      "relationships": {
+        "location": {
+          "data": {
+            "id": "2188c99e-df0d-4bb9-8273-71415fa70569",
+            "type": "LOCATION"
+          }
+        },
+        "services": {
+          "data": [
+            {
+              "id": "52397b9f-102d-4fd6-9434-f794c768fbcf",
+              "type": "POWER_SOCKET"
+            },
+            {
+              "id": "52397b9f-102d-4fd6-9434-f794c768fbcf",
+              "type": "COMMON"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "5e0e485f-43e0-4bd1-b857-50251278ff72",
+      "type": "DEVICE",
+      "relationships": {
+        "location": {
+          "data": {
+            "id": "2188c99e-df0d-4bb9-8273-71415fa70569",
+            "type": "LOCATION"
+          }
+        },
+        "services": {
+          "data": [
+            {
+              "id": "5e0e485f-43e0-4bd1-b857-50251278ff72",
+              "type": "SENSOR"
+            },
+            {
+              "id": "5e0e485f-43e0-4bd1-b857-50251278ff72",
+              "type": "COMMON"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "7943293a-f1c3-4b0b-bbc1-9e95cb108724",
+      "type": "DEVICE",
+      "relationships": {
+        "location": {
+          "data": {
+            "id": "2188c99e-df0d-4bb9-8273-71415fa70569",
+            "type": "LOCATION"
+          }
+        },
+        "services": {
+          "data": [
+            {
+              "id": "7943293a-f1c3-4b0b-bbc1-9e95cb108724",
+              "type": "POWER_SOCKET"
+            },
+            {
+              "id": "7943293a-f1c3-4b0b-bbc1-9e95cb108724",
+              "type": "COMMON"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "9ed4ebd1-b307-46e5-b345-425dbfb71c6d",
+      "type": "DEVICE",
+      "relationships": {
+        "location": {
+          "data": {
+            "id": "2188c99e-df0d-4bb9-8273-71415fa70569",
+            "type": "LOCATION"
+          }
+        },
+        "services": {
+          "data": [
+            {
+              "id": "9ed4ebd1-b307-46e5-b345-425dbfb71c6d",
+              "type": "POWER_SOCKET"
+            },
+            {
+              "id": "9ed4ebd1-b307-46e5-b345-425dbfb71c6d",
+              "type": "COMMON"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "cdba94f6-0a52-40c9-a896-7add04c11228",
+      "type": "DEVICE",
+      "relationships": {
+        "location": {
+          "data": {
+            "id": "2188c99e-df0d-4bb9-8273-71415fa70569",
+            "type": "LOCATION"
+          }
+        },
+        "services": {
+          "data": [
+            {
+              "id": "cdba94f6-0a52-40c9-a896-7add04c11228",
+              "type": "POWER_SOCKET"
+            },
+            {
+              "id": "cdba94f6-0a52-40c9-a896-7add04c11228",
+              "type": "COMMON"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "d7f14b8b-7dcd-4e66-a070-77753adfffae",
+      "type": "DEVICE",
+      "relationships": {
+        "location": {
+          "data": {
+            "id": "2188c99e-df0d-4bb9-8273-71415fa70569",
+            "type": "LOCATION"
+          }
+        },
+        "services": {
+          "data": [
+            {
+              "id": "d7f14b8b-7dcd-4e66-a070-77753adfffae:wc",
+              "type": "VALVE_SET"
+            },
+            {
+              "id": "d7f14b8b-7dcd-4e66-a070-77753adfffae",
+              "type": "VALVE"
+            },
+            {
+              "id": "d7f14b8b-7dcd-4e66-a070-77753adfffae",
+              "type": "COMMON"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "f11fd50a-de1c-4ad0-bae3-7aec8eb782cc",
+      "type": "DEVICE",
+      "relationships": {
+        "location": {
+          "data": {
+            "id": "2188c99e-df0d-4bb9-8273-71415fa70569",
+            "type": "LOCATION"
+          }
+        },
+        "services": {
+          "data": [
+            {
+              "id": "f11fd50a-de1c-4ad0-bae3-7aec8eb782cc",
+              "type": "POWER_SOCKET"
+            },
+            {
+              "id": "f11fd50a-de1c-4ad0-bae3-7aec8eb782cc",
+              "type": "COMMON"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "f4639c75-a4ed-4423-bb81-f6c27521bfd8",
+      "type": "DEVICE",
+      "relationships": {
+        "location": {
+          "data": {
+            "id": "2188c99e-df0d-4bb9-8273-71415fa70569",
+            "type": "LOCATION"
+          }
+        },
+        "services": {
+          "data": [
+            {
+              "id": "f4639c75-a4ed-4423-bb81-f6c27521bfd8",
+              "type": "POWER_SOCKET"
+            },
+            {
+              "id": "f4639c75-a4ed-4423-bb81-f6c27521bfd8",
+              "type": "COMMON"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd",
+      "type": "DEVICE",
+      "relationships": {
+        "location": {
+          "data": {
+            "id": "2188c99e-df0d-4bb9-8273-71415fa70569",
+            "type": "LOCATION"
+          }
+        },
+        "services": {
+          "data": [
+            {
+              "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd",
+              "type": "VALVE_SET"
+            },
+            {
+              "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd:1",
+              "type": "VALVE"
+            },
+            {
+              "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd:2",
+              "type": "VALVE"
+            },
+            {
+              "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd:3",
+              "type": "VALVE"
+            },
+            {
+              "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd:4",
+              "type": "VALVE"
+            },
+            {
+              "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd:5",
+              "type": "VALVE"
+            },
+            {
+              "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd:6",
+              "type": "VALVE"
+            },
+            {
+              "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd",
+              "type": "COMMON"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "06a96a33-e3a3-4094-9405-80b00b17cacb",
+      "type": "POWER_SOCKET",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "06a96a33-e3a3-4094-9405-80b00b17cacb",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "state": {
+          "value": "UNAVAILABLE"
+        }
+      }
+    },
+    {
+      "id": "06a96a33-e3a3-4094-9405-80b00b17cacb",
+      "type": "COMMON",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "06a96a33-e3a3-4094-9405-80b00b17cacb",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "name": {
+          "value": "Power Socket 3"
+        },
+        "batteryState": {
+          "value": "UNKNOWN"
+        },
+        "serial": {
+          "value": "00017114"
+        },
+        "modelType": {
+          "value": "GARDENA smart Power"
+        },
+        "rfLinkState": {
+          "value": "OFFLINE"
+        }
+      }
+    },
+    {
+      "id": "14ff41a6-21eb-454f-b3ad-51f0958c0365:wc",
+      "type": "VALVE_SET",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "14ff41a6-21eb-454f-b3ad-51f0958c0365",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "state": {
+          "value": "OK",
+          "timestamp": "2022-04-18T12:32:23.546+00:00"
+        },
+        "lastErrorCode": {
+          "value": "NO_MESSAGE",
+          "timestamp": "2022-04-18T12:32:23.546+00:00"
+        }
+      }
+    },
+    {
+      "id": "14ff41a6-21eb-454f-b3ad-51f0958c0365",
+      "type": "VALVE",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "14ff41a6-21eb-454f-b3ad-51f0958c0365",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "name": {
+          "value": "Water Control - fruitiers"
+        },
+        "activity": {
+          "value": "CLOSED",
+          "timestamp": "2022-04-22T19:21:59.841+00:00"
+        },
+        "state": {
+          "value": "OK",
+          "timestamp": "2022-04-18T12:32:23.188+00:00"
+        },
+        "lastErrorCode": {
+          "value": "NO_MESSAGE",
+          "timestamp": "2022-04-18T12:32:23.188+00:00"
+        }
+      }
+    },
+    {
+      "id": "14ff41a6-21eb-454f-b3ad-51f0958c0365",
+      "type": "COMMON",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "14ff41a6-21eb-454f-b3ad-51f0958c0365",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "name": {
+          "value": "Water Control - fruitiers"
+        },
+        "batteryLevel": {
+          "value": 81,
+          "timestamp": "2022-04-18T12:32:28.992+00:00"
+        },
+        "batteryState": {
+          "value": "OK",
+          "timestamp": "2022-04-18T12:32:28.992+00:00"
+        },
+        "rfLinkLevel": {
+          "value": 70,
+          "timestamp": "2022-04-22T22:00:42.291+00:00"
+        },
+        "serial": {
+          "value": "00126208"
+        },
+        "modelType": {
+          "value": "GARDENA smart Water Control"
+        },
+        "rfLinkState": {
+          "value": "ONLINE"
+        }
+      }
+    },
+    {
+      "id": "31c6c096-bf0e-4c1b-a8b6-69b21c79828a",
+      "type": "POWER_SOCKET",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "31c6c096-bf0e-4c1b-a8b6-69b21c79828a",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "activity": {
+          "value": "OFF",
+          "timestamp": "2022-04-18T19:34:03.376+00:00"
+        },
+        "state": {
+          "value": "OK",
+          "timestamp": "2022-04-18T19:34:03.258+00:00"
+        }
+      }
+    },
+    {
+      "id": "31c6c096-bf0e-4c1b-a8b6-69b21c79828a",
+      "type": "COMMON",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "31c6c096-bf0e-4c1b-a8b6-69b21c79828a",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "name": {
+          "value": "Power Socket 1"
+        },
+        "batteryState": {
+          "value": "NO_BATTERY"
+        },
+        "rfLinkLevel": {
+          "value": 90,
+          "timestamp": "2022-04-22T23:19:32.346+00:00"
+        },
+        "serial": {
+          "value": "00022372"
+        },
+        "modelType": {
+          "value": "GARDENA smart Power"
+        },
+        "rfLinkState": {
+          "value": "ONLINE"
+        }
+      }
+    },
+    {
+      "id": "3722586d-5c48-4473-a968-472419f67a81",
+      "type": "SENSOR",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "3722586d-5c48-4473-a968-472419f67a81",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "soilHumidity": {
+          "value": 45,
+          "timestamp": "2022-04-22T22:41:15.079+00:00"
+        },
+        "soilTemperature": {
+          "value": 15,
+          "timestamp": "2022-04-22T22:41:15.021+00:00"
+        },
+        "ambientTemperature": {
+          "value": 9,
+          "timestamp": "2022-04-22T22:49:14.195+00:00"
+        },
+        "lightIntensity": {
+          "value": 0,
+          "timestamp": "2022-04-22T22:49:14.241+00:00"
+        }
+      }
+    },
+    {
+      "id": "3722586d-5c48-4473-a968-472419f67a81",
+      "type": "COMMON",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "3722586d-5c48-4473-a968-472419f67a81",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "name": {
+          "value": "Sensor potager"
+        },
+        "batteryLevel": {
+          "value": 5,
+          "timestamp": "2022-04-10T03:56:17.579+00:00"
+        },
+        "batteryState": {
+          "value": "REPLACE_NOW",
+          "timestamp": "2022-04-10T03:56:17.579+00:00"
+        },
+        "rfLinkLevel": {
+          "value": 80,
+          "timestamp": "2022-03-19T05:25:18.283+00:00"
+        },
+        "serial": {
+          "value": "00028462"
+        },
+        "modelType": {
+          "value": "GARDENA smart Sensor"
+        },
+        "rfLinkState": {
+          "value": "ONLINE"
+        }
+      }
+    },
+    {
+      "id": "4ad7d828-b19f-47d5-b7d2-15eea0fb8516",
+      "type": "MOWER",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "4ad7d828-b19f-47d5-b7d2-15eea0fb8516",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "state": {
+          "value": "OK",
+          "timestamp": "2022-04-22T21:33:21.170+00:00"
+        },
+        "activity": {
+          "value": "PARKED_PARK_SELECTED",
+          "timestamp": "2022-04-22T21:33:21.170+00:00"
+        },
+        "operatingHours": {
+          "value": 341
+        }
+      }
+    },
+    {
+      "id": "4ad7d828-b19f-47d5-b7d2-15eea0fb8516",
+      "type": "COMMON",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "4ad7d828-b19f-47d5-b7d2-15eea0fb8516",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "name": {
+          "value": "SILENO"
+        },
+        "batteryLevel": {
+          "value": 100,
+          "timestamp": "2022-04-22T22:18:45.515+00:00"
+        },
+        "batteryState": {
+          "value": "OK",
+          "timestamp": "2022-04-22T21:33:21.170+00:00"
+        },
+        "rfLinkLevel": {
+          "value": 100,
+          "timestamp": "2022-04-22T23:15:52.677+00:00"
+        },
+        "serial": {
+          "value": "123456789"
+        },
+        "modelType": {
+          "value": "GARDENA smart Mower"
+        },
+        "rfLinkState": {
+          "value": "ONLINE"
+        }
+      }
+    },
+    {
+      "id": "52397b9f-102d-4fd6-9434-f794c768fbcf",
+      "type": "POWER_SOCKET",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "52397b9f-102d-4fd6-9434-f794c768fbcf",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "state": {
+          "value": "UNAVAILABLE"
+        }
+      }
+    },
+    {
+      "id": "52397b9f-102d-4fd6-9434-f794c768fbcf",
+      "type": "COMMON",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "52397b9f-102d-4fd6-9434-f794c768fbcf",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "name": {
+          "value": "Power Socket 6"
+        },
+        "batteryState": {
+          "value": "UNKNOWN"
+        },
+        "serial": {
+          "value": "00023798"
+        },
+        "modelType": {
+          "value": "GARDENA smart Power"
+        },
+        "rfLinkState": {
+          "value": "OFFLINE"
+        }
+      }
+    },
+    {
+      "id": "5e0e485f-43e0-4bd1-b857-50251278ff72",
+      "type": "SENSOR",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "5e0e485f-43e0-4bd1-b857-50251278ff72",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "soilHumidity": {
+          "value": 55,
+          "timestamp": "2022-04-22T23:09:50.767+00:00"
+        },
+        "soilTemperature": {
+          "value": 14,
+          "timestamp": "2022-04-22T23:09:50.996+00:00"
+        }
+      }
+    },
+    {
+      "id": "5e0e485f-43e0-4bd1-b857-50251278ff72",
+      "type": "COMMON",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "5e0e485f-43e0-4bd1-b857-50251278ff72",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "name": {
+          "value": "Sensor gazon"
+        },
+        "batteryLevel": {
+          "value": 34,
+          "timestamp": "2021-12-23T22:12:56.878+00:00"
+        },
+        "batteryState": {
+          "value": "OK",
+          "timestamp": "2021-12-23T22:12:56.878+00:00"
+        },
+        "rfLinkLevel": {
+          "value": 70,
+          "timestamp": "2022-04-22T23:09:50.942+00:00"
+        },
+        "serial": {
+          "value": "00051624"
+        },
+        "modelType": {
+          "value": "GARDENA smart Sensor"
+        },
+        "rfLinkState": {
+          "value": "ONLINE"
+        }
+      }
+    },
+    {
+      "id": "7943293a-f1c3-4b0b-bbc1-9e95cb108724",
+      "type": "POWER_SOCKET",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "7943293a-f1c3-4b0b-bbc1-9e95cb108724",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "state": {
+          "value": "UNAVAILABLE"
+        }
+      }
+    },
+    {
+      "id": "7943293a-f1c3-4b0b-bbc1-9e95cb108724",
+      "type": "COMMON",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "7943293a-f1c3-4b0b-bbc1-9e95cb108724",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "name": {
+          "value": "Power Socket 7"
+        },
+        "batteryState": {
+          "value": "UNKNOWN"
+        },
+        "serial": {
+          "value": "00023504"
+        },
+        "modelType": {
+          "value": "GARDENA smart Power"
+        },
+        "rfLinkState": {
+          "value": "OFFLINE"
+        }
+      }
+    },
+    {
+      "id": "9ed4ebd1-b307-46e5-b345-425dbfb71c6d",
+      "type": "POWER_SOCKET",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "9ed4ebd1-b307-46e5-b345-425dbfb71c6d",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "activity": {
+          "value": "OFF",
+          "timestamp": "2022-04-18T19:07:12.472+00:00"
+        },
+        "state": {
+          "value": "OK",
+          "timestamp": "2022-04-18T19:07:12.386+00:00"
+        }
+      }
+    },
+    {
+      "id": "9ed4ebd1-b307-46e5-b345-425dbfb71c6d",
+      "type": "COMMON",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "9ed4ebd1-b307-46e5-b345-425dbfb71c6d",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "name": {
+          "value": "Power Socket 8"
+        },
+        "batteryState": {
+          "value": "NO_BATTERY"
+        },
+        "rfLinkLevel": {
+          "value": 80,
+          "timestamp": "2022-04-22T23:03:00.214+00:00"
+        },
+        "serial": {
+          "value": "00016274"
+        },
+        "modelType": {
+          "value": "GARDENA smart Power"
+        },
+        "rfLinkState": {
+          "value": "ONLINE"
+        }
+      }
+    },
+    {
+      "id": "cdba94f6-0a52-40c9-a896-7add04c11228",
+      "type": "POWER_SOCKET",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "cdba94f6-0a52-40c9-a896-7add04c11228",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "state": {
+          "value": "UNAVAILABLE"
+        }
+      }
+    },
+    {
+      "id": "cdba94f6-0a52-40c9-a896-7add04c11228",
+      "type": "COMMON",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "cdba94f6-0a52-40c9-a896-7add04c11228",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "name": {
+          "value": "Power Socket 4"
+        },
+        "batteryState": {
+          "value": "UNKNOWN"
+        },
+        "serial": {
+          "value": "00024182"
+        },
+        "modelType": {
+          "value": "GARDENA smart Power"
+        },
+        "rfLinkState": {
+          "value": "OFFLINE"
+        }
+      }
+    },
+    {
+      "id": "d7f14b8b-7dcd-4e66-a070-77753adfffae:wc",
+      "type": "VALVE_SET",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "d7f14b8b-7dcd-4e66-a070-77753adfffae",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "state": {
+          "value": "OK",
+          "timestamp": "2022-04-18T12:34:16.042+00:00"
+        },
+        "lastErrorCode": {
+          "value": "NO_MESSAGE",
+          "timestamp": "2022-04-18T12:34:16.042+00:00"
+        }
+      }
+    },
+    {
+      "id": "d7f14b8b-7dcd-4e66-a070-77753adfffae",
+      "type": "VALVE",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "d7f14b8b-7dcd-4e66-a070-77753adfffae",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "name": {
+          "value": "Water Control - potager"
+        },
+        "activity": {
+          "value": "CLOSED",
+          "timestamp": "2022-04-18T16:36:01.152+00:00"
+        },
+        "state": {
+          "value": "WARNING",
+          "timestamp": "2022-04-17T09:41:38.853+00:00"
+        },
+        "lastErrorCode": {
+          "value": "LOW_BATTERY_PREVENTS_STARTING",
+          "timestamp": "2022-04-17T09:41:38.853+00:00"
+        }
+      }
+    },
+    {
+      "id": "d7f14b8b-7dcd-4e66-a070-77753adfffae",
+      "type": "COMMON",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "d7f14b8b-7dcd-4e66-a070-77753adfffae",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "name": {
+          "value": "Water Control - potager"
+        },
+        "batteryLevel": {
+          "value": 88,
+          "timestamp": "2022-04-18T12:34:27.618+00:00"
+        },
+        "batteryState": {
+          "value": "OK",
+          "timestamp": "2022-04-18T12:34:27.618+00:00"
+        },
+        "rfLinkLevel": {
+          "value": 90,
+          "timestamp": "2022-04-22T22:01:29.848+00:00"
+        },
+        "serial": {
+          "value": "00019796"
+        },
+        "modelType": {
+          "value": "GARDENA smart Water Control"
+        },
+        "rfLinkState": {
+          "value": "ONLINE"
+        }
+      }
+    },
+    {
+      "id": "f11fd50a-de1c-4ad0-bae3-7aec8eb782cc",
+      "type": "POWER_SOCKET",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "f11fd50a-de1c-4ad0-bae3-7aec8eb782cc",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "state": {
+          "value": "UNAVAILABLE"
+        }
+      }
+    },
+    {
+      "id": "f11fd50a-de1c-4ad0-bae3-7aec8eb782cc",
+      "type": "COMMON",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "f11fd50a-de1c-4ad0-bae3-7aec8eb782cc",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "name": {
+          "value": "Power Socket 2"
+        },
+        "batteryState": {
+          "value": "UNKNOWN"
+        },
+        "serial": {
+          "value": "00017838"
+        },
+        "modelType": {
+          "value": "GARDENA smart Power"
+        },
+        "rfLinkState": {
+          "value": "OFFLINE"
+        }
+      }
+    },
+    {
+      "id": "f4639c75-a4ed-4423-bb81-f6c27521bfd8",
+      "type": "POWER_SOCKET",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "f4639c75-a4ed-4423-bb81-f6c27521bfd8",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "state": {
+          "value": "UNAVAILABLE"
+        }
+      }
+    },
+    {
+      "id": "f4639c75-a4ed-4423-bb81-f6c27521bfd8",
+      "type": "COMMON",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "f4639c75-a4ed-4423-bb81-f6c27521bfd8",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "name": {
+          "value": "Power Socket 5"
+        },
+        "batteryState": {
+          "value": "UNKNOWN"
+        },
+        "serial": {
+          "value": "00021136"
+        },
+        "modelType": {
+          "value": "GARDENA smart Power"
+        },
+        "rfLinkState": {
+          "value": "OFFLINE"
+        }
+      }
+    },
+    {
+      "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd",
+      "type": "VALVE_SET",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "state": {
+          "value": "OK",
+          "timestamp": "2022-04-10T13:36:44.541+00:00"
+        },
+        "lastErrorCode": {
+          "value": "NO_MESSAGE",
+          "timestamp": "2022-04-10T13:36:44.541+00:00"
+        }
+      }
+    },
+    {
+      "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd:1",
+      "type": "VALVE",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "name": {
+          "value": "Vanne 1"
+        },
+        "activity": {
+          "value": "CLOSED",
+          "timestamp": "2022-04-17T18:55:17.051+00:00"
+        },
+        "state": {
+          "value": "OK",
+          "timestamp": "2022-04-17T18:45:20.962+00:00"
+        },
+        "lastErrorCode": {
+          "value": "NO_MESSAGE",
+          "timestamp": "2022-04-17T18:45:20.962+00:00"
+        }
+      }
+    },
+    {
+      "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd:2",
+      "type": "VALVE",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "name": {
+          "value": "Vanne 2"
+        },
+        "activity": {
+          "value": "CLOSED",
+          "timestamp": "2022-04-17T19:05:23.189+00:00"
+        },
+        "state": {
+          "value": "OK",
+          "timestamp": "2022-04-17T18:55:27.015+00:00"
+        },
+        "lastErrorCode": {
+          "value": "NO_MESSAGE",
+          "timestamp": "2022-04-17T18:55:27.015+00:00"
+        }
+      }
+    },
+    {
+      "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd:3",
+      "type": "VALVE",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "name": {
+          "value": "Vanne 3"
+        },
+        "activity": {
+          "value": "CLOSED",
+          "timestamp": "2022-04-18T19:15:58.078+00:00"
+        },
+        "state": {
+          "value": "OK",
+          "timestamp": "2022-04-18T19:06:02.006+00:00"
+        },
+        "lastErrorCode": {
+          "value": "NO_MESSAGE",
+          "timestamp": "2022-04-18T19:06:02.006+00:00"
+        }
+      }
+    },
+    {
+      "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd:4",
+      "type": "VALVE",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "name": {
+          "value": "Vanne 4"
+        },
+        "activity": {
+          "value": "CLOSED",
+          "timestamp": "2022-04-18T18:57:20.154+00:00"
+        },
+        "state": {
+          "value": "OK",
+          "timestamp": "2022-04-18T18:47:23.583+00:00"
+        },
+        "lastErrorCode": {
+          "value": "NO_MESSAGE",
+          "timestamp": "2022-04-18T18:47:23.583+00:00"
+        }
+      }
+    },
+    {
+      "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd:5",
+      "type": "VALVE",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "name": {
+          "value": "Vanne 5"
+        },
+        "activity": {
+          "value": "CLOSED",
+          "timestamp": "2022-04-19T18:55:38.017+00:00"
+        },
+        "state": {
+          "value": "OK",
+          "timestamp": "2022-04-19T18:45:41.660+00:00"
+        },
+        "lastErrorCode": {
+          "value": "NO_MESSAGE",
+          "timestamp": "2022-04-19T18:45:41.660+00:00"
+        }
+      }
+    },
+    {
+      "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd:6",
+      "type": "VALVE",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "name": {
+          "value": "Vanne 6"
+        },
+        "activity": {
+          "value": "CLOSED",
+          "timestamp": "2022-04-19T18:41:45.089+00:00"
+        },
+        "state": {
+          "value": "OK",
+          "timestamp": "2022-04-19T18:31:48.232+00:00"
+        },
+        "lastErrorCode": {
+          "value": "NO_MESSAGE",
+          "timestamp": "2022-04-19T18:31:48.232+00:00"
+        }
+      }
+    },
+    {
+      "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd",
+      "type": "COMMON",
+      "relationships": {
+        "device": {
+          "data": {
+            "id": "fc7323d6-225a-4ac2-83d4-7f44a0539ebd",
+            "type": "DEVICE"
+          }
+        }
+      },
+      "attributes": {
+        "name": {
+          "value": "Irrigation Control 1"
+        },
+        "batteryState": {
+          "value": "NO_BATTERY"
+        },
+        "rfLinkLevel": {
+          "value": 100,
+          "timestamp": "2022-04-22T23:09:47.630+00:00"
+        },
+        "serial": {
+          "value": "00001834"
+        },
+        "modelType": {
+          "value": "GARDENA smart Irrigation Control"
+        },
+        "rfLinkState": {
+          "value": "ONLINE"
+        }
+      }
+    }
+  ]
+}

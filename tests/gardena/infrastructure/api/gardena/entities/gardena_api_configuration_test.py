@@ -1,7 +1,7 @@
 import uuid
 
-from gardena.infrastructure.api.gardena.entities.gardena_location_api import (
-    GardenaLocationApi,
+from gardena.infrastructure.api.gardena.mappers.gardena_location_api_mapper import (
+    GardenaLocationApiMapper,
 )
 
 
@@ -10,15 +10,13 @@ class TestGardenaApiConfiguration:
         # Given
         location_id = uuid.uuid4()
         garden_name = "My garden"
-        gardena_location_api = GardenaLocationApi()
-        gardena_location_api.id = location_id
-        gardena_location_api.devices = []
-        gardena_location_api.name = garden_name
+        data = {"id": location_id, "attributes": {"name": garden_name}}
+        gardena_location_api_mapper = GardenaLocationApiMapper()
 
         # When
-        returned_location = gardena_location_api.to_location()
+        returned_location = gardena_location_api_mapper.to_location(data)
 
         # Then
         assert returned_location.id == location_id
         assert returned_location.name == garden_name
-        assert returned_location.devices == []
+        assert returned_location.devices == {}

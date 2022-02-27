@@ -6,7 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/__pypackages__/3.10/lib" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="Pipenv (py-smart-gardena)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.8 (py-smart-gardena)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="hass-gardena-smart-system" />
   </component>

@@ -1,7 +1,7 @@
 from gardena.domain.entities.location import Location
 
 
-class LocationPersistence:
+class LocationsPersistence:
     """Interface for Location API"""
 
     def get_locations(self) -> [Location]:

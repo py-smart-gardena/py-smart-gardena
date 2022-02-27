@@ -6,7 +6,8 @@ authors = [
     {name = "grm", email = "grm.klein@gmail.com"},
 ]
 dependencies = [
-    "pytest-cov>=3.0.0",
+    "requests-oauthlib>=1.3.1",
+    "dependency-injector>=4.38.0",
 ]
 requires-python = ">=3.10"
 license = {text = "MIT"}
@@ -21,9 +22,9 @@ package-dir = "src"
 [tool.pdm.dev-dependencies]
 lint = [
     "flake8",
-    "black"
+    "black",
 ]
-test = ["pytest", "pytest-cov", "pytest-mock"]
+test = ["pytest", "pytest-cov", "pytest-mock", "mutmut"]
 doc = ["mkdocs"]
 
 [tool.pytest.ini_options]

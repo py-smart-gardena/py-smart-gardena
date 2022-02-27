@@ -1,9 +1,7 @@
 from unittest.mock import Mock
 
 from gardena.domain.entities.location import Location
-from gardena.domain.entities.mower import Mower
 from gardena.use_cases.list_locations import ListLocations
-from gardena.use_cases.list_mowers import ListMowers
 
 
 class TestListLocations:
