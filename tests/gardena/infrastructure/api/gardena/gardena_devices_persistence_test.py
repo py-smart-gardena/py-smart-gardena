@@ -9,7 +9,7 @@ from gardena.infrastructure.api.gardena.gardena_devices_persistence import (
 )
 
 
-class TestGardenaDeevicesPersistence:
+class TestGardenaDevicesPersistence:
     @pytest.mark.usefixtures("mower_fixture")
     def test_get_devices_should_return_a_list_of_devices(self, mower_fixture):
         # Given
@@ -21,11 +21,15 @@ class TestGardenaDeevicesPersistence:
         gardena_persistence: GardenaDevicesPersistence = GardenaDevicesPersistence(
             gardena_api_mock
         )
+        location: Location = Location(id="5e85df94-17d0-410c-a4b2-b3aafeb1dbd2")
 
         # When
-        returned_devices = gardena_persistence.get_devices(Location())
+        returned_devices = gardena_persistence.get_devices(location)
 
         # Then
+        gardena_api_mock.call_smart_system_get.assert_called_once_with(
+            f"/v1/locations/{location.id}"
+        )
         assert len(returned_devices.mowers) == 1
         assert returned_devices.mowers[0].id == "4ad7d828-b19f-47d5-b7d2-15eea0fb8516"
         assert returned_devices.mowers[0].type == DeviceType.MOWER
