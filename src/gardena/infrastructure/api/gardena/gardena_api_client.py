@@ -37,6 +37,19 @@ class GardenaApiClient:
             )
             self.connected = True
 
+    def call_command(self, service_id, data):
+        args = {"data": data}
+        headers = self.__create_header(True)
+
+        r = self.oauth_session.put(
+            f"{self.SMART_HOST}/v1/command/{service_id}",
+            headers=headers,
+            data=json.dumps(args, ensure_ascii=False),
+        )
+        if r.status_code != 202:
+            response = r.json()
+            raise Exception(f"{r.status_code} : {response['errors'][0]['title']}")
+
     def call_smart_system_get(self, url):
         response = self.oauth_session.get(
             f"{self.SMART_HOST}{url}", headers=self.__create_header()

@@ -14,6 +14,7 @@ from gardena.use_cases.list_locations import ListLocations
 def main(
         list_locations: ListLocations = Provide[Container.list_locations],
         list_devices: ListDevice = Provide[Container.list_devices],
+        start_mowing = Provide[Container.start_mowing],
         gardena_api: GardenaApiClient = Provide[Container.gardena_api],
 ) -> None:
     try:
@@ -21,6 +22,7 @@ def main(
         pprint.pprint(locations[0].__dict__)
         devices = list_devices.execute(locations[0])
         pprint.pprint(devices.mowers[0].__dict__)
+        start_mowing.execute(devices.mowers[0], 10800)
         pprint.pprint(devices.power_sockets[0].__dict__)
 
 
