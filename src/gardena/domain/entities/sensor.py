@@ -18,7 +18,6 @@ class Sensor(BaseDevice):
         light_intensity: str = "N/A",
         soil_humidity: str = "N/A",
         soil_temperature: str = "N/A",
-        last_error_code: str = "N/A",
     ):
         """Constructor for the sensor device."""
         BaseDevice.__init__(
@@ -36,6 +35,5 @@ class Sensor(BaseDevice):
         self.light_intensity: str = light_intensity
         self.soil_humidity: str = soil_humidity
         self.soil_temperature: str = soil_temperature
-        self.last_error_code: str = last_error_code
         self.battery_level: str = battery_level
         self.battery_state: str = battery_state

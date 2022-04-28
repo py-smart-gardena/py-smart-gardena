@@ -22,10 +22,10 @@ def main(
         pprint.pprint(locations[0].__dict__)
         devices = list_devices.execute(locations[0])
         pprint.pprint(devices.mowers[0].__dict__)
-        start_mowing.execute(devices.mowers[0], 10800)
+        start_mowing.execute(devices.mowers[0], 3600)
         pprint.pprint(devices.power_sockets[0].__dict__)
-
-
+        pprint.pprint(devices.sensors[0].__dict__)
+        pprint.pprint(devices.smart_irrigation_controls[0].__dict__)
     except Exception:
         traceback.print_exc()
 

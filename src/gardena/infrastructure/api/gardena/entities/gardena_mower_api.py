@@ -12,6 +12,8 @@ class GardenaMowerApi(GardenaBaseDeviceApi):
         self.operating_hours = "N/A"
         self.state = "N/A"
         self.last_error_code = "N/A"
+        self.battery_level = "N/A"
+        self.battery_state = "N/A"
         self.setup_values_from_device_map(device_map)
 
     def update_device_specific_data(self, device_map):
@@ -27,6 +29,7 @@ class GardenaMowerApi(GardenaBaseDeviceApi):
         return Mower(
             id=self.id,
             battery_level=self.battery_level,
+            battery_state=self.battery_state,
             name=self.name,
             rf_link_level=self.rf_link_level,
             rf_link_state=self.rf_link_state,

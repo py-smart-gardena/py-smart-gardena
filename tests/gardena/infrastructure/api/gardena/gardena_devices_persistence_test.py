@@ -38,7 +38,7 @@ class TestGardenaDevicesPersistence:
         assert returned_devices.mowers[0].state == "OK"
         assert returned_devices.mowers[0].last_error_code == "N/A"
         assert returned_devices.mowers[0].battery_level == 100
-        assert returned_devices.mowers[0].battery_state == "N/A"
+        assert returned_devices.mowers[0].battery_state == "OK"
         assert returned_devices.mowers[0].name == "SILENO"
         assert returned_devices.mowers[0].rf_link_level == 100
         assert returned_devices.mowers[0].rf_link_state == "ONLINE"
