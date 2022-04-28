@@ -37,6 +37,6 @@ jobs:
         run: |
           pdm run pytest -v
 
-      - name: Run mutmut tests
-        run: |
-          pdm run mutmut run
+#      - name: Run mutmut tests
+#        run: |
+#          pdm run mutmut run
