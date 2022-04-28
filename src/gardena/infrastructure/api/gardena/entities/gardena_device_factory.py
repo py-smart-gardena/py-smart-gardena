@@ -7,8 +7,8 @@ from gardena.infrastructure.api.gardena.entities.gardena_power_socket_api import
 from gardena.infrastructure.api.gardena.entities.gardena_sensor_api import (
     GardenaSensorApi,
 )
-from gardena.infrastructure.api.gardena.entities.gardena_smart_irrigation_control_api import (
-    GardenaSmartIrrigationControlApi,
+from gardena.infrastructure.api.gardena.entities.irrigation_control_api import (
+    SmartIrrigationControlApi,
 )
 
 
@@ -22,9 +22,4 @@ class GardenaDeviceFactory:
         elif "SENSOR" in device_map:
             return GardenaSensorApi(device_map)
         elif "VALVE" in device_map:
-            if len(device_map["VALVE"]) > 1:
-                return GardenaSmartIrrigationControlApi(device_map)
-        #     else:
-        #         return WaterControl(smart_system, device_map)
-        # elif "POWER_SOCKET" in device_map:
-        #     return PowerSocket(smart_system, device_map)
+            return SmartIrrigationControlApi(device_map)

@@ -4,7 +4,7 @@ from gardena.domain.entities.base_device import BaseDevice
 from gardena.domain.entities.device_type import DeviceType
 
 
-class SmartIrrigationControl(BaseDevice):
+class IrrigationControl(BaseDevice):
     def __init__(
         self,
         id: str = "None",

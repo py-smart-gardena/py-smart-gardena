@@ -21,11 +21,16 @@ def main(
         locations = list_locations.execute()
         pprint.pprint(locations[0].__dict__)
         devices = list_devices.execute(locations[0])
-        pprint.pprint(devices.mowers[0].__dict__)
-        start_mowing.execute(devices.mowers[0], 3600)
-        pprint.pprint(devices.power_sockets[0].__dict__)
-        pprint.pprint(devices.sensors[0].__dict__)
-        pprint.pprint(devices.smart_irrigation_controls[0].__dict__)
+        #start_mowing.execute(devices.mowers[0], 3600)
+        for power_socket in devices.power_sockets:
+            pprint(power_socket.__dict__)
+        for mower in devices.mowers:
+            pprint.pprint(mower.__dict__)
+        for sensor in devices.sensors:
+            pprint.pprint(sensor.__dict__)
+        for irrigation_control in devices.irrigation_controls:
+            pprint.pprint(irrigation_control.__dict__)
+
     except Exception:
         traceback.print_exc()
 

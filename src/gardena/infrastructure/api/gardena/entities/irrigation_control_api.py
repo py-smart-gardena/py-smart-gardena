@@ -1,10 +1,10 @@
-from gardena.domain.entities.smart_irrigation_control import SmartIrrigationControl
+from gardena.domain.entities.smart_irrigation_control import IrrigationControl
 from gardena.infrastructure.api.gardena.entities.gardena_base_device_api import (
     GardenaBaseDeviceApi,
 )
 
 
-class GardenaSmartIrrigationControlApi(GardenaBaseDeviceApi):
+class SmartIrrigationControlApi(GardenaBaseDeviceApi):
     def __init__(self, device_map):
         GardenaBaseDeviceApi.__init__(self)
         self.device_map = device_map
@@ -51,7 +51,7 @@ class GardenaSmartIrrigationControlApi(GardenaBaseDeviceApi):
             )
 
     def toDomainObject(self):
-        return SmartIrrigationControl(
+        return IrrigationControl(
             id=self.id,
             name=self.name,
             rf_link_level=self.rf_link_level,
