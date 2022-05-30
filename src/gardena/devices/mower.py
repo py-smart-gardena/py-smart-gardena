@@ -3,7 +3,6 @@ import uuid
 
 
 class Mower(BaseDevice):
-
     def __init__(self, location, device_map):
         """Constructor for the mower device."""
         BaseDevice.__init__(self, location, device_map["COMMON"][0]["id"])
@@ -29,7 +28,10 @@ class Mower(BaseDevice):
             data = {
                 "id": str(uuid.uuid1()),
                 "type": "MOWER_CONTROL",
-                "attributes": {"command": "START_SECONDS_TO_OVERRIDE", "seconds": duration},
+                "attributes": {
+                    "command": "START_SECONDS_TO_OVERRIDE",
+                    "seconds": duration,
+                },
             }
             self.location.smart_system.call_smart_system_service(self.mower_id, data)
         else:

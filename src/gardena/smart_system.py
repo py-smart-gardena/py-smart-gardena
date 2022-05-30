@@ -66,8 +66,8 @@ class SmartSystem:
             )
         logging.basicConfig(
             level=level,
-            format='%(asctime)s %(levelname)-8s %(message)s',
-            datefmt='%Y-%m-%d %H:%M:%S'
+            format="%(asctime)s %(levelname)-8s %(message)s",
+            datefmt="%Y-%m-%d %H:%M:%S",
         )
         self.AUTHENTICATION_HOST = "https://api.authentication.husqvarnagroup.dev"
         self.SMART_HOST = "https://api.smart.gardena.dev"
@@ -99,7 +99,7 @@ class SmartSystem:
             headers["Content-Type"] = "application/vnd.api+json"
         return headers
 
-    def authenticate(self):
+    async def authenticate(self):
         """
         Authenticate and get tokens.
         This function needs to be called first.
@@ -119,7 +119,7 @@ class SmartSystem:
             client_id=self.client_id,
         )
 
-    def quit(self):
+    async def quit(self):
         if self.client:
             self.client.should_stop = True
         if self.ws:
@@ -140,6 +140,7 @@ class SmartSystem:
             self.ws_status_callback(status)
 
     def token_saver(self, token):
+        print(f"on a un token : {self.token}")
         self.token = token
 
     def call_smart_system_service(self, service_id, data):
@@ -160,9 +161,9 @@ class SmartSystem:
         if response.status_code not in (200, 202):
             try:
                 r = response.json()
-                if 'errors' in r:
+                if "errors" in r:
                     msg = "{r['errors'][0]['title']} - {r['errors'][0]['detail']}"
-                elif 'message' in r:
+                elif "message" in r:
                     msg = f"{r['message']}"
 
                     if response.status_code == 403:
@@ -191,9 +192,9 @@ class SmartSystem:
 
     @contextmanager
     def __set_retry_on_session(
-            self,
-            backoff_factor=0.3,
-            status_forcelist=(500, 502, 504),
+        self,
+        backoff_factor=0.3,
+        status_forcelist=(500, 502, 504),
     ):
         try:
             retry = Retry(
@@ -206,17 +207,17 @@ class SmartSystem:
                 status_forcelist=status_forcelist,
             )
             adapter = HTTPAdapter(max_retries=retry)
-            self.oauth_session.mount('http://', adapter)
-            self.oauth_session.mount('https://', adapter)
+            self.oauth_session.mount("http://", adapter)
+            self.oauth_session.mount("https://", adapter)
             yield self.oauth_session
         finally:
-            self.oauth_session.mount('http://', HTTPAdapter())
-            self.oauth_session.mount('https://', HTTPAdapter())
+            self.oauth_session.mount("http://", HTTPAdapter())
+            self.oauth_session.mount("https://", HTTPAdapter())
 
-    def update_locations(self):
+    async def update_locations(self):
         response_data = self.__call_smart_system_get(f"{self.SMART_HOST}/v1/locations")
         if response_data is not None:
-            if 'data' not in response_data or len(response_data["data"]) < 1:
+            if "data" not in response_data or len(response_data["data"]) < 1:
                 self.logger.error("No locations found....")
             else:
                 self.locations = {}
@@ -225,7 +226,7 @@ class SmartSystem:
                     new_location.update_location_data(location)
                     self.locations[new_location.id] = new_location
 
-    def update_devices(self, location):
+    async def update_devices(self, location):
         response_data = self.__call_smart_system_get(
             f"{self.SMART_HOST}/v1/locations/{location.id}"
         )
@@ -235,7 +236,7 @@ class SmartSystem:
                 self.logger.error("No device found....")
             else:
                 devices_smart_system = {}
-                self.logger.debug(f'Received devices in  message')
+                self.logger.debug(f"Received devices in  message")
                 self.logger.debug("------- Beginning of message ---------")
                 self.logger.debug(response_data["included"])
                 for device in response_data["included"]:
@@ -251,7 +252,7 @@ class SmartSystem:
                     if device_obj is not None:
                         location.add_device(device_obj)
 
-    def start_ws(self, location):
+    async def start_ws(self, location):
         args = {
             "data": {
                 "type": "WEBSOCKET",
@@ -280,7 +281,8 @@ class SmartSystem:
                 on_open=self.client.on_open,
             )
             wst = Thread(
-                target=self.ws.run_forever, kwargs={"ping_interval": 60, "ping_timeout": 5}
+                target=self.ws.run_forever,
+                kwargs={"ping_interval": 60, "ping_timeout": 5},
             )
             wst.daemon = True
             wst.start()

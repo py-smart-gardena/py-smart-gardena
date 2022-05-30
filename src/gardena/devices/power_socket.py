@@ -3,7 +3,6 @@ import uuid
 
 
 class PowerSocket(BaseDevice):
-
     def __init__(self, location, device_map):
         """Constructor for the Power socket device."""
         BaseDevice.__init__(self, location, device_map["COMMON"][0]["id"])
