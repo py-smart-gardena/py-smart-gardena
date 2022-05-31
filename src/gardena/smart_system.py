@@ -9,8 +9,6 @@ from requests_oauthlib import OAuth2Session
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
-from threading import Thread
-
 from gardena.exceptions.authentication_exception import AuthenticationException
 from gardena.location import Location
 from gardena.devices.device_factory import DeviceFactory
@@ -97,7 +95,7 @@ class SmartSystem:
         print(f"on a un token : {self.token}")
         self.token = token
 
-    def call_smart_system_service(self, service_id, data):
+    async def call_smart_system_service(self, service_id, data):
         args = {"data": data}
         headers = self.create_header(True)
 
@@ -138,7 +136,7 @@ class SmartSystem:
             return True
         return False
 
-    def __call_smart_system_get(self, url):
+    async def __call_smart_system_get(self, url):
         response = self.oauth_session.get(url, headers=self.create_header())
         if self.__response_has_errors(response):
             return None
@@ -169,7 +167,9 @@ class SmartSystem:
             self.oauth_session.mount("https://", HTTPAdapter())
 
     async def update_locations(self):
-        response_data = self.__call_smart_system_get(f"{self.SMART_HOST}/v1/locations")
+        response_data = await self.__call_smart_system_get(
+            f"{self.SMART_HOST}/v1/locations"
+        )
         if response_data is not None:
             if "data" not in response_data or len(response_data["data"]) < 1:
                 self.logger.error("No locations found....")
@@ -181,7 +181,7 @@ class SmartSystem:
                     self.locations[new_location.id] = new_location
 
     async def update_devices(self, location):
-        response_data = self.__call_smart_system_get(
+        response_data = await self.__call_smart_system_get(
             f"{self.SMART_HOST}/v1/locations/{location.id}"
         )
         if response_data is not None:
@@ -243,6 +243,7 @@ class SmartSystem:
             self.logger.debug(">>>>>>>>>>>>> Found LOCATION")
             self.parse_location(data)
         elif data["type"] in self.supported_services:
+            self.logger.debug(">>>>>>>>>>>>> Found DEVICE")
             self.parse_device(data)
         else:
             self.logger.debug(">>>>>>>>>>>>> Unkonwn Message")

@@ -49,34 +49,34 @@ class SmartIrrigationControl(BaseDevice):
                 self.valves[device_map["id"]], device_map["attributes"], "state"
             )
 
-    def start_seconds_to_override(self, duration, valve_id):
+    async def start_seconds_to_override(self, duration, valve_id):
         data = {
             "id": str(uuid.uuid1()),
             "type": "VALVE_CONTROL",
             "attributes": {"command": "START_SECONDS_TO_OVERRIDE", "seconds": duration},
         }
-        self.location.smart_system.call_smart_system_service(valve_id, data)
+        await self.location.smart_system.call_smart_system_service(valve_id, data)
 
-    def stop_until_next_task(self, valve_id):
+    async def stop_until_next_task(self, valve_id):
         data = {
             "id": str(uuid.uuid1()),
             "type": "VALVE_CONTROL",
             "attributes": {"command": "STOP_UNTIL_NEXT_TASK"},
         }
-        self.location.smart_system.call_smart_system_service(valve_id, data)
+        await self.location.smart_system.call_smart_system_service(valve_id, data)
 
-    def pause(self, valve_id):
+    async def pause(self, valve_id):
         data = {
             "id": str(uuid.uuid1()),
             "type": "VALVE_CONTROL",
             "attributes": {"command": "PAUSE"},
         }
-        self.location.smart_system.call_smart_system_service(valve_id, data)
+        await self.location.smart_system.call_smart_system_service(valve_id, data)
 
-    def unpause(self, valve_id):
+    async def unpause(self, valve_id):
         data = {
             "id": str(uuid.uuid1()),
             "type": "VALVE_CONTROL",
             "attributes": {"command": "UNPAUSE"},
         }
-        self.location.smart_system.call_smart_system_service(valve_id, data)
+        await self.location.smart_system.call_smart_system_service(valve_id, data)
