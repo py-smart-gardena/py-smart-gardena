@@ -3,56 +3,17 @@ import logging
 from contextlib import contextmanager
 from json.decoder import JSONDecodeError
 
+import websockets
 from oauthlib.oauth2 import LegacyApplicationClient
 from requests_oauthlib import OAuth2Session
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
-import websocket
 from threading import Thread
 
 from gardena.exceptions.authentication_exception import AuthenticationException
 from gardena.location import Location
 from gardena.devices.device_factory import DeviceFactory
-
-
-class Client:
-    def __init__(self, smart_system=None, level=logging.WARN, location=None):
-        self.smart_system = smart_system
-        self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(level)
-        self.live = False
-        self.location = location
-        self.should_stop = False
-
-    def on_message(self, ws, message):
-        self.smart_system.on_message(message)
-
-    def on_error(self, ws, error):
-        self.logger.error(f"error : {error}")
-        self.smart_system.set_ws_status(False)
-
-    def is_connected(self):
-        return self.live
-
-    def on_close(self, ws, close_status_code, close_msg):
-        self.live = False
-        self.logger.info("Connection close to gardena API")
-        self.smart_system.set_ws_status(False)
-        if not self.should_stop:
-            self.logger.info("Restarting websocket")
-            self.smart_system.start_ws(self.location)
-
-    def on_open(self, ws):
-        self.logger.info("Connected to Gardena API")
-        self.live = True
-        self.smart_system.set_ws_status(True)
-
-        # def run(*args):
-        #     while self.live:
-        #         time.sleep(1)
-        #
-        # Thread(target=run).start()
 
 
 class SmartSystem:
@@ -79,8 +40,6 @@ class SmartSystem:
         self.client = None
         self.oauth_session = None
         self.ws = None
-        self.is_ws_connected = False
-        self.ws_status_callback = None
         self.supported_services = [
             "COMMON",
             "VALVE",
@@ -133,11 +92,6 @@ class SmartSystem:
                 f'{self.AUTHENTICATION_HOST}/v1/token/{self.token["access_token"]}',
                 headers={"X-Api-Key": self.client_id},
             )
-
-    def set_ws_status(self, status):
-        self.is_ws_connected = status
-        if self.ws_status_callback:
-            self.ws_status_callback(status)
 
     def token_saver(self, token):
         print(f"on a un token : {self.token}")
@@ -260,32 +214,25 @@ class SmartSystem:
                 "id": "does-not-matter",
             }
         }
-        with self.__set_retry_on_session() as session:
-            r = session.post(
-                f"{self.SMART_HOST}/v1/websocket",
-                headers=self.create_header(True),
-                data=json.dumps(args, ensure_ascii=False),
-            )
-            r.raise_for_status()
-            response = r.json()
-            ws_url = response["data"]["attributes"]["url"]
-            if self.client is None:
-                self.client = Client(self, level=self.level, location=location)
-            if self.level == logging.DEBUG:
-                websocket.enableTrace(True)
-            self.ws = websocket.WebSocketApp(
-                ws_url,
-                on_message=self.client.on_message,
-                on_error=self.client.on_error,
-                on_close=self.client.on_close,
-                on_open=self.client.on_open,
-            )
-            wst = Thread(
-                target=self.ws.run_forever,
-                kwargs={"ping_interval": 60, "ping_timeout": 5},
-            )
-            wst.daemon = True
-            wst.start()
+        while True:
+            with self.__set_retry_on_session() as session:
+                r = session.post(
+                    f"{self.SMART_HOST}/v1/websocket",
+                    headers=self.create_header(True),
+                    data=json.dumps(args, ensure_ascii=False),
+                )
+                r.raise_for_status()
+                response = r.json()
+                ws_url = response["data"]["attributes"]["url"]
+                try:
+                    websocket = await websockets.connect(ws_url)
+                    while True:
+                        message = await websocket.recv()
+                        self.on_message(message)
+                except websockets.ConnectionClosed:
+                    continue
+                finally:
+                    websocket.close()
 
     def on_message(self, message):
         data = json.loads(message)
@@ -312,6 +259,3 @@ class SmartSystem:
             if device_id in location.devices:
                 location.devices[device_id].update_data(device)
                 break
-
-    def add_ws_status_callback(self, callback):
-        self.ws_status_callback = callback

@@ -26,9 +26,14 @@ async def main():
             pprint.pprint(location)
             for device in location.devices.values():
                 pprint.pprint(device)
+                device.add_callback(
+                    lambda device: print(f"on a recu un device {device}")
+                )
         print(f"------------{next(iter(smart_system.locations))}")
-        await smart_system.start_ws(
-            smart_system.locations.get(next(iter(smart_system.locations)))
+        asyncio.create_task(
+            smart_system.start_ws(
+                smart_system.locations.get(next(iter(smart_system.locations)))
+            )
         )
         while True:
             await asyncio.sleep(5)
