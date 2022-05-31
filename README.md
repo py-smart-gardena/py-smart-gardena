@@ -31,17 +31,11 @@ Your help is very much appreciated.
 Here are the links if you want to show your support :  
 <span class="badge-paypal"><a href="https://paypal.me/grmklein" title="Donate to this project using Paypal"><img src="https://img.shields.io/badge/paypal-donate-yellow.svg" alt="PayPal donate button" /></a></span>
 
-You can also send me crypto using one of the following addresses :
-
-Bitcoin (BTC) : 39TrJWZ1fV5UBwbRxK8yTJUK68gAhpJHzZ
-
-Ethereum (ETH) : 0xE363E94F6a42881580A9Df9E52Ab86c987dCFDc7
-
 Thx for your support !
 
 ## Requirements
 
-*   **Python 3.6+**
+*   **Python 3.8+**
 
 ## Supported devices
 
@@ -95,15 +89,15 @@ from gardena.smart_system import SmartSystem
 import pprint
 
 smart_system = SmartSystem(email="email@gmail.com", password="my_password", client_id="client_id")
-smart_system.authenticate()
-smart_system.update_locations()
+await smart_system.authenticate()
+await smart_system.update_locations()
 for location in smart_system.locations.values():
-    smart_system.update_devices(location)
+    await smart_system.update_devices(location)
     pprint.pprint(location)
     for device in location.devices.values():
         pprint.pprint(device)
 
-smart_system.start_ws(smart_system.locations['LOCATION_ID'])
+await smart_system.start_ws(smart_system.locations['LOCATION_ID'])
 
 
 ```
