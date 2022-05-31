@@ -3,56 +3,15 @@ import logging
 from contextlib import contextmanager
 from json.decoder import JSONDecodeError
 
+import websockets
 from oauthlib.oauth2 import LegacyApplicationClient
 from requests_oauthlib import OAuth2Session
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
-import websocket
-from threading import Thread
-
 from gardena.exceptions.authentication_exception import AuthenticationException
 from gardena.location import Location
 from gardena.devices.device_factory import DeviceFactory
-
-
-class Client:
-    def __init__(self, smart_system=None, level=logging.WARN, location=None):
-        self.smart_system = smart_system
-        self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(level)
-        self.live = False
-        self.location = location
-        self.should_stop = False
-
-    def on_message(self, ws, message):
-        self.smart_system.on_message(message)
-
-    def on_error(self, ws, error):
-        self.logger.error(f"error : {error}")
-        self.smart_system.set_ws_status(False)
-
-    def is_connected(self):
-        return self.live
-
-    def on_close(self, ws, close_status_code, close_msg):
-        self.live = False
-        self.logger.info("Connection close to gardena API")
-        self.smart_system.set_ws_status(False)
-        if not self.should_stop:
-            self.logger.info("Restarting websocket")
-            self.smart_system.start_ws(self.location)
-
-    def on_open(self, ws):
-        self.logger.info("Connected to Gardena API")
-        self.live = True
-        self.smart_system.set_ws_status(True)
-
-        # def run(*args):
-        #     while self.live:
-        #         time.sleep(1)
-        #
-        # Thread(target=run).start()
 
 
 class SmartSystem:
@@ -66,8 +25,8 @@ class SmartSystem:
             )
         logging.basicConfig(
             level=level,
-            format='%(asctime)s %(levelname)-8s %(message)s',
-            datefmt='%Y-%m-%d %H:%M:%S'
+            format="%(asctime)s %(levelname)-8s %(message)s",
+            datefmt="%Y-%m-%d %H:%M:%S",
         )
         self.AUTHENTICATION_HOST = "https://api.authentication.husqvarnagroup.dev"
         self.SMART_HOST = "https://api.smart.gardena.dev"
@@ -79,8 +38,6 @@ class SmartSystem:
         self.client = None
         self.oauth_session = None
         self.ws = None
-        self.is_ws_connected = False
-        self.ws_status_callback = None
         self.supported_services = [
             "COMMON",
             "VALVE",
@@ -99,7 +56,7 @@ class SmartSystem:
             headers["Content-Type"] = "application/vnd.api+json"
         return headers
 
-    def authenticate(self):
+    async def authenticate(self):
         """
         Authenticate and get tokens.
         This function needs to be called first.
@@ -119,7 +76,7 @@ class SmartSystem:
             client_id=self.client_id,
         )
 
-    def quit(self):
+    async def quit(self):
         if self.client:
             self.client.should_stop = True
         if self.ws:
@@ -134,15 +91,11 @@ class SmartSystem:
                 headers={"X-Api-Key": self.client_id},
             )
 
-    def set_ws_status(self, status):
-        self.is_ws_connected = status
-        if self.ws_status_callback:
-            self.ws_status_callback(status)
-
     def token_saver(self, token):
+        print(f"on a un token : {self.token}")
         self.token = token
 
-    def call_smart_system_service(self, service_id, data):
+    async def call_smart_system_service(self, service_id, data):
         args = {"data": data}
         headers = self.create_header(True)
 
@@ -160,9 +113,9 @@ class SmartSystem:
         if response.status_code not in (200, 202):
             try:
                 r = response.json()
-                if 'errors' in r:
+                if "errors" in r:
                     msg = "{r['errors'][0]['title']} - {r['errors'][0]['detail']}"
-                elif 'message' in r:
+                elif "message" in r:
                     msg = f"{r['message']}"
 
                     if response.status_code == 403:
@@ -183,7 +136,7 @@ class SmartSystem:
             return True
         return False
 
-    def __call_smart_system_get(self, url):
+    async def __call_smart_system_get(self, url):
         response = self.oauth_session.get(url, headers=self.create_header())
         if self.__response_has_errors(response):
             return None
@@ -191,9 +144,9 @@ class SmartSystem:
 
     @contextmanager
     def __set_retry_on_session(
-            self,
-            backoff_factor=0.3,
-            status_forcelist=(500, 502, 504),
+        self,
+        backoff_factor=0.3,
+        status_forcelist=(500, 502, 504),
     ):
         try:
             retry = Retry(
@@ -206,17 +159,19 @@ class SmartSystem:
                 status_forcelist=status_forcelist,
             )
             adapter = HTTPAdapter(max_retries=retry)
-            self.oauth_session.mount('http://', adapter)
-            self.oauth_session.mount('https://', adapter)
+            self.oauth_session.mount("http://", adapter)
+            self.oauth_session.mount("https://", adapter)
             yield self.oauth_session
         finally:
-            self.oauth_session.mount('http://', HTTPAdapter())
-            self.oauth_session.mount('https://', HTTPAdapter())
+            self.oauth_session.mount("http://", HTTPAdapter())
+            self.oauth_session.mount("https://", HTTPAdapter())
 
-    def update_locations(self):
-        response_data = self.__call_smart_system_get(f"{self.SMART_HOST}/v1/locations")
+    async def update_locations(self):
+        response_data = await self.__call_smart_system_get(
+            f"{self.SMART_HOST}/v1/locations"
+        )
         if response_data is not None:
-            if 'data' not in response_data or len(response_data["data"]) < 1:
+            if "data" not in response_data or len(response_data["data"]) < 1:
                 self.logger.error("No locations found....")
             else:
                 self.locations = {}
@@ -225,8 +180,8 @@ class SmartSystem:
                     new_location.update_location_data(location)
                     self.locations[new_location.id] = new_location
 
-    def update_devices(self, location):
-        response_data = self.__call_smart_system_get(
+    async def update_devices(self, location):
+        response_data = await self.__call_smart_system_get(
             f"{self.SMART_HOST}/v1/locations/{location.id}"
         )
         if response_data is not None:
@@ -235,7 +190,7 @@ class SmartSystem:
                 self.logger.error("No device found....")
             else:
                 devices_smart_system = {}
-                self.logger.debug(f'Received devices in  message')
+                self.logger.debug(f"Received devices in  message")
                 self.logger.debug("------- Beginning of message ---------")
                 self.logger.debug(response_data["included"])
                 for device in response_data["included"]:
@@ -251,7 +206,7 @@ class SmartSystem:
                     if device_obj is not None:
                         location.add_device(device_obj)
 
-    def start_ws(self, location):
+    async def start_ws(self, location):
         args = {
             "data": {
                 "type": "WEBSOCKET",
@@ -259,31 +214,25 @@ class SmartSystem:
                 "id": "does-not-matter",
             }
         }
-        with self.__set_retry_on_session() as session:
-            r = session.post(
-                f"{self.SMART_HOST}/v1/websocket",
-                headers=self.create_header(True),
-                data=json.dumps(args, ensure_ascii=False),
-            )
-            r.raise_for_status()
-            response = r.json()
-            ws_url = response["data"]["attributes"]["url"]
-            if self.client is None:
-                self.client = Client(self, level=self.level, location=location)
-            if self.level == logging.DEBUG:
-                websocket.enableTrace(True)
-            self.ws = websocket.WebSocketApp(
-                ws_url,
-                on_message=self.client.on_message,
-                on_error=self.client.on_error,
-                on_close=self.client.on_close,
-                on_open=self.client.on_open,
-            )
-            wst = Thread(
-                target=self.ws.run_forever, kwargs={"ping_interval": 60, "ping_timeout": 5}
-            )
-            wst.daemon = True
-            wst.start()
+        while True:
+            with self.__set_retry_on_session() as session:
+                r = session.post(
+                    f"{self.SMART_HOST}/v1/websocket",
+                    headers=self.create_header(True),
+                    data=json.dumps(args, ensure_ascii=False),
+                )
+                r.raise_for_status()
+                response = r.json()
+                ws_url = response["data"]["attributes"]["url"]
+                try:
+                    websocket = await websockets.connect(ws_url)
+                    while True:
+                        message = await websocket.recv()
+                        self.on_message(message)
+                except websockets.ConnectionClosed:
+                    continue
+                finally:
+                    websocket.close()
 
     def on_message(self, message):
         data = json.loads(message)
@@ -294,6 +243,7 @@ class SmartSystem:
             self.logger.debug(">>>>>>>>>>>>> Found LOCATION")
             self.parse_location(data)
         elif data["type"] in self.supported_services:
+            self.logger.debug(">>>>>>>>>>>>> Found DEVICE")
             self.parse_device(data)
         else:
             self.logger.debug(">>>>>>>>>>>>> Unkonwn Message")
@@ -310,6 +260,3 @@ class SmartSystem:
             if device_id in location.devices:
                 location.devices[device_id].update_data(device)
                 break
-
-    def add_ws_status_callback(self, callback):
-        self.ws_status_callback = callback

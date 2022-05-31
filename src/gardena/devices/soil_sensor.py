@@ -2,7 +2,6 @@ from .base_device import BaseDevice
 
 
 class SoilSensor(BaseDevice):
-
     def __init__(self, location, device_map):
         """Constructor for the sensor device."""
         BaseDevice.__init__(self, location, device_map["COMMON"][0]["id"])
