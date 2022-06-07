@@ -36,6 +36,8 @@ class SmartSystem:
         self.access_token = None
         self.refresh_token = None
         self.ws = None
+        self.is_ws_connected = False
+        self.ws_status_callback = None
         self.should_stop = False
         self.supported_services = [
             "COMMON",
@@ -196,12 +198,14 @@ class SmartSystem:
             ws_url = response["data"]["attributes"]["url"]
             try:
                 websocket = await websockets.connect(ws_url)
+                self.set_ws_status(True)
                 while True:
                     message = await websocket.recv()
                     self.on_message(message)
             except websockets.ConnectionClosed:
                 continue
             finally:
+                self.set_ws_status(False)
                 await websocket.close()
                 await asyncio.sleep(10)
 
@@ -231,3 +235,11 @@ class SmartSystem:
             if device_id in location.devices:
                 location.devices[device_id].update_data(device)
                 break
+
+    def add_ws_status_callback(self, callback):
+        self.ws_status_callback = callback
+
+    def set_ws_status(self, status):
+        self.is_ws_connected = status
+        if self.ws_status_callback:
+            self.ws_status_callback(status)
