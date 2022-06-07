@@ -4,10 +4,10 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-oauthlib = "*"
-requests-oauthlib = "*"
 requests = "*"
 websockets = "*"
+httpx = "*"
+authlib = "*"
 
 [dev-packages]
 black = "*"
