@@ -1,23 +1,20 @@
+import asyncio
+
 import json
 import logging
-from contextlib import contextmanager
+import websockets
+from authlib.integrations.httpx_client import AsyncOAuth2Client
 from json.decoder import JSONDecodeError
 
-import websockets
-from oauthlib.oauth2 import LegacyApplicationClient
-from requests_oauthlib import OAuth2Session
-from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
-
+from gardena.devices.device_factory import DeviceFactory
 from gardena.exceptions.authentication_exception import AuthenticationException
 from gardena.location import Location
-from gardena.devices.device_factory import DeviceFactory
 
 
 class SmartSystem:
     """Base class to communicate with gardena and handle network calls"""
 
-    def __init__(self, email=None, password=None, client_id=None, level=logging.INFO):
+    def __init__(self, email=None, password=None, client_id=None, client_secret=None, level=logging.INFO):
         """Constructor, create instance of gateway"""
         if email is None or password is None or client_id is None:
             raise ValueError(
@@ -33,10 +30,11 @@ class SmartSystem:
         self.email = email
         self.password = password
         self.client_id = client_id
+        self.client_secret = client_secret
         self.locations = {}
         self.level = level
-        self.client = None
-        self.oauth_session = None
+        self.client: AsyncOAuth2Client = None
+        self.token = None
         self.ws = None
         self.supported_services = [
             "COMMON",
@@ -63,43 +61,28 @@ class SmartSystem:
         """
         url = self.AUTHENTICATION_HOST + "/v1/oauth2/token"
         extra = {"client_id": self.client_id}
-        self.oauth_session = OAuth2Session(
-            client=LegacyApplicationClient(client_id=self.client_id),
-            auto_refresh_url=url,
-            auto_refresh_kwargs=extra,
-            token_updater=self.token_saver,
-        )
-        self.token = self.oauth_session.fetch_token(
-            token_url=url,
-            username=self.email,
-            password=self.password,
-            client_id=self.client_id,
-        )
+        self.client = AsyncOAuth2Client(self.client_id, self.client_secret, update_token=self.token_saver)
+        self.token = await self.client.fetch_token(url, username=self.email, password=self.password)
 
     async def quit(self):
         if self.client:
             self.client.should_stop = True
-        if self.ws:
-            self.ws.close()
-        if self.oauth_session:
-            self.oauth_session.delete(
+        if self.client:
+            await self.client.delete(
                 f'{self.AUTHENTICATION_HOST}/v1/token/{self.token["refresh_token"]}',
                 headers={"X-Api-Key": self.client_id},
             )
-            self.oauth_session.delete(
-                f'{self.AUTHENTICATION_HOST}/v1/token/{self.token["access_token"]}',
-                headers={"X-Api-Key": self.client_id},
-            )
+            # Close WS
 
-    def token_saver(self, token):
-        print(f"on a un token : {self.token}")
-        self.token = token
+    def token_saver(self, token, refresh_token=None, access_token=None):
+        print(f"on a un token : {token['access_token']}")
+        self.token = token['access_token']
 
     async def call_smart_system_service(self, service_id, data):
         args = {"data": data}
         headers = self.create_header(True)
 
-        r = self.oauth_session.put(
+        r = await self.client.put(
             f"{self.SMART_HOST}/v1/command/{service_id}",
             headers=headers,
             data=json.dumps(args, ensure_ascii=False),
@@ -137,34 +120,10 @@ class SmartSystem:
         return False
 
     async def __call_smart_system_get(self, url):
-        response = self.oauth_session.get(url, headers=self.create_header())
+        response = await self.client.get(url, headers=self.create_header())
         if self.__response_has_errors(response):
             return None
         return json.loads(response.content.decode("utf-8"))
-
-    @contextmanager
-    def __set_retry_on_session(
-        self,
-        backoff_factor=0.3,
-        status_forcelist=(500, 502, 504),
-    ):
-        try:
-            retry = Retry(
-                total=None,
-                read=None,
-                connect=None,
-                status=None,
-                method_whitelist=False,
-                backoff_factor=backoff_factor,
-                status_forcelist=status_forcelist,
-            )
-            adapter = HTTPAdapter(max_retries=retry)
-            self.oauth_session.mount("http://", adapter)
-            self.oauth_session.mount("https://", adapter)
-            yield self.oauth_session
-        finally:
-            self.oauth_session.mount("http://", HTTPAdapter())
-            self.oauth_session.mount("https://", HTTPAdapter())
 
     async def update_locations(self):
         response_data = await self.__call_smart_system_get(
@@ -215,24 +174,24 @@ class SmartSystem:
             }
         }
         while True:
-            with self.__set_retry_on_session() as session:
-                r = session.post(
-                    f"{self.SMART_HOST}/v1/websocket",
-                    headers=self.create_header(True),
-                    data=json.dumps(args, ensure_ascii=False),
-                )
-                r.raise_for_status()
-                response = r.json()
-                ws_url = response["data"]["attributes"]["url"]
-                try:
-                    websocket = await websockets.connect(ws_url)
-                    while True:
-                        message = await websocket.recv()
-                        self.on_message(message)
-                except websockets.ConnectionClosed:
-                    continue
-                finally:
-                    websocket.close()
+            r = await self.client.post(
+                f"{self.SMART_HOST}/v1/websocket",
+                headers=self.create_header(True),
+                data=json.dumps(args, ensure_ascii=False),
+            )
+            r.raise_for_status()
+            response = r.json()
+            ws_url = response["data"]["attributes"]["url"]
+            try:
+                websocket = await websockets.connect(ws_url)
+                while True:
+                    message = await websocket.recv()
+                    self.on_message(message)
+            except websockets.ConnectionClosed:
+                continue
+            finally:
+                websocket.close()
+                await asyncio.sleep(10)
 
     def on_message(self, message):
         data = json.loads(message)
