@@ -13,7 +13,6 @@ async def main():
         email=os.environ.get("GARDENA_EMAIL"),
         password=os.environ.get("GARDENA_PASSWORD"),
         client_id=os.environ.get("GARDENA_CLIENT_ID"),
-        client_secret=os.environ.get("GARDENA_CLIENT_SECRET"),
         level=logging.DEBUG,
     )
     try:

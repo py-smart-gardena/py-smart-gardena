@@ -14,7 +14,7 @@ from gardena.location import Location
 class SmartSystem:
     """Base class to communicate with gardena and handle network calls"""
 
-    def __init__(self, email=None, password=None, client_id=None, client_secret=None, level=logging.INFO):
+    def __init__(self, email=None, password=None, client_id=None, level=logging.INFO):
         """Constructor, create instance of gateway"""
         if email is None or password is None or client_id is None:
             raise ValueError(
@@ -30,12 +30,13 @@ class SmartSystem:
         self.email = email
         self.password = password
         self.client_id = client_id
-        self.client_secret = client_secret
         self.locations = {}
         self.level = level
         self.client: AsyncOAuth2Client = None
-        self.token = None
+        self.access_token = None
+        self.refresh_token = None
         self.ws = None
+        self.should_stop = False
         self.supported_services = [
             "COMMON",
             "VALVE",
@@ -61,22 +62,33 @@ class SmartSystem:
         """
         url = self.AUTHENTICATION_HOST + "/v1/oauth2/token"
         extra = {"client_id": self.client_id}
-        self.client = AsyncOAuth2Client(self.client_id, self.client_secret, update_token=self.token_saver)
-        self.token = await self.client.fetch_token(url, username=self.email, password=self.password)
+        self.client = AsyncOAuth2Client(
+            self.client_id, None, update_token=self.token_saver
+        )
+        self.token = await self.client.fetch_token(
+            url, username=self.email, password=self.password
+        )
 
     async def quit(self):
+        self.should_stop = True
         if self.client:
-            self.client.should_stop = True
-        if self.client:
-            await self.client.delete(
-                f'{self.AUTHENTICATION_HOST}/v1/token/{self.token["refresh_token"]}',
-                headers={"X-Api-Key": self.client_id},
-            )
-            # Close WS
+            if self.refresh_token:
+                await self.client.delete(
+                    f"{self.AUTHENTICATION_HOST}/v1/token/{self.refresh_token}",
+                    headers={"X-Api-Key": self.client_id},
+                )
+            if self.access_token:
+                await self.client.delete(
+                    f"{self.AUTHENTICATION_HOST}/v1/token/{self.access_token}",
+                    headers={"X-Api-Key": self.client_id},
+                )
 
     def token_saver(self, token, refresh_token=None, access_token=None):
         print(f"on a un token : {token['access_token']}")
-        self.token = token['access_token']
+        if access_token:
+            self.access_token = access_token
+        if refresh_token:
+            self.refresh_token = refresh_token
 
     async def call_smart_system_service(self, service_id, data):
         args = {"data": data}
@@ -173,7 +185,7 @@ class SmartSystem:
                 "id": "does-not-matter",
             }
         }
-        while True:
+        while not self.should_stop:
             r = await self.client.post(
                 f"{self.SMART_HOST}/v1/websocket",
                 headers=self.create_header(True),
@@ -190,7 +202,7 @@ class SmartSystem:
             except websockets.ConnectionClosed:
                 continue
             finally:
-                websocket.close()
+                await websocket.close()
                 await asyncio.sleep(10)
 
     def on_message(self, message):
