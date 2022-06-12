@@ -81,7 +81,7 @@ An exception is raised if authentication fails.
 from gardena.smart_system import SmartSystem
 import pprint
 
-smart_system = SmartSystem(email="email@gmail.com", password="my_password", client_id="client_id")
+smart_system = SmartSystem(client_id="client_id", client_secret="client_secret")
 await smart_system.authenticate()
 await smart_system.update_locations()
 for location in smart_system.locations.values():

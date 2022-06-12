@@ -9,7 +9,7 @@ from fixtures import location_fixture, mower_fixture
 
 class SmartSystemTest(unittest.TestCase):
     def setup_method(self, method):
-        self.sm = SmartSystem(email="login", password="password", client_id="client_id")
+        self.sm = SmartSystem(client_id="client_id", client_secret="client_secret")
         loc = Location(self.sm, location_fixture)
         self.sm.locations[loc.id] = loc
         device = Mower(self.sm, mower_fixture)

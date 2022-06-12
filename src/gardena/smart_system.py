@@ -14,11 +14,11 @@ from gardena.location import Location
 class SmartSystem:
     """Base class to communicate with gardena and handle network calls"""
 
-    def __init__(self, email=None, password=None, client_id=None, level=logging.INFO):
+    def __init__(self, client_id=None, client_secret=None, level=logging.INFO):
         """Constructor, create instance of gateway"""
-        if email is None or password is None or client_id is None:
+        if client_id is None or client_secret is None:
             raise ValueError(
-                "Arguments 'email', 'passwords' and 'client_id' are required"
+                "Arguments 'email', 'client_secret' and 'client_id' are required"
             )
         logging.basicConfig(
             level=level,
@@ -27,9 +27,8 @@ class SmartSystem:
         )
         self.AUTHENTICATION_HOST = "https://api.authentication.husqvarnagroup.dev"
         self.SMART_HOST = "https://api.smart.gardena.dev"
-        self.email = email
-        self.password = password
         self.client_id = client_id
+        self.client_secret = client_secret
         self.locations = {}
         self.level = level
         self.client: AsyncOAuth2Client = None
@@ -65,10 +64,10 @@ class SmartSystem:
         url = self.AUTHENTICATION_HOST + "/v1/oauth2/token"
         extra = {"client_id": self.client_id}
         self.client = AsyncOAuth2Client(
-            self.client_id, None, update_token=self.token_saver
+            self.client_id, self.client_secret, update_token=self.token_saver
         )
         self.token = await self.client.fetch_token(
-            url, username=self.email, password=self.password
+            url, usernamegrant_type="client_credentials"
         )
 
     async def quit(self):

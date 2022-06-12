@@ -8,7 +8,7 @@ from fixtures import water_control_fixture
 
 class WaterControlTest(unittest.TestCase):
     def setup_method(self, method):
-        self.sm = SmartSystem(email="login", password="password", client_id="client_id")
+        self.sm = SmartSystem(client_id="client_id", client_secret="client_secret")
 
     def test_water_control(self):
         device = WaterControl(self.sm, water_control_fixture)

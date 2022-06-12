@@ -7,7 +7,7 @@ from fixtures import smart_irrigation_fixture
 
 class SmartIrrigationControlTest(unittest.TestCase):
     def setup_method(self, method):
-        self.sm = SmartSystem(email="login", password="password", client_id="client_id")
+        self.sm = SmartSystem(client_id="client_id", client_secret="client_secret")
 
     def test_smart_irrigation_control(self):
         device = SmartIrrigationControl(self.sm, smart_irrigation_fixture)
@@ -31,10 +31,10 @@ class SmartIrrigationControlTest(unittest.TestCase):
             device.valves["28c26146-d4c1-42d7-964a-89f5237550ce:1"]["activity"]
             == "CLOSED"
         )
-#        assert (
-#            device.valves["28c26146-d4c1-42d7-964a-89f5237550ce:1"]["last_error_code"]
-#            == "NO_MESSAGE"
-#        )
+        #        assert (
+        #            device.valves["28c26146-d4c1-42d7-964a-89f5237550ce:1"]["last_error_code"]
+        #            == "NO_MESSAGE"
+        #        )
         assert (
             device.valves["28c26146-d4c1-42d7-964a-89f5237550ce:1"]["name"]
             == "Clapet 1"

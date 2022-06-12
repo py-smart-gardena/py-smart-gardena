@@ -10,14 +10,13 @@ import pprint
 
 async def main():
     smart_system = SmartSystem(
-        email=os.environ.get("GARDENA_EMAIL"),
-        password=os.environ.get("GARDENA_PASSWORD"),
         client_id=os.environ.get("GARDENA_CLIENT_ID"),
+        client_secret=os.environ.get("GARDENA_CLIENT_SECRET"),
         level=logging.DEBUG,
     )
     try:
         print(
-            f"Connecting with email/password/application key : {os.environ.get('GARDENA_EMAIL')}/{os.environ.get('GARDENA_PASSWORD')}/{os.environ.get('GARDENA_CLIENT_ID')}"
+            f"Connecting with client_id/client_secret : {os.environ.get('GARDENA_CLIENT_ID')}/{os.environ.get('GARDENA_CLIENT_SECRET')}"
         )
         await smart_system.authenticate()
         await smart_system.update_locations()
