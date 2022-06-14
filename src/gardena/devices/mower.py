@@ -39,12 +39,12 @@ class Mower(BaseDevice):
         else:
             self.location.smart_system.logger.error("The mower id is not defined")
 
-    async def start_dont_override(self, duration):
+    async def start_dont_override(self):
         if self.mower_id is not None:
             data = {
                 "id": str(uuid.uuid1()),
                 "type": "MOWER_CONTROL",
-                "attributes": {"command": "START_DONT_OVERRIDE", "seconds": duration},
+                "attributes": {"command": "START_DONT_OVERRIDE"},
             }
             await self.location.smart_system.call_smart_system_service(
                 self.mower_id, data
