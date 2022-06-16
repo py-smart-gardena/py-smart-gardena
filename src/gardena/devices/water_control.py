@@ -12,6 +12,7 @@ class WaterControl(BaseDevice):
         self.valve_activity = "N/A"
         self.valve_name = "N/A"
         self.valve_state = "N/A"
+        self.last_error_code = "N/A"
         self.setup_values_from_device_map(device_map)
 
     def update_device_specific_data(self, device_map):
@@ -22,6 +23,7 @@ class WaterControl(BaseDevice):
             self.set_attribute_value("valve_activity", device_map, "activity")
             self.set_attribute_value("valve_name", device_map, "name")
             self.set_attribute_value("valve_state", device_map, "state")
+            self.set_attribute_value("last_error_code", device_map, "lastErrorCode")
 
     async def start_seconds_to_override(self, duration):
         data = {
