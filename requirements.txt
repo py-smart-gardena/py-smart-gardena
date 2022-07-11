@@ -8,7 +8,7 @@
 -i https://pypi.org/simple
 anyio==3.6.1; python_full_version >= '3.6.2'
 authlib==1.0.1
-certifi==2022.5.18.1; python_version >= '3.6'
+certifi==2022.6.15; python_version >= '3.6'
 cffi==1.15.0
 charset-normalizer==2.0.12; python_version >= '3'
 cryptography==37.0.2; python_version >= '3.6'
