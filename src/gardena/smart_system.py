@@ -9,6 +9,7 @@ from json.decoder import JSONDecodeError
 from gardena.devices.device_factory import DeviceFactory
 from gardena.exceptions.authentication_exception import AuthenticationException
 from gardena.location import Location
+from gardena.token_manager import TokenManager
 
 
 class SmartSystem:
@@ -25,6 +26,8 @@ class SmartSystem:
             format="%(asctime)s %(levelname)-8s %(message)s",
             datefmt="%Y-%m-%d %H:%M:%S",
         )
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(level)
         self.AUTHENTICATION_HOST = "https://api.authentication.husqvarnagroup.dev"
         self.SMART_HOST = "https://api.smart.gardena.dev"
         self.client_id = client_id
@@ -32,8 +35,7 @@ class SmartSystem:
         self.locations = {}
         self.level = level
         self.client: AsyncOAuth2Client = None
-        self.access_token = None
-        self.refresh_token = None
+        self.token_manager = TokenManager(logger=self.logger)
         self.ws = None
         self.is_ws_connected = False
         self.ws_status_callback = None
@@ -47,8 +49,6 @@ class SmartSystem:
             "POWER_SOCKET",
             "DEVICE",
         ]
-        self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(level)
 
     def create_header(self, include_json=False):
         headers = {"Authorization-Provider": "husqvarna", "X-Api-Key": self.client_id}
@@ -66,30 +66,26 @@ class SmartSystem:
         self.client = AsyncOAuth2Client(
             self.client_id, self.client_secret, update_token=self.token_saver
         )
-        self.token = await self.client.fetch_token(
+        self.token_manager.load_from_oauth2_token(await self.client.fetch_token(
             url, usernamegrant_type="client_credentials"
-        )
+        ))
 
     async def quit(self):
         self.should_stop = True
         if self.client:
-            if self.refresh_token:
+            if self.token_manager.refresh_token:
                 await self.client.delete(
-                    f"{self.AUTHENTICATION_HOST}/v1/token/{self.refresh_token}",
+                    f"{self.AUTHENTICATION_HOST}/v1/token/{self.token_manager.refresh_token}",
                     headers={"X-Api-Key": self.client_id},
                 )
-            if self.access_token:
+            if self.token_manager.access_token:
                 await self.client.delete(
-                    f"{self.AUTHENTICATION_HOST}/v1/token/{self.access_token}",
+                    f"{self.AUTHENTICATION_HOST}/v1/token/{self.token_manager.access_token}",
                     headers={"X-Api-Key": self.client_id},
                 )
 
-    def token_saver(self, token, refresh_token=None, access_token=None):
-        print(f"on a un token : {token['access_token']}")
-        if access_token:
-            self.access_token = access_token
-        if refresh_token:
-            self.refresh_token = refresh_token
+    async def token_saver(self, token, refresh_token=None, access_token=None):
+        self.token_manager.load_from_oauth2_token(token)
 
     async def call_smart_system_service(self, service_id, data):
         args = {"data": data}
