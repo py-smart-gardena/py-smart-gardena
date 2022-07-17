@@ -67,7 +67,7 @@ class SmartSystem:
             self.client_id, self.client_secret, update_token=self.token_saver
         )
         self.token_manager.load_from_oauth2_token(await self.client.fetch_token(
-            url, usernamegrant_type="client_credentials"
+            url, grant_type="client_credentials"
         ))
 
     async def quit(self):
