@@ -64,7 +64,7 @@ class SmartSystem:
         url = self.AUTHENTICATION_HOST + "/v1/oauth2/token"
         extra = {"client_id": self.client_id}
         self.client = AsyncOAuth2Client(
-            self.client_id, self.client_secret, update_token=self.token_saver
+            self.client_id, self.client_secret, update_token=self.token_saver, grant_type="client_credentials"
         )
         self.token_manager.load_from_oauth2_token(await self.client.fetch_token(
             url, grant_type="client_credentials"
@@ -73,11 +73,6 @@ class SmartSystem:
     async def quit(self):
         self.should_stop = True
         if self.client:
-            if self.token_manager.refresh_token:
-                await self.client.delete(
-                    f"{self.AUTHENTICATION_HOST}/v1/token/{self.token_manager.refresh_token}",
-                    headers={"X-Api-Key": self.client_id},
-                )
             if self.token_manager.access_token:
                 await self.client.delete(
                     f"{self.AUTHENTICATION_HOST}/v1/token/{self.token_manager.access_token}",
