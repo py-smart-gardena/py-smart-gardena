@@ -183,7 +183,6 @@ class SmartSystem:
         }
         while not self.should_stop:
             self.logger.debug("Trying to connect to gardena API....")
-            websocket = None
             try:
                 self.logger.debug("Trying to get Websocket url")
                 r = await self.client.post(
@@ -197,33 +196,25 @@ class SmartSystem:
                 ws_url = response["data"]["attributes"]["url"]
                 self.logger.debug("Websocket url retrieved successfully")
                 self.logger.debug("Connecting to websocket ..")
-                websocket = await websockets.connect(ws_url, ping_interval=150)
-                self.set_ws_status(True)
-                self.logger.debug("Connected !")
-                while True:
-                    self.logger.debug("Waiting for message ..")
-                    message = await websocket.recv()
-                    self.logger.debug("Message received ..")
-                    self.on_message(message)
-            except websockets.ConnectionClosed:
-                continue
-            except InvalidTokenError:
-                self.logger.debug("Token is invalid ..")
-                continue
-            except OAuthError:
-                self.logger.debug("OAuthError ..")
-                continue
-            except HTTPStatusError:
-                self.logger.debug("HTTPStatusError ..")
+                await self.__launch_websocket_loop(ws_url)
+            except (websockets.ConnectionClosed, InvalidTokenError, OAuthError, HTTPStatusError) as error:
+                self.logger.debug(error, exc_info=True)
                 continue
             finally:
                 self.set_ws_status(False)
-                if websocket:
-                    self.logger.debug("Closing websocket ..")
-                    await websocket.close()
                 if not self.should_stop:
                     self.logger.debug("Sleeping 10 seconds ..")
                     await asyncio.sleep(10)
+
+    async def __launch_websocket_loop(self, url):
+        websocket = await websockets.connect(url, ping_interval=150)
+        self.set_ws_status(True)
+        self.logger.debug("Connected !")
+        while not self.should_stop:
+            self.logger.debug("Waiting for message ..")
+            message = await websocket.recv()
+            self.logger.debug("Message received ..")
+            self.on_message(message)
 
     def on_message(self, message):
         data = json.loads(message)
