@@ -8,6 +8,7 @@ requests = "*"
 websockets = "*"
 httpx = "*"
 authlib = "*"
+backoff = "*"
 
 [dev-packages]
 black = "*"

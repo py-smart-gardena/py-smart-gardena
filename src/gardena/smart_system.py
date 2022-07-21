@@ -2,6 +2,8 @@ import asyncio
 
 import json
 import logging
+
+import backoff
 from httpx import HTTPStatusError
 import websockets
 from authlib.integrations.httpx_client import AsyncOAuth2Client
@@ -15,6 +17,7 @@ from gardena.exceptions.authentication_exception import AuthenticationException
 from gardena.location import Location
 from gardena.token_manager import TokenManager
 
+MAX_BACKOFF_VALUE = 900
 
 class SmartSystem:
     """Base class to communicate with gardena and handle network calls"""
@@ -119,14 +122,16 @@ class SmartSystem:
 
             self.logger.error(f"{response.status_code} : {msg}")
 
-            if response.status_code in (403, 429):
-                raise Exception(msg)
-            elif response.status_code == 401:
+            if response.status_code == 401:
                 raise AuthenticationException(msg)
-
+            response.raise_for_status()
             return True
         return False
 
+    @backoff.on_exception(backoff.expo,
+                          HTTPStatusError,
+                          max_value=MAX_BACKOFF_VALUE,
+                          logger=logging.getLogger(__name__))
     async def __call_smart_system_get(self, url):
         response = await self.client.get(url, headers=self.create_header())
         if self.__response_has_errors(response):
@@ -174,30 +179,12 @@ class SmartSystem:
                         location.add_device(device_obj)
 
     async def start_ws(self, location):
-        args = {
-            "data": {
-                "type": "WEBSOCKET",
-                "attributes": {"locationId": location.id},
-                "id": "does-not-matter",
-            }
-        }
         while not self.should_stop:
             self.logger.debug("Trying to connect to gardena API....")
             try:
-                self.logger.debug("Trying to get Websocket url")
-                r = await self.client.post(
-                    f"{self.SMART_HOST}/v1/websocket",
-                    headers=self.create_header(True),
-                    data=json.dumps(args, ensure_ascii=False),
-                )
-                self.logger.debug("Websocket url: got response")
-                r.raise_for_status()
-                response = r.json()
-                ws_url = response["data"]["attributes"]["url"]
-                self.logger.debug("Websocket url retrieved successfully")
-                self.logger.debug("Connecting to websocket ..")
+                ws_url = await self.__get_ws_url(location)
                 await self.__launch_websocket_loop(ws_url)
-            except (websockets.ConnectionClosed, InvalidTokenError, OAuthError, HTTPStatusError) as error:
+            except (websockets.ConnectionClosed, InvalidTokenError, OAuthError) as error:
                 self.logger.debug(error, exc_info=True)
                 continue
             finally:
@@ -206,7 +193,33 @@ class SmartSystem:
                     self.logger.debug("Sleeping 10 seconds ..")
                     await asyncio.sleep(10)
 
+    @backoff.on_exception(backoff.expo,
+                          HTTPStatusError,
+                          max_value=MAX_BACKOFF_VALUE,
+                          logger=logging.getLogger(__name__))
+    async def __get_ws_url(self, location):
+        args = {
+            "data": {
+                "type": "WEBSOCKET",
+                "attributes": {"locationId": location.id},
+                "id": "does-not-matter",
+            }
+        }
+        self.logger.debug("Trying to get Websocket url")
+        r = await self.client.post(
+            f"{self.SMART_HOST}/v1/websocket",
+            headers=self.create_header(True),
+            data=json.dumps(args, ensure_ascii=False),
+        )
+        self.logger.debug("Websocket url: got response")
+        r.raise_for_status()
+        response = r.json()
+        ws_url = response["data"]["attributes"]["url"]
+        self.logger.debug("Websocket url retrieved successfully")
+        return ws_url
+
     async def __launch_websocket_loop(self, url):
+        self.logger.debug("Connecting to websocket ..")
         websocket = await websockets.connect(url, ping_interval=150)
         self.set_ws_status(True)
         self.logger.debug("Connected !")
