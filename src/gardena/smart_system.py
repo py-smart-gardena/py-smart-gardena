@@ -179,18 +179,18 @@ class SmartSystem:
         }
         while not self.should_stop:
             self.logger.debug("Trying to connect to gardena API....")
-            self.logger.debug("Trying to get Websocket url")
-            r = await self.client.post(
-                f"{self.SMART_HOST}/v1/websocket",
-                headers=self.create_header(True),
-                data=json.dumps(args, ensure_ascii=False),
-            )
-            self.logger.debug("Websocket url retrieved !")
-            r.raise_for_status()
-            response = r.json()
-            ws_url = response["data"]["attributes"]["url"]
-            self.logger.debug("Websocket url retrieved !")
             try:
+                self.logger.debug("Trying to get Websocket url")
+                r = await self.client.post(
+                    f"{self.SMART_HOST}/v1/websocket",
+                    headers=self.create_header(True),
+                    data=json.dumps(args, ensure_ascii=False),
+                )
+                self.logger.debug("Websocket url: got response")
+                r.raise_for_status()
+                response = r.json()
+                ws_url = response["data"]["attributes"]["url"]
+                self.logger.debug("Websocket url retrieved successfully")
                 self.logger.debug("Connecting to websocket ..")
                 websocket = await websockets.connect(ws_url)
                 self.set_ws_status(True)
@@ -203,12 +203,14 @@ class SmartSystem:
             except websockets.ConnectionClosed:
                 continue
             finally:
-                self.logger.debug("Cloosing socket ..")
                 self.set_ws_status(False)
-                await websocket.close()
-                await asyncio.sleep(10)
-                self.logger.debug("Sleeping 10 seconds ..")
-
+                if websocket:
+                    self.logger.debug("Closing websocket ..")
+                    await websocket.close()
+                if not self.should_stop:
+                    self.logger.debug("Sleeping 10 seconds ..")
+                    await asyncio.sleep(10)
+    
     def on_message(self, message):
         data = json.loads(message)
         self.logger.debug(f'Received {data["type"]} message')
