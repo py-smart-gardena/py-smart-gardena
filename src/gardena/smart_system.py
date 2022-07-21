@@ -183,6 +183,7 @@ class SmartSystem:
         }
         while not self.should_stop:
             self.logger.debug("Trying to connect to gardena API....")
+            websocket = None
             try:
                 self.logger.debug("Trying to get Websocket url")
                 r = await self.client.post(
