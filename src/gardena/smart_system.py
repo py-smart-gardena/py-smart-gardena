@@ -197,7 +197,7 @@ class SmartSystem:
                 ws_url = response["data"]["attributes"]["url"]
                 self.logger.debug("Websocket url retrieved successfully")
                 self.logger.debug("Connecting to websocket ..")
-                websocket = await websockets.connect(ws_url)
+                websocket = await websockets.connect(ws_url, ping_interval=150)
                 self.set_ws_status(True)
                 self.logger.debug("Connected !")
                 while True:
