@@ -2,10 +2,14 @@ import asyncio
 
 import json
 import logging
+from httpx import HTTPStatusError
 import websockets
 from authlib.integrations.httpx_client import AsyncOAuth2Client
 from json.decoder import JSONDecodeError
-
+from authlib.integrations.base_client.errors import (
+    OAuthError,
+    InvalidTokenError
+)
 from gardena.devices.device_factory import DeviceFactory
 from gardena.exceptions.authentication_exception import AuthenticationException
 from gardena.location import Location
@@ -179,18 +183,18 @@ class SmartSystem:
         }
         while not self.should_stop:
             self.logger.debug("Trying to connect to gardena API....")
-            self.logger.debug("Trying to get Websocket url")
-            r = await self.client.post(
-                f"{self.SMART_HOST}/v1/websocket",
-                headers=self.create_header(True),
-                data=json.dumps(args, ensure_ascii=False),
-            )
-            self.logger.debug("Websocket url retrieved !")
-            r.raise_for_status()
-            response = r.json()
-            ws_url = response["data"]["attributes"]["url"]
-            self.logger.debug("Websocket url retrieved !")
             try:
+                self.logger.debug("Trying to get Websocket url")
+                r = await self.client.post(
+                    f"{self.SMART_HOST}/v1/websocket",
+                    headers=self.create_header(True),
+                    data=json.dumps(args, ensure_ascii=False),
+                )
+                self.logger.debug("Websocket url: got response")
+                r.raise_for_status()
+                response = r.json()
+                ws_url = response["data"]["attributes"]["url"]
+                self.logger.debug("Websocket url retrieved successfully")
                 self.logger.debug("Connecting to websocket ..")
                 websocket = await websockets.connect(ws_url)
                 self.set_ws_status(True)
@@ -202,12 +206,23 @@ class SmartSystem:
                     self.on_message(message)
             except websockets.ConnectionClosed:
                 continue
+            except InvalidTokenError:
+                self.logger.debug("Token is invalid ..")
+                continue
+            except OAuthError:
+                self.logger.debug("OAuthError ..")
+                continue
+            except HTTPStatusError:
+                self.logger.debug("HTTPStatusError ..")
+                continue
             finally:
-                self.logger.debug("Cloosing socket ..")
                 self.set_ws_status(False)
-                await websocket.close()
-                await asyncio.sleep(10)
-                self.logger.debug("Sleeping 10 seconds ..")
+                if websocket:
+                    self.logger.debug("Closing websocket ..")
+                    await websocket.close()
+                if not self.should_stop:
+                    self.logger.debug("Sleeping 10 seconds ..")
+                    await asyncio.sleep(10)
 
     def on_message(self, message):
         data = json.loads(message)
