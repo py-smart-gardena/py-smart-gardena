@@ -223,7 +223,7 @@ class SmartSystem:
                 if not self.should_stop:
                     self.logger.debug("Sleeping 10 seconds ..")
                     await asyncio.sleep(10)
-    
+
     def on_message(self, message):
         data = json.loads(message)
         self.logger.debug(f'Received {data["type"]} message')
