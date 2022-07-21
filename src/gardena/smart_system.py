@@ -2,10 +2,14 @@ import asyncio
 
 import json
 import logging
+from httpx import HTTPStatusError
 import websockets
 from authlib.integrations.httpx_client import AsyncOAuth2Client
 from json.decoder import JSONDecodeError
-
+from authlib.integrations.base_client.errors import (
+    OAuthError,
+    InvalidTokenError
+)
 from gardena.devices.device_factory import DeviceFactory
 from gardena.exceptions.authentication_exception import AuthenticationException
 from gardena.location import Location
@@ -201,6 +205,15 @@ class SmartSystem:
                     self.logger.debug("Message received ..")
                     self.on_message(message)
             except websockets.ConnectionClosed:
+                continue
+            except InvalidTokenError:
+                self.logger.debug("Token is invalid ..")
+                continue
+            except OAuthError:
+                self.logger.debug("OAuthError ..")
+                continue
+            except HTTPStatusError:
+                self.logger.debug("HTTPStatusError ..")
                 continue
             finally:
                 self.set_ws_status(False)
