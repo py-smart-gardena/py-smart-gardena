@@ -71,7 +71,11 @@ class SmartSystem:
         url = self.AUTHENTICATION_HOST + "/v1/oauth2/token"
         extra = {"client_id": self.client_id}
         self.client = AsyncOAuth2Client(
-            self.client_id, self.client_secret, update_token=self.token_saver, grant_type="client_credentials", token_endpoint=url
+            self.client_id, 
+            self.client_secret, 
+            update_token=self.token_saver, 
+            grant_type="client_credentials", 
+            token_endpoint=url
         )
         self.token_manager.load_from_oauth2_token(await self.client.fetch_token(
             url, grant_type="client_credentials"
