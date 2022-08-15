@@ -13,7 +13,7 @@ certifi==2022.6.15; python_full_version >= '3.6.0'
 cffi==1.15.1
 charset-normalizer==2.1.0; python_full_version >= '3.6.0'
 cryptography==37.0.4; python_full_version >= '3.6.0'
-h11==0.12.0; python_full_version >= '3.6.0'
+h11==0.13.0; python_full_version >= '3.6.0'
 httpcore==0.15.0; python_version >= '3.7'
 httpx==0.23.0
 idna==3.3; python_version >= '3'
