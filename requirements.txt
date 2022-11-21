@@ -14,7 +14,7 @@ cffi==1.15.1
 charset-normalizer==3.0.1; python_full_version >= '3.6.0'
 cryptography==38.0.3; python_full_version >= '3.6.0'
 h11==0.14.0; python_full_version >= '3.6.0'
-httpcore==0.15.0; python_version >= '3.7'
+httpcore==0.16.1; python_version >= '3.7'
 httpx==0.23.0
 idna==3.3; python_version >= '3'
 pycparser==2.21
