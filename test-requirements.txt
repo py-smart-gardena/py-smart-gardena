@@ -9,7 +9,7 @@
 black==23.7.0
 click==8.1.6; python_version >= '3.7'
 mypy-extensions==1.0.0
-pathspec==0.11.0
+pathspec==0.11.1
 pep517==0.13.0
 pip-tools==6.12.2
 platformdirs==3.0.0; python_version >= '3.7'
