@@ -10,7 +10,7 @@ anyio==4.1.0; python_full_version >= '3.6.2'
 authlib==1.2.1
 backoff==2.2.1
 certifi==2023.11.17; python_full_version >= '3.6.0'
-cffi==1.15.1
+cffi==1.16.0
 charset-normalizer==3.0.1; python_full_version >= '3.6.0'
 cryptography==39.0.1; python_full_version >= '3.6.0'
 h11==0.14.0; python_full_version >= '3.6.0'
