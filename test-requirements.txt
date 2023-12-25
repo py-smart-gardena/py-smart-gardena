@@ -10,7 +10,7 @@ black==23.12.1
 click==8.1.7; python_version >= '3.7'
 mypy-extensions==1.0.0
 pathspec==0.12.1
-pep517==0.13.0
+pep517==0.13.1
 pip-tools==6.12.2
 platformdirs==3.0.0; python_version >= '3.7'
 tomli==2.0.1; python_version < '3.11'
