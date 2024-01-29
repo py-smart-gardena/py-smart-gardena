@@ -12,7 +12,7 @@ backoff==2.2.1
 certifi==2023.11.17; python_full_version >= '3.6.0'
 cffi==1.16.0
 charset-normalizer==3.3.2; python_full_version >= '3.6.0'
-cryptography==39.0.1; python_full_version >= '3.6.0'
+cryptography==42.0.1; python_full_version >= '3.6.0'
 h11==0.14.0; python_full_version >= '3.6.0'
 httpcore==0.16.3; python_version >= '3.7'
 httpx==0.23.3
