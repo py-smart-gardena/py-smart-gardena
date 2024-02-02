@@ -7,6 +7,7 @@ name = "pypi"
 requests = "*"
 websockets = "*"
 httpx = "*"
+oauthlib = "*"
 authlib = "*"
 backoff = "*"
 
@@ -15,4 +16,4 @@ black = "*"
 pip-tools = "*"
 
 [requires]
-python_version = "3.10"
+python_version = "3.12"

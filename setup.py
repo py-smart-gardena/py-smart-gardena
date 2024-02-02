@@ -1,7 +1,6 @@
 import setuptools
 from os.path import splitext, basename
 from glob import glob
-from subprocess import check_output
 
 import versioneer
 

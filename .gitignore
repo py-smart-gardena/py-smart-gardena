@@ -14,3 +14,4 @@ dist/
 request.sample
 src/test_functions.py
 .env
+.python-version
