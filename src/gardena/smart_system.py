@@ -235,6 +235,7 @@ class SmartSystem:
                 continue
             self.logger.debug("Message received ..")
             self.on_message(message)
+        await websocket.close()
 
     def on_message(self, message):
         data = json.loads(message)
