@@ -13,5 +13,5 @@ pathspec==0.12.1
 pep517==0.13.1
 pip-tools==7.4.1
 platformdirs==4.3.6; python_version >= '3.7'
-tomli==2.0.1; python_version < '3.11'
+tomli==2.0.2; python_version < '3.11'
 wheel==0.38.4; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'
