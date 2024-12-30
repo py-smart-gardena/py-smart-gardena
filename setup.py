@@ -35,7 +35,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     extras_require={
-        "test": ["pytest>=3.6", "coverage", "pytest-cov", "requests_mock"],
+        "test": ["pytest>=6.0", "coverage", "pytest-cov", "requests_mock"],
         "dev": ["pre-commit"]
     },
 )
