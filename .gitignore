@@ -8,6 +8,7 @@ pip-selfcheck.json
 .eggs/
 src/py_smart_gardena.egg-info/
 venv/
+.venv/
 reports/
 dist/
 

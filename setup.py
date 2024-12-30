@@ -7,7 +7,7 @@ import versioneer
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-tests_require = ["pytest>=3.6", "coverage", "pytest-cov", "requests_mock"]
+tests_require = []
 
 
 setuptools.setup(
@@ -26,7 +26,6 @@ setuptools.setup(
     install_requires=["requests", "websockets", "httpx", "authlib", "backoff"],
     setup_requires=["pytest-runner"],
     tests_require=tests_require,
-    extras_require={"dev": ["pre-commit"]},
     py_modules={splitext(basename(path))[0] for path in glob("src/*py")},
     license="MIT",
     zip_safe=False,
@@ -35,4 +34,8 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    extras_require={
+        "test": ["pytest>=3.6", "coverage", "pytest-cov", "requests_mock"],
+        "dev": ["pre-commit"]
+    },
 )
