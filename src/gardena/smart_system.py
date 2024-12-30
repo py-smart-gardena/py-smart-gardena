@@ -5,7 +5,8 @@ import logging
 
 import backoff
 from httpx import HTTPStatusError
-import websockets
+from websockets.asyncio.client import connect
+from websockets.exceptions import ConnectionClosed
 from authlib.integrations.httpx_client import AsyncOAuth2Client
 from json.decoder import JSONDecodeError
 from authlib.integrations.base_client.errors import (
@@ -188,7 +189,7 @@ class SmartSystem:
             try:
                 ws_url = await self.__get_ws_url(location)
                 await self.__launch_websocket_loop(ws_url)
-            except (websockets.ConnectionClosed, InvalidTokenError, OAuthError) as error:
+            except (ConnectionClosed, InvalidTokenError, OAuthError) as error:
                 self.logger.debug(error, exc_info=True)
                 continue
             finally:
@@ -224,7 +225,7 @@ class SmartSystem:
 
     async def __launch_websocket_loop(self, url):
         self.logger.debug("Connecting to websocket ..")
-        websocket = await websockets.connect(url, ping_interval=150)
+        websocket = await connect(url, ping_interval=150)
         self.set_ws_status(True)
         self.logger.debug("Connected !")
         while not self.should_stop:
