@@ -86,9 +86,10 @@ class SmartSystem:
         self.should_stop = True
         if self.client:
             if self.token_manager.access_token:
-                await self.client.delete(
-                    f"{self.AUTHENTICATION_HOST}/v1/token/{self.token_manager.access_token}",
-                    headers={"X-Api-Key": self.client_id},
+                await self.client.post(
+                    f"{self.AUTHENTICATION_HOST}/v1/oauth2/revoke",
+                    headers={"Authorization": "Bearer " + self.token_manager.access_token},
+                    data={"token": self.token_manager.access_token}
                 )
 
     async def token_saver(self, token, refresh_token=None, access_token=None):
