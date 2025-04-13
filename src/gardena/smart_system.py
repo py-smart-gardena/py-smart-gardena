@@ -99,7 +99,7 @@ class SmartSystem:
         headers = self.create_header(True)
 
         r = await self.client.put(
-            f"{self.SMART_HOST}/v1/command/{service_id}",
+            f"{self.SMART_HOST}/v2/command/{service_id}",
             headers=headers,
             data=json.dumps(args, ensure_ascii=False),
         )
@@ -145,7 +145,7 @@ class SmartSystem:
 
     async def update_locations(self):
         response_data = await self.__call_smart_system_get(
-            f"{self.SMART_HOST}/v1/locations"
+            f"{self.SMART_HOST}/v2/locations"
         )
         if response_data is not None:
             if "data" not in response_data or len(response_data["data"]) < 1:
@@ -159,7 +159,7 @@ class SmartSystem:
 
     async def update_devices(self, location):
         response_data = await self.__call_smart_system_get(
-            f"{self.SMART_HOST}/v1/locations/{location.id}"
+            f"{self.SMART_HOST}/v2/locations/{location.id}"
         )
         if response_data is not None:
             #  TODO : test if key exists
@@ -212,7 +212,7 @@ class SmartSystem:
         }
         self.logger.debug("Trying to get Websocket url")
         r = await self.client.post(
-            f"{self.SMART_HOST}/v1/websocket",
+            f"{self.SMART_HOST}/v2/websocket",
             headers=self.create_header(True),
             data=json.dumps(args, ensure_ascii=False),
         )
