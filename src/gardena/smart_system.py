@@ -2,6 +2,7 @@ import asyncio
 import json
 import logging
 import ssl
+import functools
 
 import backoff
 from httpx import HTTPStatusError
@@ -20,10 +21,16 @@ from gardena.token_manager import TokenManager
 
 MAX_BACKOFF_VALUE = 900
 
+@functools.lru_cache(maxsize=1)
+def get_ssl_context():
+    """Create and cache SSL context outside of event loop."""
+    context = ssl.create_default_context()
+    return context
+
 class SmartSystem:
     """Base class to communicate with gardena and handle network calls"""
 
-    def __init__(self, client_id=None, client_secret=None, level=logging.INFO):
+    def __init__(self, client_id=None, client_secret=None, level=logging.INFO, ssl_context=None):
         """Constructor, create instance of gateway"""
         if client_id is None or client_secret is None:
             raise ValueError(
@@ -57,8 +64,8 @@ class SmartSystem:
             "POWER_SOCKET",
             "DEVICE",
         ]
-        # Create SSL context outside of event loop
-        self._ssl_context = ssl.create_default_context()
+        # Use provided SSL context or get cached one
+        self._ssl_context = ssl_context or get_ssl_context()
 
     def create_header(self, include_json=False):
         headers = {"Authorization-Provider": "husqvarna", "X-Api-Key": self.client_id}
@@ -78,7 +85,8 @@ class SmartSystem:
             self.client_secret,
             update_token=self.token_saver,
             grant_type="client_credentials",
-            token_endpoint=url
+            token_endpoint=url,
+            verify=self._ssl_context  # Pass SSL context to httpx client
         )
         self.token_manager.load_from_oauth2_token(await self.client.fetch_token(
             url, grant_type="client_credentials"
