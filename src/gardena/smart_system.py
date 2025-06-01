@@ -1,7 +1,7 @@
 import asyncio
-
 import json
 import logging
+import ssl
 
 import backoff
 from httpx import HTTPStatusError
@@ -57,6 +57,8 @@ class SmartSystem:
             "POWER_SOCKET",
             "DEVICE",
         ]
+        # Create SSL context outside of event loop
+        self._ssl_context = ssl.create_default_context()
 
     def create_header(self, include_json=False):
         headers = {"Authorization-Provider": "husqvarna", "X-Api-Key": self.client_id}
@@ -225,7 +227,7 @@ class SmartSystem:
 
     async def __launch_websocket_loop(self, url):
         self.logger.debug("Connecting to websocket ..")
-        websocket = await connect(url, ping_interval=150)
+        websocket = await connect(url, ping_interval=150, ssl=self._ssl_context)
         self.set_ws_status(True)
         self.logger.debug("Connected !")
         while not self.should_stop:
