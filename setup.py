@@ -23,7 +23,7 @@ setuptools.setup(
     url="https://github.com/grm/py-smart-gardena",
     packages=setuptools.find_packages("src"),
     package_dir={"": "src"},
-    install_requires=["requests", "websockets", "httpx", "authlib", "backoff"],
+    install_requires=["requests", "websockets", "httpx", "oauthlib", "authlib", "backoff"],
     setup_requires=["pytest-runner"],
     tests_require=tests_require,
     py_modules={splitext(basename(path))[0] for path in glob("src/*py")},
