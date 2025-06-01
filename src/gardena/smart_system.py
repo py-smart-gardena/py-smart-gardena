@@ -241,9 +241,13 @@ class SmartSystem:
         self.logger.debug("Connected !")
         while not self.should_stop:
             self.logger.debug("Waiting for message ..")
-            message = await websocket.recv()
+            try:
+                message = await asyncio.wait_for(websocket.recv(), timeout=1)
+            except asyncio.TimeoutError:
+                continue
             self.logger.debug("Message received ..")
             self.on_message(message)
+        await websocket.close()
 
     def on_message(self, message):
         data = json.loads(message)
