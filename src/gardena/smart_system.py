@@ -195,19 +195,55 @@ class SmartSystem:
                         location.add_device(device_obj)
 
     async def start_ws(self, location):
+        """Start WebSocket connection with improved robustness."""
+        connection_attempts = 0
+        max_consecutive_failures = 5
+        
         while not self.should_stop:
-            self.logger.debug("Trying to connect to gardena API....")
+            self.logger.debug(f"Trying to connect to gardena API.... (attempt {connection_attempts + 1})")
+            websocket = None
+            
             try:
                 ws_url = await self.__get_ws_url(location)
-                await self.__launch_websocket_loop(ws_url)
+                websocket = await self.__launch_websocket_loop(ws_url)
+                
+                # Reset failure counter on successful connection
+                connection_attempts = 0
+                
             except (ConnectionClosed, InvalidTokenError, OAuthError) as error:
-                self.logger.debug(error, exc_info=True)
-                continue
+                connection_attempts += 1
+                self.logger.warning(f"WebSocket connection error (attempt {connection_attempts}): {error}")
+                
+                # If too many consecutive failures, increase the delay
+                if connection_attempts >= max_consecutive_failures:
+                    self.logger.error(f"Too many consecutive WebSocket failures ({connection_attempts}), extending delay")
+                    delay = min(60, 10 + (connection_attempts - max_consecutive_failures) * 10)
+                else:
+                    delay = 10
+                    
+            except Exception as error:
+                connection_attempts += 1
+                self.logger.error(f"Unexpected WebSocket error (attempt {connection_attempts}): {type(error).__name__}: {error}")
+                delay = min(30, 5 + connection_attempts * 2)
+                
             finally:
                 self.set_ws_status(False)
-                if not self.should_stop:
-                    self.logger.debug("Sleeping 10 seconds ..")
-                    await asyncio.sleep(10)
+                
+                # Ensure WebSocket is properly closed
+                if websocket and not websocket.closed:
+                    try:
+                        await websocket.close()
+                        self.logger.debug("WebSocket connection closed")
+                    except Exception as close_error:
+                        self.logger.warning(f"Error closing WebSocket: {close_error}")
+                        
+            if not self.should_stop:
+                self.logger.debug(f"Sleeping {delay} seconds before reconnect..")
+                # Use shorter sleep intervals to allow faster shutdown
+                for _ in range(delay):
+                    if self.should_stop:
+                        break
+                    await asyncio.sleep(1)
 
     @backoff.on_exception(backoff.expo,
                           HTTPStatusError,
@@ -235,19 +271,51 @@ class SmartSystem:
         return ws_url
 
     async def __launch_websocket_loop(self, url):
+        """Launch WebSocket connection with improved error handling."""
         self.logger.debug("Connecting to websocket ..")
-        websocket = await connect(url, ping_interval=150, ssl=self._ssl_context)
+        
+        # Configure WebSocket with better settings
+        websocket = await connect(
+            url, 
+            ping_interval=150,  # Send ping every 150 seconds
+            ping_timeout=60,    # Wait 60 seconds for pong
+            close_timeout=10,   # Wait 10 seconds for close handshake
+            ssl=self._ssl_context,
+            max_size=2**20,     # 1MB max message size
+            compression=None    # Disable compression for better performance
+        )
+        
         self.set_ws_status(True)
-        self.logger.debug("Connected !")
-        while not self.should_stop:
-            self.logger.debug("Waiting for message ..")
-            try:
-                message = await asyncio.wait_for(websocket.recv(), timeout=1)
-            except asyncio.TimeoutError:
-                continue
-            self.logger.debug("Message received ..")
-            self.on_message(message)
-        await websocket.close()
+        self.logger.debug("WebSocket connected successfully!")
+        
+        try:
+            while not self.should_stop:
+                try:
+                    # Use shorter timeout for more responsive shutdown
+                    message = await asyncio.wait_for(websocket.recv(), timeout=5.0)
+                    self.logger.debug("Message received from WebSocket")
+                    self.on_message(message)
+                    
+                except asyncio.TimeoutError:
+                    # Check connection health periodically
+                    if websocket.closed:
+                        self.logger.warning("WebSocket connection closed unexpectedly")
+                        break
+                    continue
+                    
+                except ConnectionClosed:
+                    self.logger.warning("WebSocket connection closed by server")
+                    break
+                    
+        except Exception as ex:
+            self.logger.error(f"Error in WebSocket message loop: {type(ex).__name__}: {ex}")
+            raise
+            
+        finally:
+            if not websocket.closed:
+                await websocket.close()
+                
+        return websocket
 
     def on_message(self, message):
         data = json.loads(message)
