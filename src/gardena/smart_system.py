@@ -230,7 +230,7 @@ class SmartSystem:
                 self.set_ws_status(False)
                 
                 # Ensure WebSocket is properly closed
-                if websocket and websocket.close_code is not None:
+                if websocket and websocket.protocol.close_code is not None:
                     try:
                         await websocket.close()
                         self.logger.debug("WebSocket connection closed")
@@ -298,7 +298,7 @@ class SmartSystem:
                     
                 except asyncio.TimeoutError:
                     # Check connection health periodically
-                    if websocket.close_code is not None:
+                    if websocket.protocol.close_code is not None:
                         self.logger.warning("WebSocket connection closed unexpectedly")
                         break
                     continue
@@ -312,7 +312,7 @@ class SmartSystem:
             raise
             
         finally:
-            if websocket.close_code is not None:
+            if websocket.protocol.close_code is not None:
                 await websocket.close()
                 
         return websocket
