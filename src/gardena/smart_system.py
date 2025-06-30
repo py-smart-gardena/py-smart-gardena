@@ -207,7 +207,7 @@ class SmartSystem:
 
     def on_message(self, message):
         data = json.loads(message)
-        self.logger.debug(f'Received {data["type"]} message: {message}")
+        self.logger.debug(f'Received {data["type"]} message: {message}')
 
     def add_ws_status_callback(self, callback):
         self.ws_status_callback = callback
