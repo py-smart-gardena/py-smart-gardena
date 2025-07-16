@@ -10,10 +10,7 @@ from websockets.asyncio.client import connect
 from websockets.exceptions import ConnectionClosed
 from authlib.integrations.httpx_client import AsyncOAuth2Client
 from json.decoder import JSONDecodeError
-from authlib.integrations.base_client.errors import (
-    OAuthError,
-    InvalidTokenError
-)
+from authlib.integrations.base_client.errors import OAuthError, InvalidTokenError
 from gardena.devices.device_factory import DeviceFactory
 from gardena.exceptions.authentication_exception import AuthenticationException
 from gardena.location import Location
@@ -21,16 +18,20 @@ from gardena.token_manager import TokenManager
 
 MAX_BACKOFF_VALUE = 900
 
+
 @functools.lru_cache(maxsize=1)
 def get_ssl_context():
     """Create and cache SSL context outside of event loop."""
     context = ssl.create_default_context()
     return context
 
+
 class SmartSystem:
     """Base class to communicate with gardena and handle network calls"""
 
-    def __init__(self, client_id=None, client_secret=None, level=logging.INFO, ssl_context=None):
+    def __init__(
+        self, client_id=None, client_secret=None, level=logging.INFO, ssl_context=None
+    ):
         """Constructor, create instance of gateway"""
         if client_id is None or client_secret is None:
             raise ValueError(
@@ -86,11 +87,11 @@ class SmartSystem:
             update_token=self.token_saver,
             grant_type="client_credentials",
             token_endpoint=url,
-            verify=self._ssl_context  # Pass SSL context to httpx client
+            verify=self._ssl_context,  # Pass SSL context to httpx client
         )
-        self.token_manager.load_from_oauth2_token(await self.client.fetch_token(
-            url, grant_type="client_credentials"
-        ))
+        self.token_manager.load_from_oauth2_token(
+            await self.client.fetch_token(url, grant_type="client_credentials")
+        )
 
     async def quit(self):
         self.should_stop = True
@@ -98,8 +99,10 @@ class SmartSystem:
             if self.token_manager.access_token:
                 await self.client.post(
                     f"{self.AUTHENTICATION_HOST}/v1/oauth2/revoke",
-                    headers={"Authorization": "Bearer " + self.token_manager.access_token},
-                    data={"token": self.token_manager.access_token}
+                    headers={
+                        "Authorization": "Bearer " + self.token_manager.access_token
+                    },
+                    data={"token": self.token_manager.access_token},
                 )
 
     async def token_saver(self, token, refresh_token=None, access_token=None):
@@ -124,7 +127,7 @@ class SmartSystem:
             try:
                 r = response.json()
                 if "errors" in r:
-                    msg = "{r['errors'][0]['title']} - {r['errors'][0]['detail']}"
+                    msg = f"{r['errors'][0]['title']} - {r['errors'][0]['detail']}"
                 elif "message" in r:
                     msg = f"{r['message']}"
 
@@ -144,10 +147,12 @@ class SmartSystem:
             return True
         return False
 
-    @backoff.on_exception(backoff.expo,
-                          HTTPStatusError,
-                          max_value=MAX_BACKOFF_VALUE,
-                          logger=logging.getLogger(__name__))
+    @backoff.on_exception(
+        backoff.expo,
+        HTTPStatusError,
+        max_value=MAX_BACKOFF_VALUE,
+        logger=logging.getLogger(__name__),
+    )
     async def __call_smart_system_get(self, url):
         response = await self.client.get(url, headers=self.create_header())
         if self.__response_has_errors(response):
@@ -198,45 +203,75 @@ class SmartSystem:
         """Start WebSocket connection with improved robustness."""
         connection_attempts = 0
         max_consecutive_failures = 5
-        
+
         while not self.should_stop:
-            self.logger.debug(f"Trying to connect to gardena API.... (attempt {connection_attempts + 1})")
+            self.logger.debug(
+                f"Trying to connect to gardena API.... (attempt {connection_attempts + 1})"
+            )
             websocket = None
-            
+
             try:
                 ws_url = await self.__get_ws_url(location)
                 websocket = await self.__launch_websocket_loop(ws_url)
-                
+
                 # Reset failure counter on successful connection
                 connection_attempts = 0
-                
+
             except (ConnectionClosed, InvalidTokenError, OAuthError) as error:
                 connection_attempts += 1
-                self.logger.warning(f"WebSocket connection error (attempt {connection_attempts}): {error}")
-                
+                self.logger.warning(
+                    f"WebSocket connection error (attempt {connection_attempts}): {error}"
+                )
+
                 # If too many consecutive failures, increase the delay
                 if connection_attempts >= max_consecutive_failures:
-                    self.logger.error(f"Too many consecutive WebSocket failures ({connection_attempts}), extending delay")
-                    delay = min(60, 10 + (connection_attempts - max_consecutive_failures) * 10)
+                    self.logger.error(
+                        f"Too many consecutive WebSocket failures ({connection_attempts}), extending delay"
+                    )
+                    delay = min(
+                        60, 10 + (connection_attempts - max_consecutive_failures) * 10
+                    )
                 else:
                     delay = 10
-                    
+
             except Exception as error:
                 connection_attempts += 1
-                self.logger.error(f"Unexpected WebSocket error (attempt {connection_attempts}): {type(error).__name__}: {error}")
+                self.logger.error(
+                    f"Unexpected WebSocket error (attempt {connection_attempts}): {type(error).__name__}: {error}"
+                )
                 delay = min(30, 5 + connection_attempts * 2)
-                
+
             finally:
                 self.set_ws_status(False)
-                
+
                 # Ensure WebSocket is properly closed
-                if websocket and not websocket.closed:
+                if websocket:
+                    # Robustly determine if websocket is closed
+                    closed = True  # Default to closed
                     try:
+                        if hasattr(websocket, "open"):
+                            closed = not getattr(websocket, "open", True)
+                        elif hasattr(websocket, "closed"):
+                            closed_attr = getattr(websocket, "closed", None)
+                            if callable(closed_attr):
+                                closed = closed_attr()
+                            else:
+                                closed = (
+                                    bool(closed_attr)
+                                    if closed_attr is not None
+                                    else True
+                                )
+                        elif hasattr(websocket, "state"):
+                            # 1 = OPEN, 2 = CLOSING, 3 = CLOSED (per websockets.protocol)
+                            closed = getattr(websocket, "state", 3) != 1
+                        elif hasattr(websocket, "close_code"):
+                            closed = getattr(websocket, "close_code", None) is not None
+                    except (AttributeError, TypeError):
+                        closed = True  # If any attribute access fails, treat as closed
+                    if not closed:
                         await websocket.close()
                         self.logger.debug("WebSocket connection closed")
-                    except Exception as close_error:
-                        self.logger.warning(f"Error closing WebSocket: {close_error}")
-                        
+
             if not self.should_stop:
                 self.logger.debug(f"Sleeping {delay} seconds before reconnect..")
                 # Use shorter sleep intervals to allow faster shutdown
@@ -245,10 +280,12 @@ class SmartSystem:
                         break
                     await asyncio.sleep(1)
 
-    @backoff.on_exception(backoff.expo,
-                          HTTPStatusError,
-                          max_value=MAX_BACKOFF_VALUE,
-                          logger=logging.getLogger(__name__))
+    @backoff.on_exception(
+        backoff.expo,
+        HTTPStatusError,
+        max_value=MAX_BACKOFF_VALUE,
+        logger=logging.getLogger(__name__),
+    )
     async def __get_ws_url(self, location):
         args = {
             "data": {
@@ -273,21 +310,21 @@ class SmartSystem:
     async def __launch_websocket_loop(self, url):
         """Launch WebSocket connection with improved error handling."""
         self.logger.debug("Connecting to websocket ..")
-        
+
         # Configure WebSocket with better settings
         websocket = await connect(
-            url, 
+            url,
             ping_interval=150,  # Send ping every 150 seconds
-            ping_timeout=60,    # Wait 60 seconds for pong
-            close_timeout=10,   # Wait 10 seconds for close handshake
+            ping_timeout=60,  # Wait 60 seconds for pong
+            close_timeout=10,  # Wait 10 seconds for close handshake
             ssl=self._ssl_context,
-            max_size=2**20,     # 1MB max message size
-            compression=None    # Disable compression for better performance
+            max_size=2**20,  # 1MB max message size
+            compression=None,  # Disable compression for better performance
         )
-        
+
         self.set_ws_status(True)
         self.logger.debug("WebSocket connected successfully!")
-        
+
         try:
             while not self.should_stop:
                 try:
@@ -295,31 +332,70 @@ class SmartSystem:
                     message = await asyncio.wait_for(websocket.recv(), timeout=5.0)
                     self.logger.debug("Message received from WebSocket")
                     self.on_message(message)
-                    
+
                 except asyncio.TimeoutError:
                     # Check connection health periodically
-                    if websocket.closed:
+                    closed = True  # Default to closed
+                    try:
+                        if hasattr(websocket, "open"):
+                            closed = not getattr(websocket, "open", True)
+                        elif hasattr(websocket, "closed"):
+                            closed_attr = getattr(websocket, "closed", None)
+                            if callable(closed_attr):
+                                closed = closed_attr()
+                            else:
+                                closed = (
+                                    bool(closed_attr)
+                                    if closed_attr is not None
+                                    else True
+                                )
+                        elif hasattr(websocket, "state"):
+                            closed = getattr(websocket, "state", 3) != 1
+                        elif hasattr(websocket, "close_code"):
+                            closed = getattr(websocket, "close_code", None) is not None
+                    except (AttributeError, TypeError):
+                        closed = True  # If any attribute access fails, treat as closed
+                    if closed:
                         self.logger.warning("WebSocket connection closed unexpectedly")
                         break
                     continue
-                    
+
                 except ConnectionClosed:
                     self.logger.warning("WebSocket connection closed by server")
                     break
-                    
+
         except Exception as ex:
-            self.logger.error(f"Error in WebSocket message loop: {type(ex).__name__}: {ex}")
+            self.logger.error(
+                f"Error in WebSocket message loop: {type(ex).__name__}: {ex}"
+            )
             raise
-            
+
         finally:
-            if not websocket.closed:
+            # Robustly determine if websocket is closed
+            closed = True  # Default to closed
+            try:
+                if hasattr(websocket, "open"):
+                    closed = not getattr(websocket, "open", True)
+                elif hasattr(websocket, "closed"):
+                    closed_attr = getattr(websocket, "closed", None)
+                    if callable(closed_attr):
+                        closed = closed_attr()
+                    else:
+                        closed = bool(closed_attr) if closed_attr is not None else True
+                elif hasattr(websocket, "state"):
+                    closed = getattr(websocket, "state", 3) != 1
+                elif hasattr(websocket, "close_code"):
+                    closed = getattr(websocket, "close_code", None) is not None
+            except (AttributeError, TypeError):
+                closed = True  # If any attribute access fails, treat as closed
+            if not closed:
                 await websocket.close()
-                
+
         return websocket
 
     def on_message(self, message):
         data = json.loads(message)
-        self.logger.debug(f'Received {data["type"]} message')
+        self.logger.debug(f"Received {data['type']} message")
         self.logger.debug("------- Beginning of message ---------")
         self.logger.debug(message)
         if data["type"] == "LOCATION":
