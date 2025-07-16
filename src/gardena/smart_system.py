@@ -19,6 +19,12 @@ from gardena.token_manager import TokenManager
 MAX_BACKOFF_VALUE = 900
 
 
+class RateLimitException(Exception):
+    """Exception raised when API rate limit is reached."""
+
+    pass
+
+
 @functools.lru_cache(maxsize=1)
 def get_ssl_context():
     """Create and cache SSL context outside of event loop."""
@@ -67,6 +73,11 @@ class SmartSystem:
         ]
         # Use provided SSL context or get cached one
         self._ssl_context = ssl_context or get_ssl_context()
+
+        # Rate limiting and backoff settings
+        self.connection_attempts = 0
+        self.max_backoff = MAX_BACKOFF_VALUE
+        self.base_delay = 5
 
     def create_header(self, include_json=False):
         headers = {"Authorization-Provider": "husqvarna", "X-Api-Key": self.client_id}
@@ -234,6 +245,13 @@ class SmartSystem:
                 else:
                     delay = 10
 
+            except RateLimitException as error:
+                connection_attempts += 1
+                delay = self.calculate_backoff_delay()
+                self.logger.warning(
+                    f"Rate limit reached: {error}. Backing off for {delay} seconds."
+                )
+
             except Exception as error:
                 connection_attempts += 1
                 self.logger.error(
@@ -273,12 +291,21 @@ class SmartSystem:
                         self.logger.debug("WebSocket connection closed")
 
             if not self.should_stop:
+                delay = self.calculate_backoff_delay()
                 self.logger.debug(f"Sleeping {delay} seconds before reconnect..")
                 # Use shorter sleep intervals to allow faster shutdown
-                for _ in range(delay):
-                    if self.should_stop:
-                        break
-                    await asyncio.sleep(1)
+                await self._wait_with_cancel(delay)
+
+    def calculate_backoff_delay(self):
+        """Calculate exponential backoff delay for reconnection attempts."""
+        return min(self.max_backoff, self.base_delay * (2**self.connection_attempts))
+
+    async def _wait_with_cancel(self, delay):
+        """Wait for specified delay while allowing for cancellation."""
+        for _ in range(int(delay)):
+            if self.should_stop:
+                break
+            await asyncio.sleep(1)
 
     @backoff.on_exception(
         backoff.expo,
@@ -301,6 +328,13 @@ class SmartSystem:
             data=json.dumps(args, ensure_ascii=False),
         )
         self.logger.debug("Websocket url: got response")
+
+        # Check for rate limiting
+        if r.status_code == 429:
+            raise RateLimitException(
+                "API rate limit reached when retrieving WebSocket URL"
+            )
+
         r.raise_for_status()
         response = r.json()
         ws_url = response["data"]["attributes"]["url"]
