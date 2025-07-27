@@ -8,6 +8,7 @@ import backoff
 from httpx import HTTPStatusError
 from websockets.asyncio.client import connect
 from websockets.exceptions import ConnectionClosed
+from websockets.protocol import State
 from authlib.integrations.httpx_client import AsyncOAuth2Client
 from json.decoder import JSONDecodeError
 from authlib.integrations.base_client.errors import (
@@ -230,7 +231,7 @@ class SmartSystem:
                 self.set_ws_status(False)
                 
                 # Ensure WebSocket is properly closed
-                if websocket and not websocket.closed:
+                if websocket and not websocket.state is State.CLOSED:
                     try:
                         await websocket.close()
                         self.logger.debug("WebSocket connection closed")
@@ -298,7 +299,7 @@ class SmartSystem:
                     
                 except asyncio.TimeoutError:
                     # Check connection health periodically
-                    if websocket.closed:
+                    if websocket.state is State.CLOSED:
                         self.logger.warning("WebSocket connection closed unexpectedly")
                         break
                     continue
@@ -312,7 +313,7 @@ class SmartSystem:
             raise
             
         finally:
-            if not websocket.closed:
+            if not websocket.state is State.CLOSED:
                 await websocket.close()
                 
         return websocket
