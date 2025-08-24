@@ -113,6 +113,16 @@ for location in smart_system.locations.values():
 
 Devices are automatically retrieved the first time from the API, and then the websocket is used to get updates. They are stored in each locations. Depending on the function type, you can have diffrents fields.
 
+#### List all devices
+```python
+    for device in smart_system.locations[location.id].find_all_device():
+        #print(dir(device))
+        print('')
+        print(f"name : {device.name}")
+        print(f"id :   {device.id}")
+        print(f"type : {device.type}")
+```
+
 #### Mowers
 
 ```python
@@ -152,7 +162,7 @@ Devices are automatically retrieved the first time from the API, and then the we
 #### Sensor
 
 ```python
-    for device in smart_system.locations["LOCATION_ID"].find_device_by_type("SENSOR"):
+    for device in smart_system.locations["LOCATION_ID"].find_device_by_type(["SENSOR", "SOIL_SENSOR"]):
           print(f"name : {device.name}")
           print(f"id : {device.id}")
           print(f"type : {device.type}")
@@ -162,8 +172,9 @@ Devices are automatically retrieved the first time from the API, and then the we
           print(f"rf_link_level : {device.rf_link_level}")
           print(f"rf_link_state : {device.rf_link_state}")
           print(f"serial : {device.serial}")
-          print(f"ambient_temperature : {device.ambient_temperature}")
-          print(f"light_intensity : {device.light_intensity}")
+          if device.type == 'SENSOR':
+                print(f"ambient_temperature : {device.ambient_temperature}")
+                print(f"light_intensity : {device.light_intensity}")
           print(f"soil_humidity : {device.soil_humidity}")
           print(f"soil_temperature : {device.soil_temperature}")
 
